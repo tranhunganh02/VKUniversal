@@ -1,0 +1,16 @@
+# Default ignored files
+/shelf/
+.DS_Store
+/workspace.xml
+../Backend/node_modules
+../Backend/.env
+
+# File build
+build/
+ios/build/
+android/build/
+
+# Loại trừ file backend (NodeJS)
+node_modules/
+dist/
+package-lock.json
