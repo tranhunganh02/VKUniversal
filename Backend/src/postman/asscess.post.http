@@ -1,0 +1,3 @@
+###signup
+
+POST http://localhost:5055/v1/api/vkuniversal/signup

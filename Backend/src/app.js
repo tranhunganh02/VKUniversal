@@ -1,5 +1,6 @@
 const compression = require("compression")
 const express = require("express")
+require('dotenv').config()
 const { default: helmet } = require("helmet")
 const morgan = require("morgan")
 
@@ -7,21 +8,17 @@ const app = express()
 
 //init middlewares
 
-app.use(morgan("common"))
+app.use(morgan("dev"))
 app.use(helmet())
 app.use(compression())
+app.use(express.json()); 
 
 //init db
+// Database and Firebase connections
+require('./dbs/init.db.js');
 
 //init router
-
-app.get('/', (req, res, next) => {
-     const strCompress = 'Hello fanassa  gfdggg dad asdas'
-     return res.status(200).json({
-          message: 'Welcome casc!',
-          metadata: strCompress.repeat(10000)
-     })
-})
+app.use('/', require('./routes/index.js'))
 
 //handling error
 
