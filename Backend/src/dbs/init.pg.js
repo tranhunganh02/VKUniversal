@@ -14,9 +14,21 @@ const checkUserByEmail = async (email) => {
      const result = await db.query(query, values);
      return result.rows
    };
+
+   // Create a new key token
+  async function createKeyToken(id_user, publicKey) {
+
+    const query = `INSERT INTO key_tokens (id_user, publicKey) VALUES ($1, $2) RETURNING *`;
+    const values = [id_user, publicKey, refreshToken];
+    const result = await executeQuery(query, values);
+    return result[0];
+    console.log(result);
+  }
+
    
    module.exports = {
      checkUserByEmail,
      signUpUser,
+     createKeyToken
    };
    
