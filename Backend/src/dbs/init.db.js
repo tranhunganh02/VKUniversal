@@ -33,7 +33,7 @@ class Database {
   async query(query, values = []) {
     try {
       const result = await this.pool.query(query, values);
-      console.log("cau lenh truy van", result.rows);
+      console.log("cau lenh truy van", query);
       return result.rows;
     } catch (error) {
       console.error('Error executing query:', error);
