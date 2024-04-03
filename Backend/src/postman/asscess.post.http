@@ -1,3 +1,22 @@
 ###signup
 
 POST http://localhost:5055/v1/api/vkuniversal/signup
+Content-Type: application/json
+
+{
+     "name": "he24",
+     "password": "abc",
+     "email": "agg@vku.udn.vn"
+}
+###
+POST http://localhost:5055/v1/api/vkuniversal/login
+Content-Type: application/json
+
+{
+     "email": "agg@vku.udn.vn",
+     "password": "absc"
+}
+
+### check mail
+
+ 
