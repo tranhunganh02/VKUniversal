@@ -1,4 +1,4 @@
-const{ checkUserByEmail } = require('../dbs/init.pg')
+const{ checkUserByEmail, findUserByEmail } = require('../dbs/access/pg.access')
 
 class UserService {
 
@@ -7,8 +7,13 @@ class UserService {
      }
 
      static async checkMailUserExists(email) {
-          const result = await checkUserByEmail(email);
-          return result.length > 0 ? result[0] : null;
+          console.log("email in service: ", email);
+          return await checkUserByEmail(email);
+     }
+
+     static async findUserByEmail(email) {
+          console.log("email in service: ", email);
+          return await findUserByEmail(email);
      }
 
 }
