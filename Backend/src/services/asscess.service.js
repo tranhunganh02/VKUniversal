@@ -1,20 +1,75 @@
-const { signUpUser } = require("../dbs/init.pg.js");
+const { signUpUser } = require("../dbs/access/pg.access.js");
 const bcrypt = require("bcrypt");
 const crypto = require("node:crypto");
 const User = require("../models/userModel.js");
 const KeyTokenService = require("./keyToken.service.js");
-const { createTokenPair, checkRoleEmail } = require("../auth/authUtils.js");
+const { createTokenPair, verifyJWT } = require("../auth/authUtils.js");
 const { getInfoData } = require("../utils/index.js");
-const { BadRequestError, AuthFailureError } = require("../core/error.response.js");
+const { BadRequestError, AuthFailureError, ForbiddenError } = require("../core/error.response.js");
 const UserService = require("./user.service.js");
 
 const roleAccount = {
-  student: "student",
-  lecture: "lecture",
-  department: "department",
+  student: 0,
+  lecture: 1,
+  department: 2,
+  admin: 3
 };
 
 class AccessService {
+
+  static handlerRefreshToken  = async ( refreshToken ) => {
+  //check token_used?
+    const foundToken = await KeyTokenService.findByRefreshTokenUsed(refreshToken)
+    //if found
+    if (foundToken) {
+      console.log("token_refresh_used", foundToken);
+     //decode check user 
+      const { userId, email } = await verifyJWT (refreshToken,foundToken.private_key)
+      //delete token in db
+      await KeyTokenService.findAndDeleteKeyByUserId(userId)
+
+      throw new ForbiddenError("Something went wrong ! Please relogin")
+    }
+    console.log("not found");
+    //if not found -> check refresh token
+    const holdderToken = await KeyTokenService.findByRefreshToken(refreshToken)
+    if (!holdderToken) throw new AuthFailureError('Account not registered.')
+    console.log("holdderToken", holdderToken);
+    //check email and userId from request and privateKey(db)
+    const { userId, email } = await verifyJWT ( refreshToken, holdderToken.private_key )
+    console.log("dsdsad, ",{userId: userId, email: email});
+
+    //create new access token and refresh token
+    const tokens = await createTokenPair(
+      { userId: userId, email: email },
+      holdderToken.public_key,
+      holdderToken.private_key
+    );
+    //update token
+    await KeyTokenService.updateToken(userId, tokens.refreshToken, holdderToken.refreshToken)
+
+    //update token in db
+    return {
+      user: {userId, email},
+      tokens
+    }
+  }
+
+  static logout = async (keyStore) => {
+    console.log("vo toi logout r," ,keyStore);
+    const delKey = await KeyTokenService.removeTokenByTokenId(keyStore.token_id)
+
+    console.log(delKey);
+    if (!delKey) {
+      throw new BadRequestError('Error: Bản ghi không được tìm thấy trong bảng')
+    }
+
+    return {
+      success: true,
+      message: `bản ghi đã được xóa khỏi bảng`
+    }
+  }
+
 
   /*
 
@@ -25,10 +80,10 @@ class AccessService {
 
   */
 
-  static login = async({  email, password, refreshToken = null}) => {
-    
+  static login = async({  email, password }) => {
+    console.log(email, password);
     //1.Check if mail user already exists
-    const foundUser = await UserService.checkMailUserExists(email)
+    const foundUser = await UserService.findUserByEmail(email)
     if(!foundUser) throw new BadRequestError('User not found')
 
     //2.Check macth password
@@ -41,13 +96,13 @@ class AccessService {
 
     //4. generate token
     const tokens = await createTokenPair(
-      { userId: foundUser.id, email },
+      { userId: foundUser.user_id, email },
       publicKey,
       privateKey
     );
 
     await KeyTokenService.createKeyToken({
-      userId: foundUser.id,
+      userId: foundUser.user_id,
       refreshToken: tokens.refreshToken,
       privateKey: privateKey,
       publicKey: publicKey
@@ -62,25 +117,27 @@ class AccessService {
   }
 
 
-  static async signUp({ name, email, password }) {
+  static async signUp({ email, password }) {
     try {
 
+      console.log("email: " + email);
       // check permisson mail vku
       const isMailVku = await UserService.checkRoleEmail(email)
       if (!isMailVku) {
-       throw new BadRequestError('Error: Your email is forbidden');
+      console.log("email: " + email);
+       throw new ForbiddenError('Error: Your email is forbidden');
       }
-
       // Check if mail user already exists
       const existingMailUser = await UserService.checkMailUserExists(email);
       if (existingMailUser) {
+      console.log("email: " + email);
         throw new BadRequestError('Error: Email already exists')
       }
       // Hash password using bcrypt (replace with your preferred hashing method)
       const hashedPassword = await bcrypt.hash(password, 10);
 
+      console.log("email: " + email);
       const saveUser = await signUpUser(
-        name,
         email,
         hashedPassword,
         roleAccount.student
@@ -92,43 +149,28 @@ class AccessService {
 
         //create token
         const tokens = await createTokenPair(
-          { userId: saveUser.id, email },
+          { userId: saveUser.user_id, email },
           publicKey,
           privateKey
         );
 
         console.log("created tokens: ", tokens);
         const keyStore = await KeyTokenService.createKeyToken({
-          userId :  saveUser.id,
+          userId :  saveUser.user_id,
           publicKey : publicKey,
           privateKey : privateKey,
           refreshToken: tokens.refreshToken
       });
 
-        //check condition publicKeyString
         if (!keyStore) {
-          return {
-            code: "xxxx",
-            message: "publicKeyString error",
-          };
+          throw new BadRequestError("publicKeyString error")
         }
 
         return {
-          code: "SIGNUP_SUCCESS",
-          message: "User created successfully.",
-          metadata: {
             user: getInfoData({fileds: ['id', 'name', 'email', ], Object: saveUser}),
             tokens,
-          },
-          status: "success",
-          statusCode: 201,
         };
       }
-      return {
-        code: 200,
-        metadata: null
-      }
-
     } catch (error) {
       console.error("Error during signup:", error);
       return {
