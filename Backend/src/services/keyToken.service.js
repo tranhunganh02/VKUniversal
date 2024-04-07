@@ -1,12 +1,27 @@
-const { createKeyToken } = require('../dbs/init.pg.js'); 
- class KeyTokenService {
+const createKeyToken = require("../dbs/init.pg.token.js");
+class KeyTokenService {
+  // create token here
+  static createKeyToken = async ({
+    userId,
+    publicKey,
+    privateKey,
+    refreshToken,
+  }) => {
+    console.log(userId, publicKey, privateKey, refreshToken);
+    try {
+      const tokens = await createKeyToken({
+        userId: userId,
+        publicKey: publicKey,
+        privateKey: privateKey,
+        refreshToken: refreshToken,
+      });
 
-     static createKeyToken = async ({ userId, publicKey }) => {
-          try {
-               const publicKeyString = publicKey.toString();
-               const tokens = createKeyToken(userId, publicKeyString)
-          } catch (error) {
-               
-          }
-     }
- }
+      return tokens ? tokens.publickey : null;
+    } catch (error) {
+      console.log(error);
+      return null;
+    }
+  };
+}
+
+module.exports = KeyTokenService;
