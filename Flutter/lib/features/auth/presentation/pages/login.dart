@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:google_sign_in/google_sign_in.dart';
 import 'package:vkuniversal/core/utils/images_string.dart';
+import 'package:vkuniversal/core/widgets/size_box.dart';
 import 'package:vkuniversal/features/auth/presentation/widgets/login_button.dart';
-import 'package:vkuniversal/features/auth/presentation/widgets/login_form.dart';
+import 'package:vkuniversal/features/auth/presentation/widgets/vku_logo.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -16,14 +15,12 @@ class _LoginPageState extends State<LoginPage> {
   @override
   Widget build(BuildContext context) {
     double widthScreen = MediaQuery.of(context).size.width;
-    // double heightScreen = MediaQuery.of(context).size.height;
-    double logoScale = widthScreen * 0.2;
-
-    final GoogleSignIn _googleSignIn = GoogleSignIn();
+    double logoScale = widthScreen * 0.28;
 
     return Scaffold(
       body: Stack(
         children: [
+          // Background
           AspectRatio(
             aspectRatio: 9 / 16,
             child: ShaderMask(
@@ -46,47 +43,36 @@ class _LoginPageState extends State<LoginPage> {
           Column(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
-              Center(
-                child: Container(
-                  width: logoScale,
-                  height: logoScale,
-                  padding: EdgeInsets.all(10.0),
-                  decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    color: Colors.white,
-                  ),
-                  child: Image.asset(
-                    ImageString.vku_logo,
-                  ),
-                ),
+              VkuLogo(
+                logoScale: logoScale,
               ),
               Column(
                 children: [
                   Text(
-                    "Welcome to VKUniversal!",
-                    style: TextStyle(color: Colors.white),
+                    "Welcome to",
+                    style: Theme.of(context).textTheme.titleMedium,
+                  ),
+                  Text(
+                    "VKUniversal!",
+                    style: Theme.of(context).textTheme.titleLarge,
                   ),
                   SizedBox(
                     height: 10,
                   ),
                   Text(
                     "Connect hearts, creating communicaties",
-                    style: TextStyle(color: Colors.white),
+                    style: Theme.of(context).textTheme.titleSmall,
                   )
                 ],
               ),
               Column(
                 children: [
-                  LoginTextField(placeholder: "Email", isObcurse: false),
-                  SizedBox(
-                    height: 20,
-                  ),
-                  LoginTextField(placeholder: "Password", isObcurse: true),
-                  SizedBox(
-                    height: 20,
-                  ),
                   LoginButton(
                     label: "Login",
+                  ),
+                  CustomSizeBox(value: 10),
+                  LoginButton(
+                    label: "Sign up",
                   ),
                 ],
               ),

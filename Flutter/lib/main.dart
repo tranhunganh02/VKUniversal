@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:vkuniversal/config/theme/theme_const.dart';
 import 'package:vkuniversal/features/auth/presentation/pages/login.dart';
 
 main() {
@@ -12,10 +13,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Flutter Demo',
-      theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
-        useMaterial3: true,
-      ),
+      theme: lightTheme,
       home: const LoginPage(),
     );
   }
