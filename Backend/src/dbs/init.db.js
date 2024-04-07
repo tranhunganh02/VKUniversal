@@ -7,11 +7,11 @@ class Database {
      this.connect()
   }   
 
-  connect(type = "pg") {
+  async connect(type = "pg") {
      if (type === "pg") {
           try {
             this.pool = new Pool({
-              user: db.user,
+              user: db.name,
               password: db.password,
               database: db.database,
               host: db.host,
@@ -19,7 +19,7 @@ class Database {
               poolSize: 100, // Adjust poolSize as needed
             });
     
-          this.pool.connect(); // Use await to ensure connection is established
+          await this.pool.connect(); // Use await to ensure connection is established
             console.log("Connected to PostgreSQL database successfully: ",db.database);
           } catch (error) {
             console.error("Error connecting to database:", error);
