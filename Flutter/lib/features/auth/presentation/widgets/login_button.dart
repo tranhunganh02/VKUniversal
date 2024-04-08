@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:vkuniversal/core/utils/screen_scale.dart';
 
 class LoginButton extends StatelessWidget {
   final String label;
-  const LoginButton({super.key, required this.label});
+  final VoidCallback onPressed;
+  const LoginButton({super.key, required this.label, required this.onPressed});
 
   @override
   Widget build(BuildContext context) {
@@ -12,7 +12,7 @@ class LoginButton extends StatelessWidget {
       width: ScreenScale(context: context).getWidth() * 0.9,
       height: 50,
       child: FilledButton(
-        onPressed: () {},
+        onPressed: onPressed,
         child: Text(
           label,
           style: Theme.of(context).textTheme.labelMedium,
