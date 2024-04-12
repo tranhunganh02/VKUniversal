@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:vkuniversal/features/auth/presentation/pages/login.dart';
+import 'package:vkuniversal/features/auth/presentation/pages/sign_up.dart';
 import 'package:vkuniversal/features/auth/presentation/pages/welcome.dart';
 
 import 'router_name.dart';
@@ -18,11 +19,7 @@ class Routes {
             builder: (BuildContext context) => LoginPage());
       case RoutesName.signUp:
         return MaterialPageRoute(
-            builder: (BuildContext context) => const Scaffold(
-                  body: Center(
-                    child: Text("data"),
-                  ),
-                ));
+            builder: (BuildContext context) => SignUpPage());
       case RoutesName.profile:
         return MaterialPageRoute(
             builder: (BuildContext context) => Container());

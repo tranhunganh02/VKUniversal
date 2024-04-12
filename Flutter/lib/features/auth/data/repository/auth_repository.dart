@@ -1,5 +1,4 @@
 import 'package:vkuniversal/core/resources/data_state.dart';
-import 'package:vkuniversal/features/auth/data/models/user.dart';
 import 'package:vkuniversal/features/auth/domain/entities/User.dart';
 import 'package:vkuniversal/features/auth/domain/repository/auth_repository.dart';
 

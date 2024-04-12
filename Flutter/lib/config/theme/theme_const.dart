@@ -1,7 +1,22 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
+ColorScheme lightColorScheme = ColorScheme(
+  brightness: Brightness.light,
+  primary: Color(0xfff5f5f5),
+  onPrimary: Color(0xff000000),
+  primaryContainer: Color(0xff5A7BC5),
+  onPrimaryContainer: Color(0xffffffff),
+  secondary: Color(0xffCED8EE),
+  onSecondary: Color(0xff091434),
+  error: Color(0xffff2e00),
+  onError: Color(0xfffafafa),
+  surface: Color(0xfff9f9f9),
+  onSurface: Color(0xff000000),
+);
+
 ThemeData lightTheme = ThemeData().copyWith(
+  colorScheme: lightColorScheme,
   brightness: Brightness.light,
   textTheme: TextTheme().copyWith(
     labelMedium: GoogleFonts.montserrat(
@@ -9,30 +24,69 @@ ThemeData lightTheme = ThemeData().copyWith(
         color: Colors.white,
         fontWeight: FontWeight.w500,
         fontSize: 25,
-        // height: 30,
       ),
     ),
-    titleLarge: GoogleFonts.montserrat(
+    labelSmall: GoogleFonts.montserrat(
+      textStyle: TextStyle(
+        color: lightColorScheme.onSecondary,
+        fontWeight: FontWeight.w600,
+        fontSize: 16,
+      ),
+    ),
+    displayLarge: GoogleFonts.montserrat(
       textStyle: TextStyle(
         color: Colors.white,
         fontWeight: FontWeight.w600,
         fontSize: 40,
-        // height: 48,
+        shadows: [
+          Shadow(
+            blurRadius: 4.0,
+            offset: Offset(0, 4.0),
+            color: Colors.black.withOpacity(0.25),
+          )
+        ],
       ),
     ),
-    titleMedium: GoogleFonts.montserrat(
+    displayMedium: GoogleFonts.montserrat(
       textStyle: TextStyle(
         color: Colors.white,
         fontWeight: FontWeight.w600,
         fontSize: 25,
-        // height: 30,
+        shadows: [
+          Shadow(
+            blurRadius: 4.0,
+            offset: Offset(0, 4.0),
+            color: Colors.black.withOpacity(0.25),
+          )
+        ],
       ),
     ),
-    titleSmall: GoogleFonts.montserrat(
+    displaySmall: GoogleFonts.montserrat(
       textStyle: TextStyle(
         color: Colors.white,
         fontWeight: FontWeight.w400,
         fontSize: 14,
+      ),
+    ),
+    headlineLarge: GoogleFonts.montserrat(
+      textStyle: TextStyle(
+        color: lightColorScheme.primaryContainer,
+        fontWeight: FontWeight.w600,
+        fontSize: 36,
+      ),
+    ),
+    headlineSmall: GoogleFonts.montserrat(
+      textStyle: TextStyle(
+        color: lightColorScheme.onPrimary,
+        fontWeight: FontWeight.w600,
+        fontSize: 16,
+      ),
+    ),
+    bodySmall: GoogleFonts.montserrat(
+      textStyle: TextStyle(
+        color: lightColorScheme.onPrimary,
+        fontWeight: FontWeight.w600,
+        fontSize: 12,
       ),
     ),
   ),

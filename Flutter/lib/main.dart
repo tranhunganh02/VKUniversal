@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:vkuniversal/config/router_name.dart';
 import 'package:vkuniversal/config/routes.dart';
 import 'package:vkuniversal/config/theme/theme_const.dart';
-import 'package:vkuniversal/features/auth/presentation/pages/login.dart';
 import 'package:vkuniversal/features/auth/presentation/pages/welcome.dart';
 
 main() {

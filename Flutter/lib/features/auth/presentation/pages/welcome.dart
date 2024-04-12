@@ -19,6 +19,8 @@ class _WelcomePageState extends State<WelcomePage> {
   Widget build(BuildContext context) {
     double widthScreen = MediaQuery.of(context).size.width;
     double logoScale = widthScreen * 0.28;
+    TextTheme textTheme = Theme.of(context).textTheme;
+    ColorScheme colorScheme = Theme.of(context).colorScheme;
 
     return Scaffold(
       body: Stack(
@@ -53,36 +55,50 @@ class _WelcomePageState extends State<WelcomePage> {
                 children: [
                   Text(
                     "Welcome to",
-                    style: Theme.of(context).textTheme.titleMedium,
+                    style: textTheme.displayMedium,
                   ),
                   Text(
                     "VKUniversal!",
-                    style: Theme.of(context).textTheme.titleLarge,
+                    style: textTheme.displayLarge,
                   ),
                   SizedBox(
                     height: 10,
                   ),
                   Text(
                     "Connect hearts, creating communicaties",
-                    style: Theme.of(context).textTheme.titleSmall,
+                    style: textTheme.displaySmall,
                   )
                 ],
               ),
               Column(
                 children: [
                   LoginButton(
-                    label: "Login",
+                    label: "Sign in",
                     onPressed: () {
                       Navigator.pushNamed(context, RoutesName.login);
                     },
                   ),
                   CustomSizeBox(value: 10),
-                  LoginButton(
-                    label: "Sign up",
-                    onPressed: () {
+                  GestureDetector(
+                    onTap: () {
                       Navigator.pushNamed(context, RoutesName.signUp);
                     },
-                  ),
+                    child: RichText(
+                      text: TextSpan(
+                          text: "Don't have account? ",
+                          style: textTheme.headlineSmall
+                              ?.copyWith(color: colorScheme.primary),
+                          children: [
+                            TextSpan(
+                              text: "Sign up!",
+                              style: textTheme.headlineSmall?.copyWith(
+                                color: colorScheme.primary,
+                                decoration: TextDecoration.underline,
+                              ),
+                            ),
+                          ]),
+                    ),
+                  )
                 ],
               ),
             ],
