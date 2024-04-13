@@ -1,16 +1,16 @@
 const express = require('express')
 const accessController = require('../../controller/access.controller')
 const router = express.Router()
-const { authentication } = require('../../auth/authUtils')
+const { authentication, authenticationV2 } = require('../../auth/authUtils')
 const asyncHandler = require('../../helper/asyncHandler')
 //touter for login and signup
-router.post('/vkuniversal/signup', asyncHandler(accessController.signUp)) 
-router.post('/vkuniversal/login', asyncHandler(accessController.login)) 
+router.post('/signup', asyncHandler(accessController.signUp)) 
+router.post('/login', asyncHandler(accessController.login)) 
 
 //authentication
-router.use(authentication)
+router.use(authenticationV2)
 
-router.post('/vkuniversal/logout', asyncHandler(accessController.logout)) 
-router.post('/vkuniversal/handlerRefreshToken', asyncHandler(accessController.handlerRefreshToken)) 
+router.post('/logout', asyncHandler(accessController.logout)) 
+router.post('/handlerRefreshToken', asyncHandler(accessController.handlerRefreshToken)) 
 
 module.exports = router
