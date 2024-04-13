@@ -19,16 +19,12 @@ Content-Type: application/json
 ###
 POST http://localhost:5055/v1/api/vkuniversal/logout
 Content-Type: application/json
-x-client-id:90
+x-client-id:1
 Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjkwLCJlbWFpbCI6ImFnZ0B2a3UudWRuLnZuIiwiaWF0IjoxNzExODk0MTQyLCJleHAiOjE3MTE4OTQyNjJ9.JIY6v5J4FvtSaohakH-4RpP5uV5woqr2rq-t3-ZMRNk
 
 ### handlerToken
 
 POST http://localhost:5055/v1/api/vkuniversal/handlerRefreshToken
 Content-Type: application/json
-x-client-id:90
-Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjkwLCJlbWFpbCI6ImFnZ0B2a3UudWRuLnZuIiwiaWF0IjoxNzEyMTMzNDEzLCJleHAiOjE3MTIxMzM3MTN9.1FqbjccWU5REnlWoar0CDTH51p_sDD1G6N2GVIzD014
-{
-     "refreshToken":"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjkwLCJlbWFpbCI6ImFnZ0B2a3UudWRuLnZuIiwiaWF0IjoxNzEyMTMzNDEzLCJleHAiOjE3MTIyMTk4MTN9.EWuBvbjGdPXywjVmbxE2aaO07ukJv7mGV_3kxZSHl8k"
-}
- 
+x-client-id:1
+x-rtoken-id:eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEsImVtYWlsIjoiYWJjZEB2a3UudWRuLnZuIiwiaWF0IjoxNzEzMDA0Nzg5LCJleHAiOjE3MTMwOTExODl9.fxxk1XliS-MadwwGHm5-DeN2COZITYElcE4EpEUhGEc

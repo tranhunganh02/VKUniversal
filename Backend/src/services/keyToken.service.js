@@ -1,4 +1,4 @@
-const {createKeyToken, getKeyByUserId, deleteKeyById, findRefreshTokenUsed, findRefreshToken, findAndDeleteTokenByUserId, updateRefreshToken} = require("../dbs/pg.token.js");
+const {createKeyToken, getKeyByUserId, deleteKeyById, findRefreshTokenUsed, findRefreshToken, findAndDeleteTokenByUserId, updateRefreshToken} = require("../dbs/access/pg.token.js");
 const { v4: uuidv4 } = require('uuid');
 class KeyTokenService {
   // create token here

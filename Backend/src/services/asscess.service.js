@@ -7,6 +7,7 @@ const { createTokenPair, verifyJWT } = require("../auth/authUtils.js");
 const { getInfoData } = require("../utils/index.js");
 const { BadRequestError, AuthFailureError, ForbiddenError } = require("../core/error.response.js");
 const UserService = require("./user.service.js");
+const { includes } = require("lodash");
 
 const roleAccount = {
   student: 0,
@@ -16,6 +17,37 @@ const roleAccount = {
 };
 
 class AccessService {
+
+  static handlerRefreshTokenV2  = async ( {refreshToken, user, keyStore} ) => {
+
+    const { userId, email } = user
+
+    console.log("user in hander", userId, email);
+
+    if(keyStore.refresh_tokens_used.includes(refreshToken)){
+      await KeyTokenService.findAndDeleteKeyByUserId(userId)
+  
+      throw new ForbiddenError("Something went wrong ! Please relogin")
+    }
+
+    if(keyStore.refresh_token !== refreshToken) throw new AuthFailureError('Account not registered.')
+
+
+     //create new access token and refresh token
+     const tokens = await createTokenPair(
+      { userId: userId, email: email },
+      keyStore.public_key,
+      keyStore.private_key
+    );
+    //update token
+    await KeyTokenService.updateToken(userId, tokens.refreshToken, refreshToken)
+
+    //update token in db
+    return {
+      user,
+      tokens
+    }
+  }
 
   static handlerRefreshToken  = async ( refreshToken ) => {
   //check token_used?
@@ -31,13 +63,14 @@ class AccessService {
       throw new ForbiddenError("Something went wrong ! Please relogin")
     }
     console.log("not found");
+    
     //if not found -> check refresh token
     const holdderToken = await KeyTokenService.findByRefreshToken(refreshToken)
     if (!holdderToken) throw new AuthFailureError('Account not registered.')
     console.log("holdderToken", holdderToken);
+
     //check email and userId from request and privateKey(db)
     const { userId, email } = await verifyJWT ( refreshToken, holdderToken.private_key )
-    console.log("dsdsad, ",{userId: userId, email: email});
 
     //create new access token and refresh token
     const tokens = await createTokenPair(
