@@ -7,6 +7,13 @@ abstract interface class AuthRepository {
     required String email,
     required String password,
   });
+  Future<DataState<UserEntity>> signUpWithGoogle();
+  Future<DataState<UserEntity>> signUpWithEmail({
+    required String name,
+    required String email,
+    required String password,
+  });
+
   Future<void> logoutWithGoogle();
   Future<void> logout();
 }
