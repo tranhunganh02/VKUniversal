@@ -1,7 +1,7 @@
 class SignUpRequest {
-  String email;
-  String password;
-  String name;
+  final String email;
+  final String password;
+  final String name;
 
   SignUpRequest({
     required this.email,
