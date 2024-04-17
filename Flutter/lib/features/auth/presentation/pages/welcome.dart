@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:vkuniversal/config/router_name.dart';
-import 'package:vkuniversal/config/routes.dart';
 import 'package:vkuniversal/core/utils/images_string.dart';
 import 'package:vkuniversal/core/widgets/size_box.dart';
-import 'package:vkuniversal/features/auth/presentation/pages/login.dart';
 import 'package:vkuniversal/features/auth/presentation/widgets/login_button.dart';
 import 'package:vkuniversal/features/auth/presentation/widgets/vku_logo.dart';
 

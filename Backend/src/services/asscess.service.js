@@ -118,7 +118,6 @@ class AccessService {
 
 
   static async signUp({ email, password }) {
-    try {
 
       console.log("email: " + email);
       // check permisson mail vku
@@ -171,16 +170,8 @@ class AccessService {
             tokens,
         };
       }
-    } catch (error) {
-      console.error("Error during signup:", error);
-      return {
-        code: "xxx",
-        message: error.message,
-        status: "error",
-      };
     }
   }
 
-}
  
 module.exports = AccessService;

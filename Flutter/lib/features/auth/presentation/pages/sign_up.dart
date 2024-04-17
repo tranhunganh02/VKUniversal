@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:vkuniversal/config/router_name.dart';
 import 'package:vkuniversal/core/utils/icon_string.dart';
 import 'package:vkuniversal/core/widgets/size_box.dart';
+import 'package:vkuniversal/features/auth/presentation/bloc/auth_bloc.dart';
 import 'package:vkuniversal/features/auth/presentation/widgets/circle_check_box.dart';
 import 'package:vkuniversal/features/auth/presentation/widgets/filled_button.dart';
 import 'package:vkuniversal/features/auth/presentation/widgets/google_button.dart';
@@ -16,6 +18,19 @@ class SignUpPage extends StatefulWidget {
 }
 
 class _SignUpPageState extends State<SignUpPage> {
+  final formKey = GlobalKey<FormState>();
+  final nameController = TextEditingController();
+  final emailController = TextEditingController();
+  final passwordController = TextEditingController();
+
+  @override
+  void dispose() {
+    nameController.dispose();
+    emailController.dispose();
+    passwordController.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     TextTheme textTheme = Theme.of(context).textTheme;
@@ -29,7 +44,8 @@ class _SignUpPageState extends State<SignUpPage> {
           icon: IconList.backArrow,
         ),
       ),
-      body: Center(
+      body: Form(
+        key: formKey,
         child: Column(
           children: [
             Text(
@@ -46,18 +62,21 @@ class _SignUpPageState extends State<SignUpPage> {
               hintText: "Name",
               prefixIcon: IconList.user,
               isObscured: false,
+              controller: nameController,
             ),
             CustomSizeBox(value: 10),
             AuthTextField(
               hintText: "Email",
               prefixIcon: IconList.email,
               isObscured: false,
+              controller: emailController,
             ),
             CustomSizeBox(value: 10),
             AuthTextField(
               hintText: "Password",
               prefixIcon: IconList.lock,
               isObscured: true,
+              controller: passwordController,
             ),
             CustomSizeBox(value: 10),
             CircleCheckBox(
@@ -66,7 +85,15 @@ class _SignUpPageState extends State<SignUpPage> {
             ),
             FilledButtonCustom(
               label: "Create",
-              onPress: () {},
+              onPress: () {
+                context.read<AuthBloc>().add(
+                      AuthSignUp(
+                        email: emailController.text.trim(),
+                        password: passwordController.text.trim(),
+                        name: nameController.text.trim(),
+                      ),
+                    );
+              },
             ),
             CustomSizeBox(value: 10),
             HorizontalLine(),

@@ -1,6 +1,4 @@
 import 'dart:io';
-import 'dart:nativewrappers/_internal/vm/lib/ffi_allocation_patch.dart';
-
 import 'package:dio/dio.dart';
 import 'package:logger/logger.dart';
 import 'package:vkuniversal/core/resources/data_state.dart';
@@ -12,7 +10,7 @@ import 'package:vkuniversal/features/auth/domain/repository/auth_repository.dart
 
 class AuthRepositoryImpl implements AuthRepository {
   final AuthApiService _authApiService;
-  late Logger _logger;
+  Logger _logger = Logger();
 
   AuthRepositoryImpl({required AuthApiService authApiService})
       : _authApiService = authApiService;
@@ -66,8 +64,9 @@ class AuthRepositoryImpl implements AuthRepository {
         password: password,
         name: name,
       ));
-      if (httpResponse.response.statusCode == HttpStatus.ok) {
-        _logger.e("Sign up successful: ");
+      _logger.d("Signing up...");
+      if (httpResponse.response.statusCode == HttpStatus.created) {
+        _logger.d("Sign up successful: ");
         return DataSuccess(httpResponse.data);
       } else {
         _logger.e("Sign up failed: ");
@@ -75,6 +74,7 @@ class AuthRepositoryImpl implements AuthRepository {
         return DataFailed(DioException(requestOptions: options));
       }
     } on DioException catch (e) {
+      _logger.e(e.message);
       return DataFailed(e);
     }
   }

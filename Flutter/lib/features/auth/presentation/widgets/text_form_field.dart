@@ -6,12 +6,14 @@ class AuthTextField extends StatelessWidget {
   final Icon? prefixIcon;
   final ImageIcon? imageIcon;
   final bool isObscured;
+  final TextEditingController controller;
   AuthTextField({
     super.key,
     required this.hintText,
     this.prefixIcon,
     this.imageIcon,
     required this.isObscured,
+    required this.controller,
   });
 
   @override
@@ -23,6 +25,7 @@ class AuthTextField extends StatelessWidget {
       width: width * 0.9,
       height: 52,
       child: TextFormField(
+        controller: controller,
         obscureText: isObscured,
         style: textTheme.labelSmall,
         cursorColor: colorScheme.onPrimary,

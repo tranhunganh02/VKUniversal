@@ -49,6 +49,7 @@ dependencies:
   retrofit: '>=4.0.0 <5.0.0'
   logger: any  #for logging purpose
   json_annotation: ^4.8.1
+  get_it: ^7.7.0
 
 dev_dependencies:
   retrofit_generator: '>=7.0.0 <8.0.0'

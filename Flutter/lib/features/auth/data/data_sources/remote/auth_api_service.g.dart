@@ -13,7 +13,7 @@ class _AuthApiService implements AuthApiService {
     this._dio, {
     this.baseUrl,
   }) {
-    baseUrl ??= 'http://localhost:5055/v1/api/vkuniversal';
+    baseUrl ??= 'http://192.168.1.2:5055/v1/api/vkuniversal';
   }
 
   final Dio _dio;
