@@ -4,10 +4,11 @@ const {
   deletePostById,
   updatePost,
   updatePostByIdAndUserId,
+  updateAttachmentFileUrl
 } = require("../../dbs/post/pg.post");
 
 const { BadRequestError } = require("../../core/error.response");
-const { uploadFileToFirebase, deleteFileFromFirebase } = require("../../dbs/post/firebase.post");
+const { uploadFileToFirebase, deleteFileFromFirebase, updateFileFromFirebase } = require("../../dbs/post/firebase.post");
 const { createAttachment } = require("../../dbs/post/pg.attachment");
 class PostService {
   // create post here
@@ -46,15 +47,6 @@ class PostService {
   static async udpatePost(payload, userId) {
     const post_id = payload.post_id;
 
-    // const attachment = payload.attachment;
-
-    // const uploadedFileUrls = await Promise.all(
-    //   attachment.map(async (file) => {
-    //     const buffer = file.buffer;
-    //     return await PostService.uploadImagesToFirebase(file);
-    //   })
-    // );
-
     delete payload.post_id;
     delete payload.attachment;
 
@@ -65,18 +57,16 @@ class PostService {
     return result;
   }
 
-  static async updatePrivacy(payload, user) {}
 
-  static async updateContent(payload, user) {}
-
-  static async updatePostType(payload, user) {
-    // Xử lý cập nhật loại bài đăng
-  }
-
-  static async updateAttachemnt(payload, user) {}
-
-  static async updateContentPrivacyTypeAttachment(payload, user) {
-    // Xử lý cập nhật toàn bộ dữ liệu
+  static async updatePostAttachment(payload, files) {
+    const attachmentURLs = await Promise.all(payload.map(async (attachment, index) => {
+      console.log("attachment", attachment.file_url);
+      // await deleteFileFromFirebase( attachment.file_url);
+      const newUrl = await updateFileFromFirebase(attachment.file_url, files[index].buffer, files[index]);
+      return await updateAttachmentFileUrl(attachment.attachment_id, newUrl)
+      
+    }));
+    return attachmentURLs
   }
 
   static async deletePostById(payload, user_id) {
@@ -100,20 +90,6 @@ class PostService {
    }
   }
 
-  static async uploadImagesToFirebase(payload, user, files) {
-    console.log("payload", payload, user, "files", files);
-
-    console.log("attachment", files);
-    const attachmentUrls = await Promise.all(
-      files.map(async (file) => {
-        const buffer = file.buffer;
-
-        return await uploadImageToFirebase(buffer, file);
-      })
-    );
-
-    return attachmentUrls;
-  }
 }
 
 module.exports = PostService;

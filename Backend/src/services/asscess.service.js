@@ -119,6 +119,8 @@ class AccessService {
     const foundUser = await UserService.findUserByEmail(email)
     if(!foundUser) throw new BadRequestError('User not found')
 
+    console.log("found user ", foundUser);
+
     //2.Check macth password
     const matchPassword = await bcrypt.compare(password, foundUser.password) 
     if(!matchPassword) throw new AuthFailureError('Authentication error')
@@ -143,7 +145,7 @@ class AccessService {
 
 
     return {
-      user: getInfoData({fileds: ['id', 'name', 'email', ], Object: foundUser}),
+      user: getInfoData({fileds: ['user_id', 'email', ], Object: foundUser}),
       tokens,
     }
 
@@ -151,7 +153,6 @@ class AccessService {
 
 
   static async signUp({ email, password }) {
-    try {
 
       console.log("email: " + email);
       // check permisson mail vku
@@ -200,18 +201,10 @@ class AccessService {
         }
 
         return {
-            user: getInfoData({fileds: ['id', 'name', 'email', ], Object: saveUser}),
+            user: getInfoData({fileds: ['user_id', 'email', ], Object: saveUser}),
             tokens,
         };
       }
-    } catch (error) {
-      console.error("Error during signup:", error);
-      return {
-        code: "xxx",
-        message: error.message,
-        status: "error",
-      };
-    }
   }
 
 }

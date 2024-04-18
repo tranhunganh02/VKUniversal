@@ -34,6 +34,22 @@ async function uploadFileToFirebase(buffer, file) {
       throw new Error('Error uploading file to Firebase');
     }
   }
+
+  async function updateFileFromFirebase(oldFileUrl, newFileBuffer, newFile) {
+    try {
+        // Xoá file cũ từ Firebase Storage
+        await deleteFileFromFirebase(oldFileUrl)
+        // Upload file mới lên Firebase Storage và nhận về URL mới
+        const newFileUrl = await uploadFileToFirebase(newFileBuffer, newFile);
+
+        // Trả về URL của tệp mới
+        return newFileUrl;
+    } catch (error) {
+        console.error('Error updating file and returning URL:', error);
+        throw new Error('Error updating file and returning URL');
+    }
+}
+
   
   // Hàm để xác định file_type từ mimetype
   function getFileTypeFromMimetype(mimetype) {
@@ -53,8 +69,7 @@ async function deleteFileFromFirebase (fileUrl) {
         // Logic để xoá tệp từ Firebase Storage, dựa vào fileUrl
         // Ví dụ:
         console.log("file sau khi cat", newFileUrl);
-        const bucket = storageFirebase.bucket();
-        const file = bucket.file(newFileUrl);
+        const file = storageFirebase.bucket().file(newFileUrl);
         await file.delete();
 
         console.log(`File ${newFileUrl} deleted from Firebase Storage.`);
@@ -81,6 +96,7 @@ async function extractFilePath(firebaseStorageLink) {
 
 
 module.exports = {
+  updateFileFromFirebase,
     uploadFileToFirebase,
     deleteFileFromFirebase
 };
