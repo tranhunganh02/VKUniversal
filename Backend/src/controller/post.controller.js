@@ -6,23 +6,22 @@ const {
 const PostService = require("../services/post/post.service");
 
 class PostController {
-  imageTest = async (req, res, next) => {
-    new SuccessResponse({
-      message: "Created success",
-      metadata: await PostService.uploadImagesToFirebase(req.body, req.user, req.files),
-    }).send(res);
-  };
   createPost = async (req, res, next) => {
-    new SuccessResponse({
+    new CREATED({
       message: "Created success",
       metadata: await PostService.createPost(req.body, req.user.userId, req.files),
     }).send(res);
   };
   updatePost = async (req, res, next) => {
-    console.log("body ", req.body);
+    new SuccessResponse({
+      message: "Update file success",
+      metadata: await PostService.udpatePost(req.body, req.user.userId),
+    }).send(res);
+  };
+  updatePostAttachment = async (req, res, next) => {
     new SuccessResponse({
       message: "Update success",
-      metadata: await PostService.udpatePost(req.body, req.user.userId),
+      metadata: await PostService.updatePostAttachment(JSON.parse(req.body.new_attachments),  req.files),
     }).send(res);
   };
   deletePost = async (req, res, next) => {

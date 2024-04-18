@@ -108,12 +108,27 @@ const updatePostType = async (postId, newPostType) => {
   `;
   const values = [newPostType, postId];
   const result = await db.query(query, values);
-  return result.rows[0];
+  return result[0];
 };
+const updateAttachmentFileUrl = async (attachmentId, newFileUrl) => {
 
-const upLoadAttachment = async (attachment) => {
-  
-}
+    // Thực hiện truy vấn SQL để cập nhật đường dẫn file mới cho attachment
+    const query = `
+      UPDATE Attachment
+      SET file_url = $1
+      WHERE attachment_id = $2
+      RETURNING *;
+    `;
+    const values = [newFileUrl, attachmentId];
+    const result = await db.query(query, values);
+
+    // In kết quả ra console để kiểm tra
+    console.log("result", result);
+
+    // Trả về kết quả sau khi cập nhật
+    return result[0];
+ 
+};
 
 
 module.exports = {
@@ -124,5 +139,6 @@ module.exports = {
   updatePostContent,
   updatePostPrivacy,
   updatePostType,
-  updatePostByIdAndUserId
+  updatePostByIdAndUserId,
+  updateAttachmentFileUrl
 };

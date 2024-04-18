@@ -12,6 +12,30 @@ const createAttachment = async (postId, fileName, fileType, fileUrl) => {
   return result[0];
 };
 
+const updateAttachmentFileUrl = async (attachmentId, newFileUrl) => {
+  try {
+    // Thực hiện truy vấn SQL để cập nhật đường dẫn file mới cho attachment
+    const query = `
+      UPDATE Attachment
+      SET file_url = $1
+      WHERE attachment_id = $2
+      RETURNING *;
+    `;
+    const values = [newFileUrl, attachmentId];
+    const result = await db.query(query, values);
+
+    // In kết quả ra console để kiểm tra
+    console.log("result", result);
+
+    // Trả về kết quả sau khi cập nhật
+    return result[0];
+  } catch (error) {
+    console.error('Error updating attachment file url:', error);
+    throw new Error('Error updating attachment file url');
+  }
+};
+
 module.exports = {
-  createAttachment
+  createAttachment,
+  updateAttachmentFileUrl
 };
