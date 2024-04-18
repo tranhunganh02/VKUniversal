@@ -7,5 +7,10 @@ class UserTokenEntity extends Equatable {
   UserTokenEntity({required this.accessToken, required this.refreshToken});
 
   @override
-  List<Object?> get props => throw UnimplementedError();
+  List<Object?> get props {
+    return [
+      accessToken,
+      refreshToken,
+    ];
+  }
 }

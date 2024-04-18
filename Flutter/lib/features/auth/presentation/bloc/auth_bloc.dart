@@ -25,7 +25,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       final dataState = await _signUpWithEmail(params: _request);
 
       if (dataState is DataSuccess) {
-        emit(AuthSignUpSuccess(dataState.data!.uid));
+        emit(AuthSignUpSuccess(dataState.data!.user.uid));
         print("Success");
       }
       if (dataState is DataFailed) {
@@ -43,7 +43,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       final dataState = await _signInWithEmail(params: _request);
 
       if (dataState is DataSuccess) {
-        emit(AuthLoginSuccess(dataState.data!.uid));
+        emit(AuthLoginSuccess(dataState.data!.user.uid));
         print("Login Success");
       }
       if (dataState is DataFailed) {

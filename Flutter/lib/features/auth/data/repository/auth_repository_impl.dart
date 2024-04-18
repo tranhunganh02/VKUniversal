@@ -6,6 +6,7 @@ import 'package:vkuniversal/features/auth/data/data_sources/remote/auth_api_serv
 import 'package:vkuniversal/features/auth/data/models/sign_in_request.dart';
 import 'package:vkuniversal/features/auth/data/models/sign_up_request.dart';
 import 'package:vkuniversal/features/auth/data/models/user.dart';
+import 'package:vkuniversal/features/auth/data/models/user_response.dart';
 import 'package:vkuniversal/features/auth/domain/repository/auth_repository.dart';
 
 class AuthRepositoryImpl implements AuthRepository {
@@ -26,12 +27,12 @@ class AuthRepositoryImpl implements AuthRepository {
   }
 
   @override
-  Future<DataState<UserModel>> signInWithGoogle() {
+  Future<DataState<UserResponse>> signInWithGoogle() {
     throw UnimplementedError();
   }
 
   @override
-  Future<DataState<UserModel>> signInWithEmail({
+  Future<DataState<UserResponse>> signInWithEmail({
     required String email,
     required String password,
   }) async {
@@ -40,10 +41,13 @@ class AuthRepositoryImpl implements AuthRepository {
         email: email,
         password: password,
       ));
+      _logger.d("Signing in...");
       if (response.response.statusCode == HttpStatus.ok) {
+        _logger.d("Sign in successful");
         return DataSuccess(response.data);
       } else {
         RequestOptions options = RequestOptions();
+        _logger.e("Sign in failed: ");
         return DataFailed(DioException(requestOptions: options));
       }
     } on DioException catch (e) {
@@ -52,7 +56,7 @@ class AuthRepositoryImpl implements AuthRepository {
   }
 
   @override
-  Future<DataState<UserModel>> signUpWithEmail({
+  Future<DataState<UserResponse>> signUpWithEmail({
     required String name,
     required String email,
     required String password,
@@ -66,7 +70,7 @@ class AuthRepositoryImpl implements AuthRepository {
       ));
       _logger.d("Signing up...");
       if (httpResponse.response.statusCode == HttpStatus.created) {
-        _logger.d("Sign up successful: ");
+        _logger.d("Sign up successful");
         return DataSuccess(httpResponse.data);
       } else {
         _logger.e("Sign up failed: ");
@@ -80,7 +84,7 @@ class AuthRepositoryImpl implements AuthRepository {
   }
 
   @override
-  Future<DataState<UserModel>> signUpWithGoogle() {
+  Future<DataState<UserResponse>> signUpWithGoogle() {
     throw UnimplementedError();
   }
 }

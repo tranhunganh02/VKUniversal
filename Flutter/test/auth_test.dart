@@ -15,7 +15,7 @@ void main() {
       final authApiService = AuthApiService(dio);
 
       final expectedEmail = 'huytn.21it@vku.udn.vn';
-      final expectedPassword = 'Tha@021103';
+      final expectedPassword = 'Huyhuy007';
 
       final response = await authApiService.signInWithEmail(SignInRequest(
         email: expectedEmail,
@@ -32,7 +32,7 @@ void main() {
       final authApiService = AuthApiService(dio);
 
       final expectedName = 'Huy';
-      final expectedEmail = 'huytest2@vku.udn.vn';
+      final expectedEmail = 'huytest123122@vku.udn.vn';
       final expectedPassword = 'Tha@021103';
 
       final response = await authApiService.signUpWithEmail(SignUpRequest(

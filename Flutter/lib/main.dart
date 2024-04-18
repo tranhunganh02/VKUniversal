@@ -5,6 +5,7 @@ import 'package:vkuniversal/config/routes.dart';
 import 'package:vkuniversal/config/theme/theme_const.dart';
 import 'package:vkuniversal/core/injection_container.dart';
 import 'package:vkuniversal/features/auth/presentation/bloc/auth_bloc.dart';
+import 'package:vkuniversal/features/auth/presentation/bloc/sign_in/bloc/sign_in_bloc.dart';
 import 'package:vkuniversal/features/auth/presentation/pages/welcome.dart';
 
 Future<void> main() async {
@@ -16,6 +17,9 @@ Future<void> main() async {
     providers: [
       BlocProvider(
         create: (_) => sl<AuthBloc>(),
+      ),
+      BlocProvider(
+        create: (_) => sl<SignInBloc>(),
       )
     ],
     child: const MyApp(),

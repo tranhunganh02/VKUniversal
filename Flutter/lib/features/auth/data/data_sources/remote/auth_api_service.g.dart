@@ -51,15 +51,15 @@ class _AuthApiService implements AuthApiService {
   }
 
   @override
-  Future<HttpResponse<dynamic>> signInWithEmail(
+  Future<HttpResponse<UserResponse>> signInWithEmail(
       SignInRequest signInRequest) async {
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{};
     final _data = <String, dynamic>{};
     _data.addAll(signInRequest.toJson());
-    final _result =
-        await _dio.fetch(_setStreamType<HttpResponse<dynamic>>(Options(
+    final _result = await _dio.fetch<Map<String, dynamic>>(
+        _setStreamType<HttpResponse<UserResponse>>(Options(
       method: 'POST',
       headers: _headers,
       extra: _extra,
@@ -75,7 +75,7 @@ class _AuthApiService implements AuthApiService {
               _dio.options.baseUrl,
               baseUrl,
             ))));
-    final value = _result.data;
+    final value = UserResponse.fromJson(_result.data!['metadata']);
     final httpResponse = HttpResponse(value, _result);
     return httpResponse;
   }

@@ -1,14 +1,14 @@
 import 'package:vkuniversal/core/resources/data_state.dart';
-import 'package:vkuniversal/features/auth/domain/entities/User.dart';
+import 'package:vkuniversal/features/auth/domain/entities/user_response.dart';
 
 abstract interface class AuthRepository {
-  Future<DataState<UserEntity>> signInWithGoogle();
-  Future<DataState<UserEntity>> signInWithEmail({
+  Future<DataState<UserResponseEntity>> signInWithGoogle();
+  Future<DataState<UserResponseEntity>> signInWithEmail({
     required String email,
     required String password,
   });
-  Future<DataState<UserEntity>> signUpWithGoogle();
-  Future<DataState<UserEntity>> signUpWithEmail({
+  Future<DataState<UserResponseEntity>> signUpWithGoogle();
+  Future<DataState<UserResponseEntity>> signUpWithEmail({
     required String name,
     required String email,
     required String password,
