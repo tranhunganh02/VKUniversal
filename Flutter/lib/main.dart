@@ -10,9 +10,6 @@ import 'package:vkuniversal/features/auth/presentation/pages/welcome.dart';
 
 Future<void> main() async {
   await initializeDependencies();
-  // runApp(
-  //   const MyApp(),
-  // );
   runApp(MultiBlocProvider(
     providers: [
       BlocProvider(

@@ -1,8 +1,5 @@
 //Create custom return success with appropriate HTTP status codes and messages
-const {
-     StatusCodes,
-     ReasonPhrases
-} = require('../utils/httpStatusCode')
+const { StatusCodes, ReasonPhrases } = require("../utils/httpStatusCode");
 
 // const StatusCode = {
 //      OK: 200,
@@ -15,35 +12,50 @@ const {
 // }
 
 class SuccessResponse {
+  constructor({
+    message,
+    statusCode = StatusCodes.OK,
+    reasonStatusCode = ReasonPhrases.OK,
+    metadata = {},
+  }) {
+    this.message = !message ? reasonStatusCode : message;
+    this.status = statusCode;
+    this.metadata = metadata;
+  }
 
-     constructor({message, statusCode = StatusCodes.OK, reasonStatusCode = ReasonPhrases.OK, metadata = {}}) {
-         this.message = !message ? reasonStatusCode : message
-         this.status = statusCode;
-         this.metadata = metadata;         
-     }
-
-     send(res, header= {}) {
-          return res.status(this.status).json(this)
-     }
-
+  send(res, header = {}) {
+    return res.status(this.status).json(this);
+  }
 }
 
 class OK extends SuccessResponse {
-
-     constructor (message , metadata) {
-          super({message, metadata})
-     }
+  constructor(message, metadata) {
+    super({ message, metadata });
+  }
 }
 
 class CREATED extends SuccessResponse {
-
-     constructor ({message, statusCode = StatusCodes.CREATED, reasonStatusCode = ReasonPhrases.CREATED, metadata}) {
-          super({message, statusCode, reasonStatusCode, metadata})
-     }
+  constructor({
+    message,
+    statusCode = StatusCodes.CREATED,
+    reasonStatusCode = ReasonPhrases.CREATED,
+    metadata,
+  }) {
+    super({ message, statusCode, reasonStatusCode, metadata });
+  }
+}
+class NoContentSuccess extends SuccessResponse {
+  constructor(
+    message = ReasonPhrases.NO_CONTENT,
+    statusCode = StatusCodes.NO_CONTENT
+  ) {
+    super(message, statusCode);
+  }
 }
 
 module.exports = {
-     OK,
-     CREATED,
-     SuccessResponse
-}
+  OK,
+  CREATED,
+  SuccessResponse,
+  NoContentSuccess,
+};

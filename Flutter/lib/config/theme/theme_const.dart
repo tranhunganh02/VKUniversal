@@ -13,6 +13,29 @@ ColorScheme lightColorScheme = ColorScheme(
   onError: Color(0xfffafafa),
   surface: Color(0xfff9f9f9),
   onSurface: Color(0xff000000),
+  surfaceBright: Color(0xffffffff),
+  surfaceContainer: Color(0xfff5f5f5),
+  outline: Color(0xff000000),
+  outlineVariant: Color(0xffe6e6e6),
+  surfaceDim: Color(0xffdcdcdc),
+);
+ColorScheme darkColorScheme = ColorScheme(
+  brightness: Brightness.dark,
+  primary: Color(0xfff5f5f5),
+  onPrimary: Color(0xff091434),
+  primaryContainer: Color(0xff5A7BC5),
+  onPrimaryContainer: Color(0xffffffff),
+  secondary: Color(0xffCED8EE),
+  onSecondary: Color(0xff091434),
+  error: Color(0xffff2e00),
+  onError: Color(0xfffafafa),
+  surface: Color(0xfff9f9f9),
+  onSurface: Color(0xff000000),
+  surfaceBright: Color(0xffffffff),
+  surfaceContainer: Color(0xfff5f5f5),
+  outline: Color(0xff000000),
+  outlineVariant: Color(0xffe6e6e6),
+  surfaceDim: Color(0xffdcdcdc),
 );
 
 ThemeData lightTheme = ThemeData().copyWith(

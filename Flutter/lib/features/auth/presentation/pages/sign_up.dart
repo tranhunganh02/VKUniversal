@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:vkuniversal/config/router_name.dart';
 import 'package:vkuniversal/core/utils/icon_string.dart';
+import 'package:vkuniversal/core/widgets/back_leading_btn.dart';
 import 'package:vkuniversal/core/widgets/size_box.dart';
 import 'package:vkuniversal/features/auth/presentation/bloc/auth_bloc.dart';
 import 'package:vkuniversal/features/auth/presentation/widgets/circle_check_box.dart';
@@ -37,12 +38,7 @@ class _SignUpPageState extends State<SignUpPage> {
     ColorScheme colorScheme = Theme.of(context).colorScheme;
     return Scaffold(
       appBar: AppBar(
-        leading: IconButton(
-          onPressed: () {
-            Navigator.pop(context);
-          },
-          icon: IconList.backArrow,
-        ),
+        leading: BackLeadingBtn(),
       ),
       body: Form(
         key: formKey,
@@ -97,6 +93,7 @@ class _SignUpPageState extends State<SignUpPage> {
             ),
             CustomSizeBox(value: 10),
             HorizontalLine(),
+            CustomSizeBox(value: 10),
             GoogleButton(
               label: 'Sign up with Google',
               onPressed: () {},

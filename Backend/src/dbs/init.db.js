@@ -1,10 +1,14 @@
 const { Pool } = require('pg');
-const { db } = require('../configs/config.pg')
+const { db } = require('../configs/config.pg');
+const admin = require('firebase-admin');
+
 class Database {
 
   constructor(){
-     this.pg = null;
-     this.connect()
+     this.pool = null;
+     this.firebase = null;
+     this.connect("pg");
+     this.connect("firebase");
   }   
 
   async connect(type = "pg") {
@@ -19,11 +23,33 @@ class Database {
               poolSize: 100, // Adjust poolSize as needed
             });
     
-          await this.pool.connect(); // Use await to ensure connection is established
-            console.log("Connected to PostgreSQL database successfully: ",db.database);
+            await this.pool.connect(); // Use await to ensure connection is established
+            console.log("Connected to PostgreSQL database successfully: ", db.database);
           } catch (error) {
             console.error("Error connecting to database:", error);
             // Handle connection errors appropriately (e.g., retry, exit gracefully)
+          }
+        } else if (type === "firebase") {
+          try {
+            this.firebase = admin.initializeApp({
+              credential: admin.credential.cert({
+                "type": process.env.FIREBASE_TYPE,
+                "project_id": process.env.FIREBASE_PROJECT_ID,
+                "private_key_id": process.env.FIREBASE_PRIVATE_KEY_ID,
+                "private_key": process.env.FIREBASE_PRIVATE_KEY.replace(/\\n/g, '\n'), // Restore line breaks
+                "client_email": process.env.FIREBASE_CLIENT_EMAIL,
+                "client_id": process.env.FIREBASE_CLIENT_ID,
+                "auth_uri": process.env.FIREBASE_AUTH_URI,
+                "token_uri": process.env.FIREBASE_TOKEN_URI,
+                "auth_provider_x509_cert_url": process.env.FIREBASE_AUTH_PROVIDER_X509_CERT_URL,
+                "client_x509_cert_url": process.env.FIREBASE_CLIENT_X509_CERT_URL
+              }),
+              databaseURL: process.env.DATABASE_URL,
+              storageBucket: process.env.STORAGEBUCKET,
+            });
+            console.log("Connected to Firebase Realtime Database successfully.");
+          } catch (error) {
+            console.error("Error connecting to Firebase:", error);
           }
         } else {
           throw new Error(`Unsupported database type: ${type}`);
@@ -45,36 +71,8 @@ class Database {
      if (!this.instance) {
           this.instance = new Database();
         }
-        return this.instance;
-      
+        return this.instance;   
   }
-
-
-
 }
 
 module.exports = Database.getInstance();
-
-
-   
-
-//     admin.initializeApp({
-//       credential: admin.credential.cert(serviceAccountKeyPath),
-//       databaseURL: firebaseDatabaseURL,
-//     });
-
-//     this.firebase = admin.database();
-  
-
-//   async query(type, text, params) {
-//     if (type === 'postgresql') {
-//       return this.pg.query(text, params);
-//     } else if (type === 'firebase') {
-//      //  return this.firebase.ref(text).once('value').then((snapshot) => snapshot.val());
-//      return null
-//     } else {
-//       throw new Error(`Invalid database type: ${type}`);
-//     }
-//   }
-
-  // ... other methods for connecting, disconnecting, managing transactions

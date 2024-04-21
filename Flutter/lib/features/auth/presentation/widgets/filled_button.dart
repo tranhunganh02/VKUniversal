@@ -4,8 +4,11 @@ import 'package:vkuniversal/core/utils/screen_scale.dart';
 class FilledButtonCustom extends StatelessWidget {
   final String label;
   final VoidCallback onPress;
-  const FilledButtonCustom(
-      {super.key, required this.label, required this.onPress});
+  const FilledButtonCustom({
+    super.key,
+    required this.label,
+    required this.onPress,
+  });
 
   @override
   Widget build(BuildContext context) {

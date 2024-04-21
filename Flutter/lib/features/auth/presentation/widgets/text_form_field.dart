@@ -7,6 +7,7 @@ class AuthTextField extends StatelessWidget {
   final ImageIcon? imageIcon;
   final bool isObscured;
   final TextEditingController controller;
+  final String? validation;
   AuthTextField({
     super.key,
     required this.hintText,
@@ -14,6 +15,7 @@ class AuthTextField extends StatelessWidget {
     this.imageIcon,
     required this.isObscured,
     required this.controller,
+    this.validation,
   });
 
   @override
@@ -29,6 +31,8 @@ class AuthTextField extends StatelessWidget {
         obscureText: isObscured,
         style: textTheme.labelSmall,
         cursorColor: colorScheme.onPrimary,
+        validator: (_) => validation,
+        autovalidateMode: AutovalidateMode.onUserInteraction,
         decoration: InputDecoration(
           prefixIcon: prefixIcon,
           hintText: hintText,
@@ -36,12 +40,12 @@ class AuthTextField extends StatelessWidget {
           fillColor: colorScheme.secondary,
           filled: true,
           border: OutlineInputBorder(
+            borderSide: BorderSide(color: Colors.transparent),
             borderRadius: BorderRadius.circular(10),
           ),
           enabledBorder: OutlineInputBorder(
             borderSide: BorderSide(color: Colors.transparent),
-            borderRadius: BorderRadius.circular(
-                10), // Transparent border for unfocused state
+            borderRadius: BorderRadius.circular(10),
           ),
         ),
       ),

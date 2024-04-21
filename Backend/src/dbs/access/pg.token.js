@@ -1,4 +1,4 @@
-const db = require("./init.db.js");
+const db = require("../init.db.js");
 
 const createKeyToken = async ({
   tokenId,

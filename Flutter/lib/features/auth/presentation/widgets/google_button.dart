@@ -23,7 +23,11 @@ class GoogleButton extends StatelessWidget {
           color: colorScheme.primaryContainer,
         ),
       ),
-      style: ButtonStyle(),
+      style: ElevatedButton.styleFrom(
+          shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(45.0),
+        side: BorderSide(color: colorScheme.outlineVariant, width: 1.0),
+      )),
     );
   }
 }

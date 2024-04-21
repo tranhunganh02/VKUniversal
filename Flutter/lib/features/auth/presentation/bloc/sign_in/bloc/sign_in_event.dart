@@ -24,6 +24,13 @@ class PasswordChanged extends SignInEvent {
   List<Object> get props => [password];
 }
 
+class LoginFormChanged extends SignInEvent {
+  final String email;
+  final String password;
+
+  LoginFormChanged(this.email, this.password);
+}
+
 class SubbmitLoginForm extends SignInEvent {
   final String email;
   final String password;

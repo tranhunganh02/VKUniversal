@@ -8,7 +8,9 @@ abstract class SignInState extends Equatable {
   List<Object> get props => [];
 }
 
-final class SignInInitial extends SignInState {}
+final class LoginInitial extends SignInState {}
+
+final class LoginLoading extends SignInState {}
 
 final class LoginSuccess extends SignInState {
   final UserModel user;
