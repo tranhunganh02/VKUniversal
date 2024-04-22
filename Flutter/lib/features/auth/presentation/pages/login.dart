@@ -1,14 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:vkuniversal/config/router_name.dart';
+import 'package:vkuniversal/config/routes/router_name.dart';
 import 'package:vkuniversal/core/utils/icon_string.dart';
 import 'package:vkuniversal/core/utils/images_string.dart';
-import 'package:vkuniversal/core/utils/screen_scale.dart';
 import 'package:vkuniversal/core/utils/show_snack_bar.dart';
 import 'package:vkuniversal/core/widgets/back_leading_btn.dart';
 import 'package:vkuniversal/core/widgets/loader.dart';
 import 'package:vkuniversal/core/widgets/size_box.dart';
-import 'package:vkuniversal/core/widgets/snack_bar.dart';
 import 'package:vkuniversal/features/auth/presentation/bloc/sign_in/bloc/sign_in_bloc.dart';
 import 'package:vkuniversal/features/auth/presentation/widgets/curved_bottom_clipper.dart';
 import 'package:vkuniversal/features/auth/presentation/widgets/dont_have_account.dart';
@@ -41,13 +39,12 @@ class _LoginPageState extends State<LoginPage> {
   @override
   Widget build(BuildContext context) {
     TextTheme textTheme = Theme.of(context).textTheme;
-    ColorScheme colorScheme = Theme.of(context).colorScheme;
 
     return Scaffold(
       body: BlocConsumer<SignInBloc, SignInState>(
         listener: (context, state) {
           if (state is LoginSuccess) {
-            Navigator.pushNamed(context, RoutesName.home);
+            Navigator.popAndPushNamed(context, RoutesName.home);
           } else if (state is LoginFailure) {
             showErrorSnackBar(context, state.message);
           }

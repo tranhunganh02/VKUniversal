@@ -21,7 +21,7 @@ class _AuthApiService implements AuthApiService {
   String? baseUrl;
 
   @override
-  Future<HttpResponse<dynamic>> signUpWithEmail(
+  Future<HttpResponse<UserResponse>> signUpWithEmail(
       SignUpRequest signUpRequest) async {
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
@@ -45,7 +45,7 @@ class _AuthApiService implements AuthApiService {
               _dio.options.baseUrl,
               baseUrl,
             ))));
-    final value = _result.data;
+    final value = UserResponse.fromJson(_result.data!['metadata']);
     final httpResponse = HttpResponse(value, _result);
     return httpResponse;
   }

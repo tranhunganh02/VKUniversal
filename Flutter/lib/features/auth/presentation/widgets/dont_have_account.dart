@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:vkuniversal/config/router_name.dart';
+import 'package:vkuniversal/config/routes/router_name.dart';
 
 class DontHaveAccount extends StatelessWidget {
   const DontHaveAccount({super.key});

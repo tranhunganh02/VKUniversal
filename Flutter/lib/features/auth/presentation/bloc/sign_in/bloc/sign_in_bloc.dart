@@ -3,6 +3,7 @@ import 'package:dio/dio.dart';
 import 'package:equatable/equatable.dart';
 import 'package:logger/logger.dart';
 import 'package:meta/meta.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:vkuniversal/core/error/LoginError.dart';
 import 'package:vkuniversal/core/resources/data_state.dart';
 import 'package:vkuniversal/features/auth/data/models/sign_in_request.dart';
@@ -31,6 +32,10 @@ class SignInBloc extends Bloc<SignInEvent, SignInState> {
 
         if (_response is DataSuccess) {
           _logger.d('At Sign_in Block: Login Success ');
+          _logger.d('User Email: ${_response.data!.user.email.toString()}');
+
+          final SharedPreferences prefs = await SharedPreferences.getInstance();
+          await prefs.setString('email', _response.data!.user.email.toString());
           emit(LoginSuccess(_response.data?.user as UserModel));
         }
         if (_response is DataFailed) {

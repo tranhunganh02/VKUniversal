@@ -5,8 +5,9 @@ import 'package:vkuniversal/features/auth/data/repository/auth_repository_impl.d
 import 'package:vkuniversal/features/auth/domain/repository/auth_repository.dart';
 import 'package:vkuniversal/features/auth/domain/usecases/sign_in_with_email.dart';
 import 'package:vkuniversal/features/auth/domain/usecases/sign_up_with_email.dart';
-import 'package:vkuniversal/features/auth/presentation/bloc/auth_bloc.dart';
+import 'package:vkuniversal/features/auth/presentation/bloc/sign_up/bloc/sign_up_bloc.dart';
 import 'package:vkuniversal/features/auth/presentation/bloc/sign_in/bloc/sign_in_bloc.dart';
+import 'package:vkuniversal/features/auth/presentation/bloc/welcome/bloc/welcome_bloc.dart';
 
 final sl = GetIt.instance;
 
@@ -25,6 +26,7 @@ Future<void> initializeDependencies() async {
   sl.registerFactory<SignInWithEmail>(
       () => SignInWithEmail(authRepository: sl()));
 
-  sl.registerFactory<AuthBloc>(() => AuthBloc(sl(), sl()));
+  sl.registerFactory<SignUpBloc>(() => SignUpBloc(sl()));
   sl.registerFactory<SignInBloc>(() => SignInBloc(sl()));
+  sl.registerFactory<WelcomeBloc>(() => WelcomeBloc());
 }

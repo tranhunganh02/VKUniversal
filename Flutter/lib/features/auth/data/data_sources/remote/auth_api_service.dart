@@ -11,7 +11,7 @@ abstract class AuthApiService {
   factory AuthApiService(Dio dio, {String baseUrl}) = _AuthApiService;
 
   @POST('/signup')
-  Future<HttpResponse> signUpWithEmail(
+  Future<HttpResponse<UserResponse>> signUpWithEmail(
     @Body() SignUpRequest signUpRequest,
   );
 
