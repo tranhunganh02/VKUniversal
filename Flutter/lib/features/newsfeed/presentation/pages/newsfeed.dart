@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:vkuniversal/core/utils/icon_string.dart';
 
 class NewsfeedPage extends StatefulWidget {
   const NewsfeedPage({super.key});
@@ -10,6 +11,14 @@ class NewsfeedPage extends StatefulWidget {
 class _NewsfeedPageState extends State<NewsfeedPage> {
   @override
   Widget build(BuildContext context) {
-    return Text("Login thành công");
+    return Scaffold(
+      bottomNavigationBar: BottomNavigationBar(
+        items: <BottomNavigationBarItem>[
+          BottomNavigationBarItem(icon: IconList.home, label: "Home"),
+          BottomNavigationBarItem(icon: IconList.home, label: "Home"),
+          BottomNavigationBarItem(icon: IconList.home, label: "Home"),
+        ],
+      ),
+    );
   }
 }

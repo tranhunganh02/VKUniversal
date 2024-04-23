@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:vkuniversal/features/auth/presentation/pages/login.dart';
 import 'package:vkuniversal/features/auth/presentation/pages/sign_up.dart';
 import 'package:vkuniversal/features/auth/presentation/pages/welcome.dart';
+import 'package:vkuniversal/features/newsfeed/presentation/pages/newsfeed.dart';
 
 import 'router_name.dart';
 
@@ -10,7 +11,7 @@ class Routes {
     switch (settings.name) {
       case RoutesName.home:
         return MaterialPageRoute(
-            builder: (BuildContext context) => Container());
+            builder: (BuildContext context) => NewsfeedPage());
       case RoutesName.welcome:
         return MaterialPageRoute(
             builder: (BuildContext context) => WelcomePage());

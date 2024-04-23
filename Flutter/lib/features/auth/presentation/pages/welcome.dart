@@ -24,10 +24,10 @@ class _WelcomePageState extends State<WelcomePage> {
 
   Future<void> _checkAuthentication() async {
     final prefs = await SharedPreferences.getInstance();
-    final email = prefs.getString('email');
+    final email = await prefs.getString('email');
 
     if (email != null && email.isNotEmpty) {
-      Navigator.popAndPushNamed(context, RoutesName.home);
+      await Navigator.popAndPushNamed(context, RoutesName.home);
     }
   }
 
@@ -40,7 +40,11 @@ class _WelcomePageState extends State<WelcomePage> {
 
     return Scaffold(
       body: BlocConsumer<WelcomeBloc, WelcomeState>(
-        listener: (context, state) async {},
+        listener: (context, state) async {
+          if(state is AuthInitial){
+            
+          }
+        },
         builder: (context, state) {
           return Stack(
             children: [

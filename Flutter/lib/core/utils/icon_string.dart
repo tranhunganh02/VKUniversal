@@ -6,4 +6,5 @@ class IconList {
   static Icon user = Icon(LucideIcons.user);
   static Icon email = Icon(LucideIcons.mail);
   static Icon lock = Icon(LucideIcons.lock);
+  static Icon home = Icon(LucideIcons.home);
 }
