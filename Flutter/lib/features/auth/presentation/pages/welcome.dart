@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:logger/logger.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:vkuniversal/config/routes/router_name.dart';
@@ -7,6 +8,7 @@ import 'package:vkuniversal/core/widgets/size_box.dart';
 import 'package:vkuniversal/features/auth/presentation/bloc/welcome/bloc/welcome_bloc.dart';
 import 'package:vkuniversal/features/auth/presentation/widgets/login_button.dart';
 import 'package:vkuniversal/features/auth/presentation/widgets/vku_logo.dart';
+import 'package:vkuniversal/features/newsfeed/presentation/pages/newsfeed.dart';
 
 class WelcomePage extends StatefulWidget {
   const WelcomePage({super.key});
@@ -18,7 +20,8 @@ class WelcomePage extends StatefulWidget {
 class _WelcomePageState extends State<WelcomePage> {
   @override
   void initState() {
-    _checkAuthentication();
+    WelcomeBloc().add(AuthInitial());
+    // _checkAuthentication();
     super.initState();
   }
 
@@ -38,11 +41,14 @@ class _WelcomePageState extends State<WelcomePage> {
     TextTheme textTheme = Theme.of(context).textTheme;
     ColorScheme colorScheme = Theme.of(context).colorScheme;
 
+    final _logger = Logger();
+
     return Scaffold(
       body: BlocConsumer<WelcomeBloc, WelcomeState>(
         listener: (context, state) async {
-          if(state is AuthInitial){
-            
+          if (state is LoggedIn) {
+            _logger.d("Alo");
+            await Navigator.popAndPushNamed(context, RoutesName.home);
           }
         },
         builder: (context, state) {

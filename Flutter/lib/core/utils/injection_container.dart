@@ -28,5 +28,5 @@ Future<void> initializeDependencies() async {
 
   sl.registerFactory<SignUpBloc>(() => SignUpBloc(sl()));
   sl.registerFactory<SignInBloc>(() => SignInBloc(sl()));
-  sl.registerFactory<WelcomeBloc>(() => WelcomeBloc());
+  sl.registerSingleton<WelcomeBloc>(WelcomeBloc());
 }
