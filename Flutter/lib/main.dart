@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:vkuniversal/config/routes/router_name.dart';
 import 'package:vkuniversal/config/routes/routes.dart';
 import 'package:vkuniversal/config/theme/theme_const.dart';
 import 'package:vkuniversal/core/utils/injection_container.dart';
@@ -9,7 +8,8 @@ import 'package:vkuniversal/features/auth/presentation/bloc/sign_up/bloc/sign_up
 import 'package:vkuniversal/features/auth/presentation/bloc/sign_in/bloc/sign_in_bloc.dart';
 import 'package:vkuniversal/features/auth/presentation/bloc/welcome/bloc/welcome_bloc.dart';
 import 'package:vkuniversal/features/auth/presentation/pages/welcome.dart';
-import 'package:vkuniversal/features/newsfeed/presentation/pages/newsfeed.dart';
+import 'package:vkuniversal/features/newsfeed/presentation/pages/home.dart';
+import 'package:vkuniversal/features/newsfeed/presentation/state/home/bloc/home_bloc.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -27,6 +27,9 @@ Future<void> main() async {
       ),
       BlocProvider(
         create: (_) => sl<WelcomeBloc>(),
+      ),
+      BlocProvider(
+        create: (_) => sl<BottomNavigationBloc>(),
       )
     ],
     child: MyApp(
@@ -44,7 +47,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Flutter Demo',
       theme: lightTheme,
-      home: this.isLoggedIn ? NewsfeedPage() : WelcomePage(),
+      home: this.isLoggedIn ? Home() : WelcomePage(),
       onGenerateRoute: Routes.generateRoute,
     );
   }

@@ -8,7 +8,6 @@ import 'package:vkuniversal/core/widgets/size_box.dart';
 import 'package:vkuniversal/features/auth/presentation/bloc/welcome/bloc/welcome_bloc.dart';
 import 'package:vkuniversal/features/auth/presentation/widgets/login_button.dart';
 import 'package:vkuniversal/features/auth/presentation/widgets/vku_logo.dart';
-import 'package:vkuniversal/features/newsfeed/presentation/pages/newsfeed.dart';
 
 class WelcomePage extends StatefulWidget {
   const WelcomePage({super.key});
@@ -21,17 +20,7 @@ class _WelcomePageState extends State<WelcomePage> {
   @override
   void initState() {
     WelcomeBloc().add(AuthInitial());
-    // _checkAuthentication();
     super.initState();
-  }
-
-  Future<void> _checkAuthentication() async {
-    final prefs = await SharedPreferences.getInstance();
-    final email = await prefs.getString('email');
-
-    if (email != null && email.isNotEmpty) {
-      await Navigator.popAndPushNamed(context, RoutesName.home);
-    }
   }
 
   @override

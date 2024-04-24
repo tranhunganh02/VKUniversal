@@ -51,8 +51,7 @@ ThemeData lightTheme = ThemeData().copyWith(
     ),
     labelSmall: GoogleFonts.montserrat(
       textStyle: TextStyle(
-        color: lightColorScheme.onSecondary,
-        fontWeight: FontWeight.w600,
+        fontWeight: FontWeight.w400,
         fontSize: 16,
       ),
     ),
@@ -108,8 +107,8 @@ ThemeData lightTheme = ThemeData().copyWith(
     bodySmall: GoogleFonts.montserrat(
       textStyle: TextStyle(
         color: lightColorScheme.onPrimary,
-        fontWeight: FontWeight.w600,
-        fontSize: 12,
+        fontWeight: FontWeight.w400,
+        fontSize: 10,
       ),
     ),
   ),
