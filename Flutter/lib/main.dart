@@ -16,7 +16,7 @@ Future<void> main() async {
   await initializeDependencies();
   final prefs = await SharedPreferences.getInstance();
   String? email = await prefs.getString('email');
-  bool isLoggedIn = email.toString().isNotEmpty;
+  bool isLoggedIn = email != null;
   runApp(MultiBlocProvider(
     providers: [
       BlocProvider(
@@ -46,7 +46,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Flutter Demo',
-      theme: lightTheme,
+      theme: MyThemeData.lightTheme,
       home: this.isLoggedIn ? Home() : WelcomePage(),
       onGenerateRoute: Routes.generateRoute,
     );

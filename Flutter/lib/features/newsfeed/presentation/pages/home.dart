@@ -36,7 +36,7 @@ class _HomeState extends State<Home> {
   ];
   @override
   Widget build(BuildContext context) {
-    final width = ScreenScale(context: context).getWidth();
+    // final width = ScreenScale(context: context).getWidth();
     return Scaffold(
       body: _pages[_selectIndex],
       bottomNavigationBar: BottomNavigationBar(

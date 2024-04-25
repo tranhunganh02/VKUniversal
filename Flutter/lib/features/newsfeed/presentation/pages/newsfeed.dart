@@ -18,6 +18,7 @@ class _NewsfeedPageState extends State<NewsfeedPage> {
     TextTheme textTheme = Theme.of(context).textTheme;
     return Scaffold(
       appBar: AppBar(
+        leading: null,
         title: SizedBox(
           width: width * 0.35,
           child: Image.asset(
@@ -36,39 +37,45 @@ class _NewsfeedPageState extends State<NewsfeedPage> {
         ],
       ),
       body: Container(
-        decoration: BoxDecoration(color: colorScheme.surfaceContainer),
+        decoration: BoxDecoration(
+          color: colorScheme.surfaceContainer,
+        ),
         child: SingleChildScrollView(
           child: Column(
             children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  CircleAvatar(
-                    backgroundImage:
-                        AssetImage('assets/images/avatar/img_0542.jpg'),
-                  ),
-                  Container(
-                    width: width * 0.8,
-                    height: 35,
-                    alignment: Alignment.centerLeft,
-                    decoration: BoxDecoration(
-                        color: colorScheme.primary,
-                        borderRadius: BorderRadius.circular(20.0),
-                        border: Border.all(color: colorScheme.primary)),
-                    child: Padding(
-                      padding: const EdgeInsets.only(
-                        left: 16,
-                        right: 16,
-                      ),
-                      child: Text(
-                        "What's is your mind?",
-                        style: textTheme.labelSmall?.copyWith(
-                          color: colorScheme.onPrimary.withOpacity(0.5),
+              Container(
+                color: colorScheme.surface,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    CircleAvatar(
+                      backgroundImage:
+                          AssetImage('assets/images/avatar/img_0542.jpg'),
+                    ),
+                    Container(
+                      width: width * 0.8,
+                      height: 35,
+                      alignment: Alignment.centerLeft,
+                      decoration: BoxDecoration(
+                          color: colorScheme.surfaceContainer,
+                          borderRadius: BorderRadius.circular(20.0),
+                          border:
+                              Border.all(color: colorScheme.surfaceContainer)),
+                      child: Padding(
+                        padding: const EdgeInsets.only(
+                          left: 16,
+                          right: 16,
+                        ),
+                        child: Text(
+                          "What's is your mind?",
+                          style: textTheme.labelSmall?.copyWith(
+                            color: colorScheme.onSurface.withOpacity(0.5),
+                          ),
                         ),
                       ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
               PostCard(),
               PostCard(),

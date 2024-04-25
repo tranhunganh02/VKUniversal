@@ -40,11 +40,11 @@ class AuthTextField extends StatelessWidget {
           fillColor: colorScheme.secondary,
           filled: true,
           border: OutlineInputBorder(
-            borderSide: BorderSide(color: Colors.transparent),
+            borderSide: BorderSide(color: Colors.transparent.withOpacity(0)),
             borderRadius: BorderRadius.circular(10),
           ),
           enabledBorder: OutlineInputBorder(
-            borderSide: BorderSide(color: Colors.transparent),
+            borderSide: BorderSide(color: Colors.transparent.withOpacity(0)),
             borderRadius: BorderRadius.circular(10),
           ),
         ),

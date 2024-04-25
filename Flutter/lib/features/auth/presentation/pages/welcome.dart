@@ -70,10 +70,11 @@ class _WelcomePageState extends State<WelcomePage> {
                     logoScale: logoScale,
                   ),
                   Column(
+                    crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
                       Text(
                         "Welcome to",
-                        style: textTheme.displayMedium,
+                        style: textTheme.displaySmall,
                       ),
                       Text(
                         "VKUniversal!",
@@ -84,7 +85,7 @@ class _WelcomePageState extends State<WelcomePage> {
                       ),
                       Text(
                         "Connect hearts, creating communicaties",
-                        style: textTheme.displaySmall,
+                        style: textTheme.headlineSmall,
                       )
                     ],
                   ),
@@ -104,13 +105,11 @@ class _WelcomePageState extends State<WelcomePage> {
                         child: RichText(
                           text: TextSpan(
                               text: "Don't have account? ",
-                              style: textTheme.headlineSmall
-                                  ?.copyWith(color: colorScheme.primary),
+                              style: textTheme.headlineSmall,
                               children: [
                                 TextSpan(
                                   text: "Sign up!",
                                   style: textTheme.headlineSmall?.copyWith(
-                                    color: colorScheme.primary,
                                     decoration: TextDecoration.underline,
                                   ),
                                 ),

@@ -71,7 +71,7 @@ class _PostCardState extends State<PostCard> {
                 Text(
                   "Hôm nay là một ngày đẹp trời.",
                   style: textTheme.bodyMedium
-                      ?.copyWith(color: colorScheme.onPrimary),
+                      ?.copyWith(color: colorScheme.onSurface),
                 ),
               ],
             ),
@@ -82,45 +82,58 @@ class _PostCardState extends State<PostCard> {
                 Image.asset("assets/images/background/vku_main_building.jpg"),
           ),
           // Các nút like, cmt,...
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Row(
-                children: [
-                  IconButton(
-                    onPressed: () {},
-                    icon: Icon(Iconsax.heart_outline),
-                  ),
-                  IconButton(
-                    onPressed: () {},
-                    icon: Icon(Iconsax.message_2_outline),
-                  ),
-                  IconButton(
-                    onPressed: () {},
-                    icon: Icon(Iconsax.link_outline),
-                  ),
-                ],
-              ),
-              IconButton(
-                onPressed: () {},
-                icon: Icon(Iconsax.save_2_outline),
-              ),
-            ],
-          ),
-          Container(
-            alignment: Alignment.centerLeft,
-            child: Text(
-              "Có Nanoo, Ngocvt.21it và những người khác thích bài viết này.",
-              overflow: TextOverflow.clip,
-              maxLines: 3,
-              style: textTheme.bodySmall,
+          Padding(
+            padding: const EdgeInsets.only(left: 8, right: 16),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Row(
+                  children: [
+                    IconButton(
+                      onPressed: () {},
+                      icon: Icon(Iconsax.heart_outline),
+                    ),
+                    IconButton(
+                      onPressed: () {},
+                      icon: Icon(Iconsax.message_2_outline),
+                    ),
+                    IconButton(
+                      onPressed: () {},
+                      icon: Icon(Iconsax.link_outline),
+                    ),
+                  ],
+                ),
+                IconButton(
+                  onPressed: () {},
+                  icon: Icon(Iconsax.save_2_outline),
+                ),
+              ],
             ),
           ),
           Container(
             alignment: Alignment.centerLeft,
-            child: Text(
-              "Xem tất cả 23 bình luận...",
-              style: textTheme.bodySmall,
+            child: Padding(
+              padding: const EdgeInsets.only(left: 8, right: 8),
+              child: Text(
+                "Có Nanoo, Ngocvt.21it và những người khác thích bài viết này.",
+                overflow: TextOverflow.clip,
+                maxLines: 3,
+                style: textTheme.bodySmall?.copyWith(
+                  color: colorScheme.onSurface,
+                ),
+              ),
+            ),
+          ),
+          Container(
+            alignment: Alignment.centerLeft,
+            child: Padding(
+              padding: const EdgeInsets.only(left: 8, right: 8),
+              child: Text(
+                "Xem tất cả 23 bình luận...",
+                style: textTheme.bodySmall?.copyWith(
+                  color: colorScheme.onSurface,
+                ),
+              ),
             ),
           ),
           // Bình luận
@@ -141,13 +154,16 @@ class _PostCardState extends State<PostCard> {
                   height: height * 0.04,
                   alignment: Alignment.centerLeft,
                   decoration: BoxDecoration(
-                      color: colorScheme.primary,
+                      color: colorScheme.surfaceContainer,
                       borderRadius: BorderRadius.circular(20.0),
-                      border: Border.all(color: colorScheme.primary)),
-                  child: Text(
-                    "Thêm bình luận...",
-                    style: textTheme.labelSmall?.copyWith(
-                      color: colorScheme.onPrimary.withOpacity(0.5),
+                      border: Border.all(color: colorScheme.surfaceContainer)),
+                  child: Padding(
+                    padding: const EdgeInsets.only(left: 8.0),
+                    child: Text(
+                      "Thêm bình luận...",
+                      style: textTheme.labelSmall?.copyWith(
+                        color: colorScheme.onSurface,
+                      ),
                     ),
                   ),
                 ),
