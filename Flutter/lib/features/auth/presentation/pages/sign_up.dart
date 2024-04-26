@@ -75,7 +75,9 @@ class _SignUpPageState extends State<SignUpPage> {
                 CustomSizeBox(value: 10),
                 Text(
                   "Create your new account",
-                  style: textTheme.headlineSmall,
+                  style: textTheme.headlineSmall?.copyWith(
+                    color: colorScheme.primary,
+                  ),
                 ),
                 CustomSizeBox(value: 50),
                 AuthTextField(
@@ -99,10 +101,6 @@ class _SignUpPageState extends State<SignUpPage> {
                   controller: passwordController,
                 ),
                 CustomSizeBox(value: 10),
-                CircleCheckBox(
-                  label: 'Remember me?',
-                  value: false,
-                ),
                 FilledButtonCustom(
                   label: "Create",
                   onPress: () {

@@ -8,7 +8,7 @@ class SnackBarCus extends StatelessWidget {
   Widget build(BuildContext context) {
     return SnackBar(
       content: Text(label),
-      duration: const Duration(seconds: 2),
+      duration: const Duration(seconds: 3),
     );
   }
 }

@@ -1,10 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
-import 'package:icons_plus/icons_plus.dart';
 import 'package:vkuniversal/core/utils/icon_string.dart';
-import 'package:vkuniversal/core/utils/screen_scale.dart';
 import 'package:vkuniversal/features/newsfeed/presentation/pages/newsfeed.dart';
-import 'package:vkuniversal/features/newsfeed/presentation/widgets/bottom_nav_bar_item_icon.dart';
 
 class Home extends StatefulWidget {
   const Home({super.key});

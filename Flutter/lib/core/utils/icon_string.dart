@@ -1,13 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:icons_plus/icons_plus.dart';
-import 'package:lucide_icons/lucide_icons.dart';
 
 class IconList {
-  static Icon backArrow = Icon(LucideIcons.chevronLeft);
-  static Icon user = Icon(LucideIcons.user);
-  static Icon email = Icon(LucideIcons.mail);
-  static Icon lock = Icon(LucideIcons.lock);
+  static Icon backArrow = Icon(Iconsax.arrow_left_2_outline);
+  static Icon user = Icon(Iconsax.user_outline);
+  static Icon email = Icon(Iconsax.sms_outline);
+  static Icon lock = Icon(Iconsax.lock_outline);
   static Icon home_outline = Icon(Iconsax.home_1_outline);
   static Icon home_solid = Icon(Iconsax.home_1_bold);
   static Icon marketplace_outline = Icon(Iconsax.shop_outline);
