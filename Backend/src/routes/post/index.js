@@ -16,6 +16,9 @@ router.put('', asyncHandler(postController.updatePost))
 router.delete('', asyncHandler(postController.deletePost)) 
 
 //comment
+router.get('/comment', asyncHandler(commentController.getCommentsById)) 
 router.post('/comment', asyncHandler(commentController.createComment)) 
+router.put('/comment', asyncHandler(commentController.updateComment)) 
+router.delete('/comment', asyncHandler(commentController.deleteComment)) 
 
 module.exports = router

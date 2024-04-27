@@ -7,9 +7,11 @@ class RoutesName {
 
   static const String welcome = '/welcome';
 
-  static const String listChat = 'list_chat';
+  static const String listChat = '/list_chat';
 
-  static const String roomChat = 'room_chat';
+  static const String roomChat = '/room_chat';
 
-  static const String profile = 'profile';
+  static const String profile = '/profile';
+
+  static const String updateProfile = '/update_profile';
 }

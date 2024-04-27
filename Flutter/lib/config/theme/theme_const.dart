@@ -13,11 +13,10 @@ ColorScheme lightColorScheme = ColorScheme(
   onError: Color(0xfffafafa),
   surface: Color(0xfff9f9f9),
   onSurface: Color(0xff000000),
-  surfaceBright: Color(0xffffffff),
-  surfaceContainer: Color(0xfff5f5f5),
+  surfaceVariant: Color(0xffffffff),
   outline: Color(0xff000000),
   outlineVariant: Color(0xffe6e6e6),
-  surfaceDim: Color(0xffdcdcdc),
+  surfaceTint: Color(0xffdcdcdc), background: Colors.black, onBackground: Colors.black,
 );
 ColorScheme darkColorScheme = ColorScheme(
   brightness: Brightness.dark,
@@ -31,11 +30,11 @@ ColorScheme darkColorScheme = ColorScheme(
   onError: Color(0xfffafafa),
   surface: Color(0xfff9f9f9),
   onSurface: Color(0xff000000),
-  surfaceBright: Color(0xffffffff),
-  surfaceContainer: Color(0xfff5f5f5),
+  surfaceVariant: Color(0xffffffff),
   outline: Color(0xff000000),
   outlineVariant: Color(0xffe6e6e6),
-  surfaceDim: Color(0xffdcdcdc),
+  surfaceTint: Color(0xffdcdcdc), background: Colors.white
+  , onBackground: Colors.white,
 );
 
 ThemeData lightTheme = ThemeData().copyWith(
@@ -44,7 +43,7 @@ ThemeData lightTheme = ThemeData().copyWith(
   textTheme: TextTheme().copyWith(
     labelMedium: GoogleFonts.montserrat(
       textStyle: TextStyle(
-        color: Colors.white,
+        color: Colors.black,
         fontWeight: FontWeight.w500,
         fontSize: 25,
       ),
@@ -58,7 +57,7 @@ ThemeData lightTheme = ThemeData().copyWith(
     ),
     displayLarge: GoogleFonts.montserrat(
       textStyle: TextStyle(
-        color: Colors.white,
+        color: Colors.black,
         fontWeight: FontWeight.w600,
         fontSize: 40,
         shadows: [
@@ -72,7 +71,7 @@ ThemeData lightTheme = ThemeData().copyWith(
     ),
     displayMedium: GoogleFonts.montserrat(
       textStyle: TextStyle(
-        color: Colors.white,
+        color: Colors.black,
         fontWeight: FontWeight.w600,
         fontSize: 25,
         shadows: [
@@ -86,7 +85,7 @@ ThemeData lightTheme = ThemeData().copyWith(
     ),
     displaySmall: GoogleFonts.montserrat(
       textStyle: TextStyle(
-        color: Colors.white,
+        color: Colors.black,
         fontWeight: FontWeight.w400,
         fontSize: 14,
       ),
@@ -110,6 +109,19 @@ ThemeData lightTheme = ThemeData().copyWith(
         color: lightColorScheme.onPrimary,
         fontWeight: FontWeight.w600,
         fontSize: 12,
+      ),
+    ),
+     bodyMedium: GoogleFonts.montserrat(
+      textStyle: TextStyle(
+        color: Colors.black,
+        fontWeight: FontWeight.w600,
+        fontSize: 14,
+      )),
+      bodyLarge: GoogleFonts.montserrat(
+      textStyle: TextStyle(
+        color: Colors.black,
+        fontWeight: FontWeight.w600,
+        fontSize: 18,
       ),
     ),
   ),

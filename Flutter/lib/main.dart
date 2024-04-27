@@ -7,10 +7,13 @@ import 'package:vkuniversal/core/utils/injection_container.dart';
 import 'package:vkuniversal/features/auth/presentation/bloc/sign_up/bloc/sign_up_bloc.dart';
 import 'package:vkuniversal/features/auth/presentation/bloc/sign_in/bloc/sign_in_bloc.dart';
 import 'package:vkuniversal/features/auth/presentation/bloc/welcome/bloc/welcome_bloc.dart';
+import 'package:vkuniversal/features/auth/presentation/pages/welcome.dart';
 import 'package:vkuniversal/features/newsfeed/presentation/pages/newsfeed.dart';
-
+import 'package:intl/date_symbol_data_local.dart';
 Future<void> main() async {
+
   await initializeDependencies();
+   initializeDateFormatting();
   runApp(MultiBlocProvider(
     providers: [
       BlocProvider(
@@ -33,11 +36,13 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      
       title: 'Flutter Demo',
       theme: lightTheme,
-      home: NewsfeedPage(),
+      home: WelcomePage(),
+      debugShowCheckedModeBanner: false,
       onGenerateRoute: Routes.generateRoute,
-      initialRoute: RoutesName.welcome,
+      initialRoute: RoutesName.profile,
     );
   }
 }
