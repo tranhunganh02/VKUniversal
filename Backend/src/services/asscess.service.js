@@ -21,10 +21,30 @@ class AccessService {
   static handlerRefreshTokenV2  = async ( {refreshToken, user, keyStore} ) => {
 
     const { userId, email } = user
-
+ 
     console.log("user in hander", userId, email);
 
-    if(keyStore.refresh_tokens_used.includes(refreshToken)){
+    if(keyStore.refresh_tokens_used == null) {
+      if(keyStore.refresh_token !== refreshToken) throw new AuthFailureError('Account not registered.')
+
+
+        //create new access token and refresh token
+        const tokens = await createTokenPair(
+        { userId: userId, email: email },
+        keyStore.public_key,
+        keyStore.private_key
+      );
+      //update token
+      await KeyTokenService.updateToken(userId, tokens.refreshToken, refreshToken)
+  
+      //update token in db
+      return {
+        user,
+        tokens
+      }
+    }
+
+    else if(keyStore.refresh_tokens_used.includes(refreshToken)){
       await KeyTokenService.findAndDeleteKeyByUserId(userId)
   
       throw new ForbiddenError("Something went wrong ! Please relogin")
@@ -205,8 +225,8 @@ class AccessService {
             tokens,
         };
       }
+    }
   }
 
-}
  
 module.exports = AccessService;

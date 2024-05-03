@@ -18,7 +18,7 @@ const pro = {
           host: process.env.PRO_DB_HOST || 'localhost',
           post: process.env.PRO_DB_PORT || 5432,
           name: process.env.PRO_DB_NAME || 'postgres',
-          password: process.env.PRO_DB_PASSWORD || 5055,
+          password: process.env.PRO_DB_PASSWORD || '',
           database:   process.env.PRO_DB_DATABASE || 'vkuniversal'
      }
 }

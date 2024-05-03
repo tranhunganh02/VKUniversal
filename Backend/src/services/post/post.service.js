@@ -28,6 +28,7 @@ class PostService {
       const attachmentURLs = await Promise.all(
         attachments.map(async (attachment) => {
           const url = await uploadFileToFirebase(attachment.buffer, attachment);
+          console.log("url ", url);
           return createAttachment(newPost.post_id, attachment.file_name, attachment.file_type, url);
         })
       );

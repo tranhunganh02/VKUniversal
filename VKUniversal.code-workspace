@@ -2,10 +2,19 @@
 	"folders": [
 		{
 			"path": "."
-		},
-		{
-			"path": "../../Backend/Ecommerce"
 		}
 	],
-	"settings": {}
+	"settings": {
+		"sqltools.connections": [
+			{
+				"previewLimit": 50,
+				"server": "localhost",
+				"port": 5432,
+				"driver": "PostgreSQL",
+				"name": "vku",
+				"database": "vkuniversal",
+				"username": "postgres"
+			}
+		]
+	}
 }
