@@ -10,10 +10,10 @@ import 'package:vkuniversal/features/auth/presentation/bloc/welcome/bloc/welcome
 import 'package:vkuniversal/features/auth/presentation/pages/welcome.dart';
 import 'package:vkuniversal/features/newsfeed/presentation/pages/newsfeed.dart';
 import 'package:intl/date_symbol_data_local.dart';
-Future<void> main() async {
 
+Future<void> main() async {
   await initializeDependencies();
-   initializeDateFormatting();
+  initializeDateFormatting();
   runApp(MultiBlocProvider(
     providers: [
       BlocProvider(
@@ -36,13 +36,12 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      
       title: 'Flutter Demo',
       theme: lightTheme,
       home: WelcomePage(),
       debugShowCheckedModeBanner: false,
       onGenerateRoute: Routes.generateRoute,
-      initialRoute: RoutesName.profile,
+      initialRoute: RoutesName.listChat,
     );
   }
 }
