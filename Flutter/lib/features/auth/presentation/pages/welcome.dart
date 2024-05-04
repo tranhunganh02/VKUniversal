@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:logger/logger.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:vkuniversal/config/routes/router_name.dart';
 import 'package:vkuniversal/core/utils/images_string.dart';
 import 'package:vkuniversal/core/widgets/size_box.dart';
