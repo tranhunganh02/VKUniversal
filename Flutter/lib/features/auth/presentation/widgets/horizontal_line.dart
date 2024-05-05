@@ -12,19 +12,21 @@ class HorizontalLine extends StatelessWidget {
         Expanded(
           child: Divider(
             height: 2.0,
-            color: colorScheme.onPrimary,
+            color: colorScheme.primary,
           ),
         ),
         Center(
           child: Text(
             '\t Or continue with \t',
-            style: textTheme.bodySmall, // Adjust text style
+            style: textTheme.bodySmall?.copyWith(
+              color: colorScheme.primary,
+            ), // Adjust text style
           ),
         ),
         Expanded(
           child: Divider(
             height: 2.0, // Adjust thickness as needed
-            color: colorScheme.onPrimary, // Adjust color as needed
+            color: colorScheme.primary, // Adjust color as needed
           ),
         ),
       ],

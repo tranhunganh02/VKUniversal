@@ -39,7 +39,7 @@ class _LoginPageState extends State<LoginPage> {
   @override
   Widget build(BuildContext context) {
     TextTheme textTheme = Theme.of(context).textTheme;
-
+    ColorScheme colorScheme = Theme.of(context).colorScheme;
     return Scaffold(
       body: BlocConsumer<SignInBloc, SignInState>(
         listener: (context, state) {
@@ -79,7 +79,8 @@ class _LoginPageState extends State<LoginPage> {
                             ),
                             Text(
                               "Login to your account",
-                              style: textTheme.headlineSmall,
+                              style: textTheme.headlineSmall
+                                  ?.copyWith(color: colorScheme.primary),
                             ),
                             CustomSizeBox(value: 30),
                             AuthTextField(

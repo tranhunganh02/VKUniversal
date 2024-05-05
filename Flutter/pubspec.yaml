@@ -42,17 +42,21 @@ dependencies:
   fpdart: ^1.1.0
   dio: ^5.4.2+1
   google_fonts: ^6.2.1
-  lucide_icons: ^0.257.0
   retrofit: '>=4.0.0 <5.0.0'
   json_annotation: ^4.8.1
   get_it: ^7.7.0
-  intl: ^0.19.0
+  flutter_svg: ^2.0.10+1
+  gettext: ^1.2.0
+  hive_storage: ^0.0.3
+  icons_plus: ^5.0.0
+  lucide_icons_flutter: ^1.0.8
 
 dev_dependencies:
   logger: any  #for logging purpose
   retrofit_generator: '>=7.0.0 <8.0.0'
   build_runner: '>=2.3.0 <4.0.0'
   json_serializable: ^6.6.2
+  devtools_extensions: ^0.1.0
 
   flutter_test:
     sdk: flutter
@@ -79,6 +83,10 @@ flutter:
   - assets/images/logo/vku.png
   - assets/images/logo/google_icon.jpg
   - assets/fonts/
+  - assets/images/avatar/
+  - assets/vectors/outline/
+  - assets/vectors/outline/home_outline.svg
+  - assets/vectors/solid/
 
   
 

@@ -10,17 +10,15 @@ class BackLeadingBtn extends StatelessWidget {
     return Container(
       width: 35,
       height: 35,
-      
       decoration: BoxDecoration(
         shape: BoxShape.circle,
-        color: colorScheme.primary.withOpacity(0.75),
+        color: colorScheme.surface.withOpacity(0.75),
       ),
       child: IconButton(
         onPressed: () {
           Navigator.pop(context);
         },
         icon: IconList.backArrow,
-        color: colorScheme.onPrimary,
         tooltip: "Back to previous",
       ),
     );

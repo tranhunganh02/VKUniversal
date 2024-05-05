@@ -2,26 +2,29 @@ import 'package:flutter/material.dart';
 
 import '../../../../core/utils/icon_string.dart';
 
-class update_button extends StatelessWidget {
-  const update_button({
-    super.key, required this.updateAvate,
+class UpdateButton extends StatelessWidget {
+  const UpdateButton({
+    super.key,
+    required this.updateAvate,
   });
 
   final void Function() updateAvate;
 
   @override
   Widget build(BuildContext context) {
+    ColorScheme colorScheme = Theme.of(context).colorScheme;
     return Container(
-      height: 35,
-      width: 35,
-      decoration: BoxDecoration(
-          borderRadius:
-              BorderRadius.all(Radius.circular(50)),
-          color: Colors.grey[400]),
-      child: Center(
-        child: IconButton(
-            onPressed: updateAvate,
-            icon: IconList.editPencil),
+      alignment: Alignment.topCenter,
+      width: 30,
+      height: 30,
+      child: IconButton(
+        onPressed: updateAvate,
+        icon: IconList.editPencil,
+        iconSize: 25,
+        padding: EdgeInsets.all(2.5),
+        tooltip: "Edit profile",
+        style: ButtonStyle().copyWith(
+            backgroundColor: WidgetStatePropertyAll(colorScheme.surfaceDim)),
       ),
     );
   }

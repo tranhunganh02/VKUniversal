@@ -8,6 +8,7 @@ import 'package:vkuniversal/features/auth/domain/usecases/sign_up_with_email.dar
 import 'package:vkuniversal/features/auth/presentation/bloc/sign_up/bloc/sign_up_bloc.dart';
 import 'package:vkuniversal/features/auth/presentation/bloc/sign_in/bloc/sign_in_bloc.dart';
 import 'package:vkuniversal/features/auth/presentation/bloc/welcome/bloc/welcome_bloc.dart';
+import 'package:vkuniversal/features/newsfeed/presentation/state/home/bloc/home_bloc.dart';
 
 final sl = GetIt.instance;
 
@@ -28,5 +29,6 @@ Future<void> initializeDependencies() async {
 
   sl.registerFactory<SignUpBloc>(() => SignUpBloc(sl()));
   sl.registerFactory<SignInBloc>(() => SignInBloc(sl()));
-  sl.registerFactory<WelcomeBloc>(() => WelcomeBloc());
+  sl.registerSingleton<WelcomeBloc>(WelcomeBloc());
+  sl.registerSingleton<BottomNavigationBloc>(BottomNavigationBloc());
 }

@@ -21,6 +21,22 @@ class SignInBloc extends Bloc<SignInEvent, SignInState> {
     on<EmailChanged>((event, emit) async {});
     on<SubbmitLoginForm>((event, emit) async {
       emit(LoginLoading());
+      if (event.email.isEmpty && event.password.isEmpty) {
+        emit(LoginFailure("Email is required and password is required!"));
+        return;
+      }
+      if (event.email.isEmpty) {
+        emit(LoginFailure("Email is required!"));
+        return;
+      }
+      if (!event.email.contains('@vku.udn.vn')) {
+        emit(LoginFailure("Email must be end with @vku.udn.vn"));
+        return;
+      }
+      if (event.password.isEmpty) {
+        emit(LoginFailure("Password is required!"));
+        return;
+      }
       try {
         final _request = SignInRequest(
           email: event.email,
@@ -52,14 +68,4 @@ class SignInBloc extends Bloc<SignInEvent, SignInState> {
       }
     });
   }
-}
-
-bool _validateEmail(String email) {
-  // Implement your email validation logic here
-  return email.isNotEmpty && email.contains('@vku.udn.vn');
-}
-
-bool _validatePassword(String password) {
-  // Implement your password validation logic here
-  return password.length >= 6;
 }

@@ -15,10 +15,11 @@ class WelcomeBloc extends Bloc<WelcomeEvent, WelcomeState> {
       String? email = await prefs.getString('email');
       _lg.d("Email: ${email}");
       if (email != null && email.isNotEmpty) {
+        emit(LoggedIn());
         _lg.d("Da login");
-        // emit(LoggedIn());
+      } else {
+        emit(LoggedOut());
       }
-      emit(LoggedIn());
     });
   }
 }
