@@ -42,7 +42,7 @@ class MyApp extends StatelessWidget {
       home: WelcomePage(),
       debugShowCheckedModeBanner: false,
       onGenerateRoute: Routes.generateRoute,
-      initialRoute: RoutesName.profile,
+      initialRoute: RoutesName.welcome,
     );
   }
 }
