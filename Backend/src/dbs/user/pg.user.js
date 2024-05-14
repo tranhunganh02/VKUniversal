@@ -45,7 +45,7 @@ const updateStudent = async (userId, studentId, updates) => {
 
   const result = await db.query(query, values);
 
-  console.log(result);
+  console.log("result", result);
   return result[0];
 };
 
@@ -99,7 +99,7 @@ const updateDepartment = async (departmentId, updates) => {
   values.push(departmentId);
 
   const result = await db.query(query, values);
-  return result.rows[0];
+  return result[0];
 };
 
 // Delete a student by student_id
@@ -119,12 +119,13 @@ const updateUserProfile = async (user_id, bio) => {
   return result[0];
 };
 const getUserInformationAndProfile = async (user_id, role) => {
-  const query = ` Select bio from user_profile where user_id = $1;`;
+  console.log("in db", user_id, role);
+  const query = "SELECT bio from user_profile WHERE user_id = $1 ;"
   const values = [user_id];
   const result = await db.query(query, values);
 
   let query2 = null;
-  if (role == 0) {
+  if (role == 1) {
     query2 = `
     SELECT 
       s.user_id,
@@ -144,7 +145,7 @@ const getUserInformationAndProfile = async (user_id, role) => {
     WHERE 
       s.user_id = $1;
   `;
-  } else if(role ==1 ){
+  } else if(role ==2 ){
     query2 =`
     SELECT 
       l.ar_name,
@@ -163,7 +164,7 @@ const getUserInformationAndProfile = async (user_id, role) => {
     JOIN 
       degree d ON le.degree_id = d.degree_id
     JOIN 
-      faculty f ON le.faculty_id = f.faculty_id;
+      faculty f ON le.faculty_id = f.faculty_id
     WHERE 
       le.user_id = $1;  
   `
