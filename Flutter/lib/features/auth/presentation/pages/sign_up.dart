@@ -7,7 +7,6 @@ import 'package:vkuniversal/core/widgets/back_leading_btn.dart';
 import 'package:vkuniversal/core/widgets/loader.dart';
 import 'package:vkuniversal/core/widgets/size_box.dart';
 import 'package:vkuniversal/features/auth/presentation/bloc/sign_up/bloc/sign_up_bloc.dart';
-import 'package:vkuniversal/features/auth/presentation/widgets/circle_check_box.dart';
 import 'package:vkuniversal/features/auth/presentation/widgets/filled_button.dart';
 import 'package:vkuniversal/features/auth/presentation/widgets/google_button.dart';
 import 'package:vkuniversal/features/auth/presentation/widgets/horizontal_line.dart';

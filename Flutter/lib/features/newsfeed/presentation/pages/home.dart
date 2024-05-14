@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:vkuniversal/core/utils/icon_string.dart';
-import 'package:vkuniversal/features/chat/presentation/pages/chat.dart';
 import 'package:vkuniversal/features/chat/presentation/pages/list_chat.dart';
 import 'package:vkuniversal/features/newsfeed/presentation/pages/newsfeed.dart';
-import 'package:vkuniversal/features/profile/presentation/pages/profile.dart';
 import 'package:vkuniversal/features/profile/presentation/pages/profile_draft.dart';
 
 class Home extends StatefulWidget {

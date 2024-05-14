@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 import 'package:vkuniversal/core/utils/icon_string.dart';
 import '../../../../config/routes/router_name.dart';
 import '../../../../core/widgets/avatat.dart';
@@ -37,7 +36,7 @@ class _ListChatScreenState extends State<ListChatScreen> {
   }
 
   void navigateToChat() {
-     Navigator.pushNamed(context, RoutesName.roomChat);
+    Navigator.pushNamed(context, RoutesName.roomChat);
   }
 
   @override
@@ -86,8 +85,7 @@ class _ListChatScreenState extends State<ListChatScreen> {
                                       : IconList.search,
                                   border: InputBorder.none,
                                   focusedBorder: UnderlineInputBorder(
-                                    borderSide:
-                                        BorderSide(color: Colors.black),
+                                    borderSide: BorderSide(color: Colors.black),
                                   ),
                                   filled: false,
                                 ),
@@ -165,26 +163,23 @@ class _ListChatScreenState extends State<ListChatScreen> {
               flex: 6,
               child: Container(
                   child: ListView.separated(
-    
                 itemCount: messages.length,
                 itemBuilder: (BuildContext context, int index) {
                   String image = messages[index]["avatar"];
                   var username = messages[index]['user_name'];
-                  var last_message =  messages[index]['last_message'];
-                  var created_at = messages[index]
-                              ['created_at'];
-                  return TileUserChat(username, last_message, created_at, textTheme, image, navigateToChat);
+                  var last_message = messages[index]['last_message'];
+                  var created_at = messages[index]['created_at'];
+                  return TileUserChat(username, last_message, created_at,
+                      textTheme, image, navigateToChat);
                 },
-                separatorBuilder: (BuildContext context, int index) =>
-                
-                    SizedBox(
-                      height: 25,
-                      child: Divider(
-                                          // Add Divider here
-                                          color: Colors.grey, // Choose your border color here
-                                          thickness: 0.5, // Adjust the thickness as needed
-                                        ),
-                    ),
+                separatorBuilder: (BuildContext context, int index) => SizedBox(
+                  height: 25,
+                  child: Divider(
+                    // Add Divider here
+                    color: Colors.grey, // Choose your border color here
+                    thickness: 0.5, // Adjust the thickness as needed
+                  ),
+                ),
               )),
             )
           ],
@@ -192,6 +187,4 @@ class _ListChatScreenState extends State<ListChatScreen> {
       ),
     );
   }
-
-  
 }

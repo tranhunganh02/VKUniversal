@@ -5,7 +5,6 @@ import 'package:vkuniversal/core/resources/data_state.dart';
 import 'package:vkuniversal/features/auth/data/data_sources/remote/auth_api_service.dart';
 import 'package:vkuniversal/features/auth/data/models/sign_in_request.dart';
 import 'package:vkuniversal/features/auth/data/models/sign_up_request.dart';
-import 'package:vkuniversal/features/auth/data/models/user.dart';
 import 'package:vkuniversal/features/auth/data/models/user_response.dart';
 import 'package:vkuniversal/features/auth/domain/repository/auth_repository.dart';
 

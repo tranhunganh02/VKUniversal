@@ -8,7 +8,7 @@ class LibraryWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     double widthScreen = MediaQuery.of(context).size.width;
-    double heightScreen = MediaQuery.of(context).size.width;
+    // double heightScreen = MediaQuery.of(context).size.width;
     ColorScheme colorScheme = Theme.of(context).colorScheme;
     TextTheme textTheme = Theme.of(context).textTheme;
 
@@ -44,7 +44,7 @@ class LibraryWidget extends StatelessWidget {
                       : images.length, // Số lượng mục trong ListView
                   itemBuilder: (BuildContext context, int index) {
                     var link_image = images[index]["file_url"];
-                    var id = images[index]["attachment_id"];
+                    // var id = images[index]["attachment_id"];
                     if (index < 2) {
                       return Container(
                         height: double.maxFinite,

@@ -2,13 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:vkuniversal/config/routes/router_name.dart';
 import 'package:vkuniversal/core/utils/icon_string.dart';
 import 'package:vkuniversal/core/widgets/avatat.dart';
-import 'package:vkuniversal/core/widgets/size_box.dart';
 import 'package:vkuniversal/features/profile/presentation/widgets/library.dart';
 import 'package:vkuniversal/helper/check_notch_device.dart';
 
 import '../widgets/biography.dart';
 import '../widgets/update_button.dart';
-import 'image_fake.dart';
 
 class ProfileScreen extends StatelessWidget {
   const ProfileScreen({super.key});
