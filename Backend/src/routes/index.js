@@ -7,4 +7,5 @@ const router = express.Router()
 //access route
 router.use("/v1/api/vkuniversal/", require('./access'))
 router.use("/v1/api/vkuniversal/post/", require('./post'))
+router.use("/v1/api/vkuniversal/user/", require('./user'))
 module.exports = router
