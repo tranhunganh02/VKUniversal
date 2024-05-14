@@ -151,7 +151,7 @@ class AccessService {
 
     //4. generate token
     const tokens = await createTokenPair(
-      { userId: foundUser.user_id, email },
+      { userId: foundUser.user_id, email, role: foundUser.role },
       publicKey,
       privateKey
     );
@@ -203,7 +203,7 @@ class AccessService {
 
         //create token
         const tokens = await createTokenPair(
-          { userId: saveUser.user_id, email },
+          { userId: saveUser.user_id, email,role: roleAccount.student },
           publicKey,
           privateKey
         );

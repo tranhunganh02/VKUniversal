@@ -1,48 +1,60 @@
-const { updateStudent, updateDepartment, updateLecture, getUserInformationAndProfile, updateUserProfile } = require("../../dbs/user/pg.user");
+const {
+  updateStudent,
+  updateDepartment,
+  updateLecture,
+  getUserInformationAndProfile,
+  updateUserProfile,
+} = require("../../dbs/user/pg.user");
 
 const { BadRequestError } = require("../../core/error.response");
 class UserService {
+  //de update can truy thong tin cua bang ( student, lecture, apartment ) va role
+  static async updateUser(user_id, role, payload) {
+    //cac truong bat buoc la role
+    if (role != payload.role) {
+          new BadRequestError("cannot update");
+    }
+    delete payload.role;
 
-     //de update can truy thong tin cua bang ( student, lecture, apartment ) va role
-     static async updateUser(user_id, payload) {
+    let updatedUser = null;
 
-          const role = payload.role
-          const student_id = payload.student_id
+    console.log("role", role);
 
-          delete payload.role;
-          delete payload.student_id
+    if (role == 1) {
+      const student_id = payload.student_id;
+      delete payload.student_id;
+      updatedUser = await updateStudent(user_id, student_id, payload);
+    } else if (role == 2) {
+      const lecture_id = payload.lecture_id;
+      delete payload.lecture_id;
+      updatedUser = await updateLecture(user_id, lecture_id, payload);
+    } else if (role == 3) {
+      const department_id = payload.department_id;
+      delete payload.department_id;
+      updatedUser = await updateDepartment(user_id, department_id, payload);
+    }
 
-          let updatedUser = null;
+    console.log("result:", updatedUser);
+    console.log("result:", updatedUser);
 
-          if (role == 0) {
-               updatedUser = updateStudent(user_id, student_id, payload)
-          } else if(role == 1) {
-               updatedUser = updateLecture(user_id, payload)
-          }else if(role == 2) {
-               updatedUser = updateDepartment(user_id, payload)
-          }
+    if (!updatedUser) throw new BadRequestError("cannot update");
+  }
+  //update vao profile
+  static async updateProfile(user_id, payload) {
+    console.log("vo day");
 
-          if(!updatedUser) new BadRequestError("cannot update")
+    const result = updateUserProfile(user_id, payload.bio);
 
-     }
-     static async updateProfile(user_id, payload) {
+    if (!result)throw new BadRequestError("cannot update");
+  }
+  static async getProfile(user_id, payload) {
+    console.log("id", user_id);
+    const result = getUserInformationAndProfile(user_id, payload.role);
 
-          console.log("vo day");
+    if (!result)throw new BadRequestError("Something went wrong");
 
-          const result = updateUserProfile(user_id, payload.bio)
-
-          if(!result) new BadRequestError("cannot update")
-
-
-     }
-     static async getProfile(user_id, payload) {
-          const result = getUserInformationAndProfile(user_id, payload.role)
-
-          if(!result) new BadRequestError("Something went wrong")
-
-          return result
-     }
-
+    return result;
+  }
 }
 
-module.exports = UserService
+module.exports = UserService;
