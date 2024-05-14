@@ -81,7 +81,7 @@ const updatePostContent = async (postId, newContent) => {
   `;
   const values = [newContent, postId];
   const result = await db.query(query, values);
-  return result.rows[0];
+  return result[0];
 };
 
 // Cập nhật quyền riêng tư của bài đăng
@@ -94,7 +94,7 @@ const updatePostPrivacy = async (postId, newPrivacy) => {
   `;
   const values = [newPrivacy, postId];
   const result = await db.query(query, values);
-  return result.rows[0];
+  return result[0];
 };
 
 

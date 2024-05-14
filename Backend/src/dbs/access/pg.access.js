@@ -11,7 +11,7 @@ const checkUserByEmail = async (email) => {
      return result[0].exists;
 };
 const findUserByEmail = async (email) => {
-     const query = `SELECT user_id, email, password FROM users WHERE email = $1`;
+     const query = `SELECT user_id, email, password, role FROM users WHERE email = $1`;
      const values = [email];
      const result = await db.query(query, values);
      
