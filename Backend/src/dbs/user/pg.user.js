@@ -1,5 +1,20 @@
 const db = require("../init.db.js");
 
+const createStudentAndProfile = async (user_id) => {
+  const query = `
+  INSERT INTO Student (user_id, student_code, surname, last_name) VALUES ($1, $2, $3, $4) ;
+  `;
+  const values = [user_id, user_id, "null", "null"];
+
+  const query2 = `
+  INSERT INTO user_profile (user_id) VALUES($1);
+  `;
+  const values2 = [user_id];
+  const result = await db.query(query, values);
+  const result2 = await db.query(query2, values2);
+  return result[0];
+}
+
 // Get a student by student_id
 const getStudentById = async (studentId) => {
   const query = `
@@ -7,7 +22,7 @@ const getStudentById = async (studentId) => {
   `;
   const values = [studentId];
   const result = await db.query(query, values);
-  return result.rows[0];
+  return result[0];
 };
 
 // Update student information
@@ -127,23 +142,25 @@ const getUserInformationAndProfile = async (user_id, role) => {
   let query2 = null;
   if (role == 1) {
     query2 = `
-    SELECT 
-      s.user_id,
-      s.student_code,
-      s.surname,
-      s.last_name,
-      s.date_of_birth,
-      s.gender,
-      m.major_name,
-      c.class_name
-    FROM 
-      student s
-    JOIN 
-      major m ON s.major_id = m.major_id
-    JOIN 
-      university_class c ON s.class_id = c.class_id
-    WHERE 
-      s.user_id = $1;
+    SELECT
+        s.user_id,
+        s.student_code,
+        s.surname,
+        s.last_name,
+        s.date_of_birth,
+        s.gender,
+        uc.class_id,
+        uc.class_name,
+        m.major_id,
+        m.major_name
+    FROM
+        student s
+    JOIN
+        university_class uc ON s.class_id = uc.class_id
+    JOIN
+        major m ON uc.major_id = m.major_id
+    WHERE
+        s.user_id = $1;
   `;
   } else if(role ==2 ){
     query2 =`
@@ -174,10 +191,12 @@ const getUserInformationAndProfile = async (user_id, role) => {
 
   const result2 = await db.query(query2, values)
 
-  return result[0], result2;
+
+  return {user_bio : result[0], user : result2[0]};
 };
 
 module.exports = {
+  createStudentAndProfile,
   getStudentById,
   updateStudent,
   updateLecture,

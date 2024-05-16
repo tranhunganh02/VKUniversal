@@ -28,8 +28,8 @@ class PostService {
       const attachmentURLs = await Promise.all(
         attachments.map(async (attachment) => {
           const url = await uploadFileToFirebase(attachment.buffer, attachment);
-          console.log("url ", url);
-          return createAttachment(newPost.post_id, attachment.file_name, attachment.file_type, url);
+          console.log("attachment", attachment, file_type);
+          return createAttachment(newPost.post_id, `${attachment.fieldname}/${attachment.originalname}`, attachment.mimetype == ("video/mp4") ? 1 : 0, url);
         })
       );
       if (!attachmentURLs) {

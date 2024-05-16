@@ -1,18 +1,9 @@
-//Create custom return errors with appropriate HTTP status codes and messages
 
-// const StatusCode = {
-//      FORBIDDEN: 403,
-//      CONFLICT: 409
-// }
-
-// const ReasonStatusCode = {
-//      FORBIDDEN: "Bad request error",
-//      CONFLICT: "Conflict error"
-// }
 
 const {
      StatusCodes,
-     ReasonPhrases
+     ReasonPhrases,
+     
 } = require('../utils/httpStatusCode')
 
 class ErrorResponse extends Error {
@@ -58,6 +49,12 @@ class ForbiddenError extends ErrorResponse{
 
 }
 
+class UnauthorizedError extends ErrorResponse {
+     constructor (message = ReasonPhrases.UNAUTHORIZED, statusCode = StatusCodes.UNAUTHORIZED) {
+          super(message, statusCode)
+     }
+}
+
 
 module.exports = {
      ConflictRequestError,
@@ -65,4 +62,5 @@ module.exports = {
      AuthFailureError,
      NotFoundError,
      ForbiddenError,
+     UnauthorizedError
 }

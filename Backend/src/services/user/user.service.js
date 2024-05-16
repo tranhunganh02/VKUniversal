@@ -35,8 +35,6 @@ class UserService {
     }
 
     console.log("result:", updatedUser);
-    console.log("result:", updatedUser);
-
     if (!updatedUser) throw new BadRequestError("cannot update");
   }
   //update vao profile
@@ -47,8 +45,22 @@ class UserService {
 
     if (!result)throw new BadRequestError("cannot update");
   }
-  static async getProfile(user_id, payload) {
+  static async getProfile(user_id, role) {
     console.log("id", user_id);
+    const { user_bio, user } = await getUserInformationAndProfile(user_id, role);
+
+    console.log("result", user_bio, user);
+
+    if (!user_bio || !user) throw new BadRequestError("Something went wrong");
+
+    return {
+      user_bio: user_bio ? user_bio.bio : null, 
+        user: user
+    };
+
+}
+
+  static async createStudent(user_id) {
     const result = getUserInformationAndProfile(user_id, payload.role);
 
     if (!result)throw new BadRequestError("Something went wrong");
