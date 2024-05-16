@@ -9,6 +9,9 @@ import 'package:vkuniversal/features/auth/presentation/bloc/sign_up/bloc/sign_up
 import 'package:vkuniversal/features/auth/presentation/bloc/sign_in/bloc/sign_in_bloc.dart';
 import 'package:vkuniversal/features/auth/presentation/bloc/welcome/bloc/welcome_bloc.dart';
 import 'package:vkuniversal/features/newsfeed/presentation/state/home/bloc/home_bloc.dart';
+import 'package:vkuniversal/features/profile/data/data_sourse/remote/profile_api_service.dart';
+import 'package:vkuniversal/features/profile/data/repository/profile_repository_impl.dart';
+import 'package:vkuniversal/features/profile/domain/repository/profile_repository.dart';
 
 final sl = GetIt.instance;
 
@@ -19,9 +22,13 @@ Future<void> initializeDependencies() async {
   // Dependencies
 
   sl.registerFactory<AuthApiService>(() => AuthApiService(sl()));
+  sl.registerFactory<ProfileApiService>(() => ProfileApiService(sl()));
 
   sl.registerFactory<AuthRepository>(
       () => AuthRepositoryImpl(authApiService: sl()));
+
+  sl.registerFactory<ProfileRepository>(
+      () => ProfileRepositoryImpl(profileApiService: sl()));
 
   sl.registerFactory<SignUpWithEmail>(() => SignUpWithEmail(sl()));
   sl.registerFactory<SignInWithEmail>(

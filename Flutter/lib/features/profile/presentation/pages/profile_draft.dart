@@ -1,27 +1,43 @@
 import 'package:flutter/material.dart';
 import 'package:vkuniversal/core/widgets/avatat.dart';
+import 'package:vkuniversal/features/profile/presentation/pages/profile_tabs/post_tab.dart';
 import 'package:vkuniversal/features/profile/presentation/widgets/biography.dart';
 import 'package:vkuniversal/features/profile/presentation/widgets/major_label.dart';
 import 'package:vkuniversal/features/profile/presentation/widgets/profile_buttons.dart';
 import 'package:vkuniversal/features/profile/presentation/widgets/user_label.dart';
 
-class ProfilePage extends StatelessWidget {
+class ProfilePage extends StatefulWidget {
   const ProfilePage({super.key});
 
   @override
+  State<StatefulWidget> createState() => _ProfilePageState();
+}
+
+class _ProfilePageState extends State<ProfilePage>
+    with TickerProviderStateMixin {
+  var scrollController = ScrollController();
+  @override
   Widget build(BuildContext context) {
     double widthScreen = MediaQuery.of(context).size.width;
-    // double heightScreen = MediaQuery.of(context).size.width;
+    double heightScreen = MediaQuery.of(context).size.width;
     ColorScheme colorScheme = Theme.of(context).colorScheme;
-    // TextTheme textTheme = Theme.of(context).textTheme;
+    TextTheme textTheme = Theme.of(context).textTheme;
 
     var image =
-        "https://s3-alpha-sig.figma.com/img/0e60/c6e9/34cba03d7b6c3f3ee8b602e5690b5184?Expires=1714953600&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4&Signature=cKMHlWGSzBQBlvULxWM0766MtIABf96bIv-yK~u0HCMu6IaxD6nkRG7Lv4iaD2qp4-Znfjb23Ma~cIbQxnPSN9godPmMN6h2E-59uMiWVdUgJk3V3ez9Kl8oHVoDvbQwskGkXb2ZIB0W619iL3vW7drMkxQ4FOeZ1ffmepFzpdMQ3AaL84LI5IqvavSd2oyemj7Xqcd37R9AWxn8VKRIvNMF2yI1C95i7vcyQesy0jKgPdsBRVD~gJJGjr4Bqh0ilNxbM95UKH0qQ-kjZzZWa9ZWr8tb3JSfjAgJOJrtR-BhoH~fUzEpEmgX8gtOdahPP3zPuM6bWKoOO9ukfWkedw__";
-    var username = "Ngọc Võ";
+        "https://scontent.fdad1-4.fna.fbcdn.net/v/t39.30808-6/427931630_3730941007228005_4002607693884312382_n.jpg?_nc_cat=103&ccb=1-7&_nc_sid=5f2048&_nc_ohc=pKahOw0j4ZkQ7kNvgFkW0xf&_nc_ht=scontent.fdad1-4.fna&oh=00_AYBjZPBhQ9i1AfywfNQgXyJ4Bd5mI2kn7eKTsgi5yMHFaQ&oe=664B9F13";
+    var username = "Ngọc Huy";
 
     String email = "fasfa.21it@gmail.com";
     String date_of_birth = "02/12/1992";
     String class_user = "21SE1";
+
+    final tabs = <Widget>[
+      Text("Post"),
+      Text("Image"),
+      Text("Video"),
+    ];
+    TabController tabController =
+        TabController(length: tabs.length, vsync: this);
 
     return Scaffold(
       body: Container(
@@ -30,6 +46,8 @@ class ProfilePage extends StatelessWidget {
         ),
         width: widthScreen,
         child: SingleChildScrollView(
+          controller: scrollController,
+          physics: ClampingScrollPhysics(),
           child: Padding(
             padding: const EdgeInsets.only(top: 32),
             child: Column(
@@ -54,6 +72,38 @@ class ProfilePage extends StatelessWidget {
                   email: email,
                   date_of_birth: date_of_birth,
                   class_user: class_user,
+                ),
+                Container(
+                  width: double.maxFinite,
+                  height: 30,
+                  child: TabBar(
+                    tabAlignment: TabAlignment.start,
+                    tabs: tabs,
+                    controller: tabController,
+                    isScrollable: true,
+                  ),
+                ),
+                Container(
+                  width: double.maxFinite,
+                  height: heightScreen * 1,
+                  child: TabBarView(
+                    children: <Widget>[
+                      PostTab(),
+                      Text(
+                        "Image Tab",
+                        style: textTheme.bodyMedium?.copyWith(
+                          color: colorScheme.primary,
+                        ),
+                      ),
+                      Text(
+                        "Video Tab",
+                        style: textTheme.bodyMedium?.copyWith(
+                          color: colorScheme.primary,
+                        ),
+                      ),
+                    ],
+                    controller: tabController,
+                  ),
                 ),
               ],
             ),

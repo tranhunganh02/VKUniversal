@@ -22,7 +22,7 @@ class FilledButtonCustom extends StatelessWidget {
         onPressed: onPress,
         child: Text(
           label,
-          style: textTheme.labelSmall
+          style: textTheme.labelLarge
               ?.copyWith(color: colorScheme.onPrimaryContainer),
         ),
         style: FilledButton.styleFrom(

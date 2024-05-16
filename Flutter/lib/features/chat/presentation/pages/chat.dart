@@ -1,6 +1,4 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:vkuniversal/core/utils/icon_string.dart';
 import 'package:vkuniversal/features/chat/presentation/pages/data_fake.dart';
 import '../../../../core/widgets/avatat.dart';
@@ -49,7 +47,7 @@ class _ChatScreenState extends State<ChatScreen> {
               Container(
                   margin: const EdgeInsets.only(left: 2.0),
                   child: Avatar(
-                      "https://s3-alpha-sig.figma.com/img/a0f4/8f73/e18597822733bc1fcd88e47a1d8e1f40?Expires=1714953600&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4&Signature=V11BzLmy3j4OO3acfClja6pyWnlUaHvxfq1~YNiZTbCAFrxQI69Bzi~ljElQMHfha7lktpsiQClkAU-39eW-u65LpwtKz50ettNpGOTEC5urYppJQmlOk1gkYeZcwLJFv-IvqWaoRimk9w0E109-cTMoED6u9~PELp1AJoCTFYpsPNyimmGy~TGVzWJgnI6aItsw6yopHNB1wOtckm5iZJ-VnYmhQejgu8RD6R22E4Yr~fp5jeBbTe~4EE5Evd4JDRDhds5l152wcbsTkPDX0jVqLwXMIzSwHgr05iI2tWW2dU9EOlMQ4siKtcAs4A8pNyiaSbVAkKg-oAWRCA2mKg__",
+                      "https://scontent.fdad1-4.fna.fbcdn.net/v/t39.30808-6/427931630_3730941007228005_4002607693884312382_n.jpg?_nc_cat=103&ccb=1-7&_nc_sid=5f2048&_nc_ohc=pKahOw0j4ZkQ7kNvgFkW0xf&_nc_ht=scontent.fdad1-4.fna&oh=00_AYBjZPBhQ9i1AfywfNQgXyJ4Bd5mI2kn7eKTsgi5yMHFaQ&oe=664B9F13",
                       45.0))
             ],
           ),

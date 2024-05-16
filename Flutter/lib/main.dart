@@ -50,6 +50,7 @@ class MyApp extends StatelessWidget {
       title: 'Flutter Demo',
       theme: MyThemeData.lightTheme,
       home: this.isLoggedIn ? Home() : WelcomePage(),
+      // home: AddUserInfoPage(),
       onGenerateRoute: Routes.generateRoute,
     );
   }

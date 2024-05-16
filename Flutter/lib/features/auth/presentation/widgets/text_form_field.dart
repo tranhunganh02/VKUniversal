@@ -29,7 +29,7 @@ class AuthTextField extends StatelessWidget {
       child: TextFormField(
         controller: controller,
         obscureText: isObscured,
-        style: textTheme.labelSmall?.copyWith(color: colorScheme.secondary),
+        style: textTheme.labelMedium?.copyWith(color: colorScheme.secondary),
         cursorColor: colorScheme.secondary,
         validator: (_) => validation,
         autovalidateMode: AutovalidateMode.onUserInteraction,

@@ -13,4 +13,5 @@ router.put('', asyncHandler(userController.updateUser))
 
 router.put('/profile', asyncHandler(userController.updateUserProfile))
 router.get('/profile', asyncHandler(userController.getUserProfile)) 
+router.get('/checkStudent', asyncHandler(userController.checkStudentExist))
 module.exports = router

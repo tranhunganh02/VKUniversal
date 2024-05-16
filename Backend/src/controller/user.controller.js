@@ -21,7 +21,13 @@ class UserController {
   getUserProfile = async (req, res, next) => {
     new SuccessResponse({
       message: "Get data success",
-      metadata: await UserService.getProfile(req.user.userId, req.body),
+      metadata: await UserService.getProfile(req.body.user_id, req.body.role),
+    }).send(res);
+  };
+  checkStudentExist = async (req, res, next) => {
+    new SuccessResponse({
+      message: "Get data success",
+      metadata: await UserService.checkStudentExist(req.body.user_id),
     }).send(res);
   };
 }

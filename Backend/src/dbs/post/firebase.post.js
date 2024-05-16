@@ -28,7 +28,7 @@ async function uploadFileToFirebase(buffer, file) {
     });
   
       // Trả về cả URL và file_type
-      return  url ;
+      return  url 
     } catch (error) {
       console.error('Error uploading file to Firebase:', error);
       throw new Error('Error uploading file to Firebase');

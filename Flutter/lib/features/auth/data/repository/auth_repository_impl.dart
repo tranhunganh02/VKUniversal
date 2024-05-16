@@ -1,11 +1,14 @@
 import 'dart:io';
 import 'package:dio/dio.dart';
 import 'package:logger/logger.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:vkuniversal/core/constants/constants.dart';
 import 'package:vkuniversal/core/resources/data_state.dart';
 import 'package:vkuniversal/features/auth/data/data_sources/remote/auth_api_service.dart';
 import 'package:vkuniversal/features/auth/data/models/sign_in_request.dart';
 import 'package:vkuniversal/features/auth/data/models/sign_up_request.dart';
 import 'package:vkuniversal/features/auth/data/models/user_response.dart';
+import 'package:vkuniversal/features/auth/domain/entities/user_response.dart';
 import 'package:vkuniversal/features/auth/domain/repository/auth_repository.dart';
 
 class AuthRepositoryImpl implements AuthRepository {
@@ -16,7 +19,7 @@ class AuthRepositoryImpl implements AuthRepository {
       : _authApiService = authApiService;
 
   @override
-  Future<void> logout() {
+  Future<DataFailed<void>> logout() {
     throw UnimplementedError();
   }
 
@@ -85,5 +88,33 @@ class AuthRepositoryImpl implements AuthRepository {
   @override
   Future<DataState<UserResponse>> signUpWithGoogle() {
     throw UnimplementedError();
+  }
+
+  @override
+  Future<DataState<UserResponseEntity>> refreshToken({
+    required int userID,
+    required String refreshToken,
+    required String accessToken,
+  }) async {
+    try {
+      final response = await _authApiService.refreshToken(
+        userID,
+        refreshToken,
+      );
+      _logger.d("Refreshing token...");
+      if (response.response.statusCode == HttpStatus.ok) {
+        SharedPreferences _pref = await SharedPreferences.getInstance();
+        _pref.setString('refreshToken', response.data.token.refreshToken);
+        _pref.setString('accessToken', response.data.token.accessToken);
+        _logger.d("Refresh token successful");
+        return DataSuccess(response.data);
+      } else {
+        _logger.e("Refresh token failed: ");
+        RequestOptions options = RequestOptions();
+        return DataFailed(DioException(requestOptions: options));
+      }
+    } on DioException catch (e) {
+      return DataFailed(e);
+    }
   }
 }

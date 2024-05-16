@@ -54,7 +54,7 @@ class _SignUpPageState extends State<SignUpPage> {
       body: BlocConsumer<SignUpBloc, SignUpState>(
         listener: (context, state) {
           if (state is SignUpSuccess) {
-            Navigator.popAndPushNamed(context, RoutesName.home);
+            Navigator.popAndPushNamed(context, RoutesName.addUserInfor);
           } else if (state is SignUpFailure) {
             showErrorSnackBar(context, state.message ?? "");
           }

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:vkuniversal/features/auth/presentation/pages/add_user_info.dart';
 import 'package:vkuniversal/features/auth/presentation/pages/login.dart';
 import 'package:vkuniversal/features/auth/presentation/pages/sign_up.dart';
 import 'package:vkuniversal/features/auth/presentation/pages/welcome.dart';
@@ -33,10 +34,12 @@ class Routes {
       case RoutesName.profile:
         return MaterialPageRoute(
             builder: (BuildContext context) => ProfileScreen());
-
+      case RoutesName.addUserInfor:
+        return MaterialPageRoute(
+            builder: (BuildContext context) => AddUserInfoPage());
       case RoutesName.updateProfile:
         return MaterialPageRoute(
-            builder: (BuildContext context) => UpdateProfileScreen());      
+            builder: (BuildContext context) => UpdateProfileScreen());
       default:
         return MaterialPageRoute(builder: (_) {
           return const Scaffold(

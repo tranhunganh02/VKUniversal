@@ -2,6 +2,7 @@ class RoutesName {
   static const String login = '/login';
 
   static const String signUp = '/sign_up';
+  static const String addUserInfor = '/sign_up/addUserInfor';
 
   static const String home = '/home_screen';
 

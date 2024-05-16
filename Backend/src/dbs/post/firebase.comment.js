@@ -22,17 +22,16 @@ const createCommentToFb = async (
     ? db.collection(`comments/${path}/${level}`).doc()
     : db.collection(`comments`).doc();
   await commentRef.set(newComment);
+  const commentId = commentRef.id; // Get the comment_id
   const commentData = (await commentRef.get()).data();
 
   //convert time
-  const created_at = commentData.created_at;
   const timestamp = new firebase.firestore.Timestamp(
-    created_at._seconds,
-    created_at._nanoseconds
+    commentData.created_at._seconds,
+    commentData.created_at._nanoseconds
   );
   commentData.created_at = timestamp.toDate();
-
-  return commentData;
+  return { comment_id: commentId, ...commentData };
 };
 const checkCommentExists = async (comment_id) => {
     const docRef = db.collection("comments").doc(comment_id);

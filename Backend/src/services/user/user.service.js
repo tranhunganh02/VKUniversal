@@ -4,9 +4,10 @@ const {
   updateLecture,
   getUserInformationAndProfile,
   updateUserProfile,
+  checkStudentExist
 } = require("../../dbs/user/pg.user");
 
-const { BadRequestError } = require("../../core/error.response");
+const { BadRequestError, NotFoundError } = require("../../core/error.response");
 class UserService {
   //de update can truy thong tin cua bang ( student, lecture, apartment ) va role
   static async updateUser(user_id, role, payload) {
@@ -35,8 +36,6 @@ class UserService {
     }
 
     console.log("result:", updatedUser);
-    console.log("result:", updatedUser);
-
     if (!updatedUser) throw new BadRequestError("cannot update");
   }
   //update vao profile
@@ -47,11 +46,33 @@ class UserService {
 
     if (!result)throw new BadRequestError("cannot update");
   }
-  static async getProfile(user_id, payload) {
+  static async getProfile(user_id, role) {
     console.log("id", user_id);
+    const { user_bio, user } = await getUserInformationAndProfile(user_id, role);
+
+    console.log("result", user_bio, user);
+
+    if (!user) throw new NotFoundError();
+
+    return {
+      user_bio: user_bio ? user_bio.bio : null, 
+        user: user
+    };
+
+}
+
+  static async createStudent(user_id) {
     const result = getUserInformationAndProfile(user_id, payload.role);
 
     if (!result)throw new BadRequestError("Something went wrong");
+
+    return result;
+  }
+
+  static async checkStudentExist(user_id) {
+    const result = checkStudentExist(user_id);
+
+    if (!result)throw new NotFoundError();
 
     return result;
   }

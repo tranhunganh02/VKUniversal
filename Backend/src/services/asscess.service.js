@@ -8,12 +8,13 @@ const { getInfoData } = require("../utils/index.js");
 const { BadRequestError, AuthFailureError, ForbiddenError } = require("../core/error.response.js");
 const UserService = require("./user.service.js");
 const { includes } = require("lodash");
+const { createStudentAndProfile } = require("../dbs/user/pg.user.js");
 
 const roleAccount = {
-  student: 0,
-  lecture: 1,
-  department: 2,
-  admin: 3
+  student: 1,
+  lecture: 2,
+  department: 3,
+  admin: 4
 };
 
 class AccessService {
@@ -203,7 +204,7 @@ class AccessService {
 
         //create token
         const tokens = await createTokenPair(
-          { userId: saveUser.user_id, email,role: roleAccount.student },
+          { userId: saveUser.user_id, email, role: roleAccount.student },
           publicKey,
           privateKey
         );
@@ -219,6 +220,9 @@ class AccessService {
         if (!keyStore) {
           throw new BadRequestError("publicKeyString error")
         }
+
+        const student = await createStudentAndProfile(saveUser.user_id)
+        console.log("student", student);
 
         return {
             user: getInfoData({fileds: ['user_id', 'email', ], Object: saveUser}),

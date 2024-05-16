@@ -14,6 +14,12 @@ abstract interface class AuthRepository {
     required String password,
   });
 
+  Future<DataState<UserResponseEntity>> refreshToken({
+    required int userID,
+    required String refreshToken,
+    required String accessToken,
+  });
+
   Future<void> logoutWithGoogle();
-  Future<void> logout();
+  Future<DataState<void>> logout();
 }

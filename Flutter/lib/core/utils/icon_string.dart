@@ -17,6 +17,7 @@ class IconList {
   static Icon calender = Icon(Iconsax.calendar_1_outline);
   static Icon graduationCap = Icon(LucideIcons.graduationCap);
   static Icon backArrow = Icon(Iconsax.arrow_left_2_outline);
+  static Icon downArrow = Icon(Iconsax.arrow_down_2_outline);
   static Icon user = Icon(Iconsax.user_outline);
   static Icon email = Icon(Iconsax.sms_outline);
   static Icon lock = Icon(Iconsax.lock_outline);

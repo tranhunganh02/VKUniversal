@@ -19,4 +19,15 @@ abstract class AuthApiService {
   Future<HttpResponse<UserResponse>> signInWithEmail(
     @Body() SignInRequest signInRequest,
   );
+
+  @POST('/handlerRefreshToken')
+  Future<HttpResponse<UserResponse>> refreshToken(
+    @Header('x-client-id') int userID,
+    @Header('x-rtoken-id') String refreshToken,
+  );
+  @POST('/logout')
+  Future<HttpResponse<void>> logout(
+    @Header('x-client-id') int userID,
+    @Header('authorization') String? token,
+  );
 }

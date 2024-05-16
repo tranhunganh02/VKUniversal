@@ -3,6 +3,7 @@ import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:logger/logger.dart';
 import 'package:meta/meta.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:vkuniversal/core/resources/data_state.dart';
 import 'package:vkuniversal/features/auth/data/models/user.dart';
 import 'package:vkuniversal/features/auth/domain/usecases/sign_up_with_email.dart';
@@ -46,6 +47,12 @@ class SignUpBloc extends Bloc<SignUpEvent, SignUpState> {
         final dataState = await _signUpWithEmail(params: _request);
 
         if (dataState is DataSuccess) {
+          final SharedPreferences prefs = await SharedPreferences.getInstance();
+          await prefs.setString('email', dataState.data!.user.email.toString());
+          await prefs.setString(
+              'refreshToken', dataState.data!.token.refreshToken);
+          await prefs.setString(
+              'accessToken', dataState.data!.token.accessToken);
           emit(SignUpSuccess(dataState.data!.user as UserModel));
           print("Success");
         }
