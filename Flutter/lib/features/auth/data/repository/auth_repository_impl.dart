@@ -7,6 +7,7 @@ import 'package:vkuniversal/core/resources/data_state.dart';
 import 'package:vkuniversal/features/auth/data/data_sources/remote/auth_api_service.dart';
 import 'package:vkuniversal/features/auth/data/models/sign_in_request.dart';
 import 'package:vkuniversal/features/auth/data/models/sign_up_request.dart';
+import 'package:vkuniversal/features/auth/data/models/student_info_checker.dart';
 import 'package:vkuniversal/features/auth/data/models/user_response.dart';
 import 'package:vkuniversal/features/auth/domain/entities/user_response.dart';
 import 'package:vkuniversal/features/auth/domain/repository/auth_repository.dart';
@@ -107,6 +108,30 @@ class AuthRepositoryImpl implements AuthRepository {
         _pref.setString('refreshToken', response.data.token.refreshToken);
         _pref.setString('accessToken', response.data.token.accessToken);
         _logger.d("Refresh token successful");
+        return DataSuccess(response.data);
+      } else {
+        _logger.e("Refresh token failed: ");
+        RequestOptions options = RequestOptions();
+        return DataFailed(DioException(requestOptions: options));
+      }
+    } on DioException catch (e) {
+      return DataFailed(e);
+    }
+  }
+
+  @override
+  Future<DataState<StudentInfoCheckerModel>> checkUserInfoExists(
+      {required int userID, required String accessToken}) async {
+    try {
+      final response = await _authApiService.checkStudentInfoExist(
+        userID,
+        accessToken,
+        CheckStudentInfoRequest(userId: userID),
+      );
+
+      _logger.d("Checking user info...");
+
+      if (response.response.statusCode == HttpStatus.ok) {
         return DataSuccess(response.data);
       } else {
         _logger.e("Refresh token failed: ");
