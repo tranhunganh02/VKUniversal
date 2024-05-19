@@ -11,8 +11,8 @@ class SignInWithEmail
   SignInWithEmail({required AuthRepository authRepository})
       : _authRepository = authRepository;
   @override
-  Future<DataState<UserResponseEntity>> call({SignInRequest? params}) {
+  Future<DataState<UserResponseEntity>> call({SignInRequest? data}) {
     return _authRepository.signInWithEmail(
-        email: params!.email, password: params.password);
+        email: data!.email, password: data.password);
   }
 }

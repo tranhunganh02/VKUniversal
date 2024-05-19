@@ -50,6 +50,8 @@ dependencies:
   hive_storage: ^0.0.3
   icons_plus: ^5.0.0
   lucide_icons_flutter: ^1.0.8
+  connectivity_plus: ^6.0.3
+  syncfusion_flutter_datepicker: ^25.2.4
 
 dev_dependencies:
   logger: any  #for logging purpose
@@ -87,6 +89,9 @@ flutter:
   - assets/vectors/outline/
   - assets/vectors/outline/home_outline.svg
   - assets/vectors/solid/
+  - assets/data/
+  - assets/data/university_class.json
+  - assets/data/major.json
 
   
 

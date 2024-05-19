@@ -1,5 +1,4 @@
 import 'package:vkuniversal/core/resources/data_state.dart';
-import 'package:vkuniversal/features/auth/data/models/student_info_checker.dart';
 import 'package:vkuniversal/features/auth/domain/entities/student_info_checker.dart';
 import 'package:vkuniversal/features/auth/domain/entities/user_response.dart';
 

@@ -1,7 +1,6 @@
 import 'package:vkuniversal/core/resources/data_state.dart';
 import 'package:vkuniversal/core/usecase/usecase.dart';
 import 'package:vkuniversal/features/auth/data/models/authorization.dart';
-import 'package:vkuniversal/features/auth/data/models/student_info_checker.dart';
 import 'package:vkuniversal/features/auth/domain/entities/student_info_checker.dart';
 import 'package:vkuniversal/features/auth/domain/repository/auth_repository.dart';
 
@@ -13,8 +12,8 @@ class CheckUserInfoExists
       : _authRepository = authRepository;
 
   @override
-  Future<DataState<StudentInfoCheckEntity>> call({Authorization? params}) {
+  Future<DataState<StudentInfoCheckEntity>> call({Authorization? data}) {
     return _authRepository.checkUserInfoExists(
-        userID: params!.userID, accessToken: params.accessToken);
+        userID: data!.userID, accessToken: data.accessToken);
   }
 }

@@ -3,7 +3,9 @@ import 'dart:io';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:logger/logger.dart';
 import 'package:vkuniversal/core/utils/injection_container.dart';
+import 'package:vkuniversal/features/auth/data/data_sources/local/class_local_service.dart';
 import 'package:vkuniversal/features/auth/data/data_sources/remote/auth_api_service.dart';
+import 'package:vkuniversal/features/auth/data/data_sources/remote/user_api_service.dart';
 import 'package:vkuniversal/features/auth/data/models/student_info_checker.dart';
 import 'package:vkuniversal/features/profile/data/data_sourse/remote/profile_api_service.dart';
 
@@ -75,5 +77,40 @@ void main() {
     _logger.d(response.data.toString());
 
     expect(response.response.data['metadata'], true);
+  });
+  test("Load class list", () {
+    TestWidgetsFlutterBinding.ensureInitialized();
+    initializeDependencies();
+
+    Logger _logger = Logger();
+
+    final _classService = ClassLocalService();
+
+    final list = _classService.getClassList();
+
+    _logger.d(list);
+  });
+  test("Test Update", () async {
+    initializeDependencies();
+
+    Logger _logger = Logger();
+    final _userInfoService = sl<UserApiService>();
+
+    final userID = 9;
+    final accessToken =
+        'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjksImVtYWlsIjoiaHV5dG4uMjFpdEB2a3UudWRuLnZuIiwicm9sZSI6MSwiaWF0IjoxNzE2MTA5NDYxLCJleHAiOjE3MTYxMTEyNjF9.4CLxSFhxuEkUtC1iuUdcsykJtRyx9QBeyEf_IcbCfdA';
+
+    final Map<String, dynamic> userInfo2 = {
+      "user_id": "9",
+      "student_code": "21IT666",
+      "gender": 1,
+      "class_id": 32
+    };
+
+    final response = await _userInfoService.updateStudentInfo(
+        userID, accessToken, userInfo2);
+    _logger.d(response.response.data.toString());
+
+    expect(response.response.statusCode, HttpStatus.ok);
   });
 }

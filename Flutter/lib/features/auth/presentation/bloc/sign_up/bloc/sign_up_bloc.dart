@@ -44,11 +44,12 @@ class SignUpBloc extends Bloc<SignUpEvent, SignUpState> {
           name: event.name,
         );
 
-        final dataState = await _signUpWithEmail(params: _request);
+        final dataState = await _signUpWithEmail(data: _request);
 
         if (dataState is DataSuccess) {
           final SharedPreferences prefs = await SharedPreferences.getInstance();
           await prefs.setString('email', dataState.data!.user.email.toString());
+          await prefs.setString('fullname', event.name);
           await prefs.setString(
               'refreshToken', dataState.data!.token.refreshToken);
           await prefs.setString(

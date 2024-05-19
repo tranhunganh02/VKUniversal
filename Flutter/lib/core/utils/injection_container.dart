@@ -1,10 +1,18 @@
 import 'package:dio/dio.dart';
 import 'package:get_it/get_it.dart';
+import 'package:vkuniversal/features/auth/data/data_sources/local/class_local_service.dart';
 import 'package:vkuniversal/features/auth/data/data_sources/remote/auth_api_service.dart';
+import 'package:vkuniversal/features/auth/data/data_sources/remote/user_api_service.dart';
 import 'package:vkuniversal/features/auth/data/repository/auth_repository_impl.dart';
+import 'package:vkuniversal/features/auth/data/repository/user_info_reposirory_impl.dart';
 import 'package:vkuniversal/features/auth/domain/repository/auth_repository.dart';
+import 'package:vkuniversal/features/auth/domain/repository/user_info_repository.dart';
+import 'package:vkuniversal/features/auth/domain/usecases/check_student_info.dart';
+import 'package:vkuniversal/features/auth/domain/usecases/refresh_token.dart';
 import 'package:vkuniversal/features/auth/domain/usecases/sign_in_with_email.dart';
 import 'package:vkuniversal/features/auth/domain/usecases/sign_up_with_email.dart';
+import 'package:vkuniversal/features/auth/domain/usecases/update_student_info.dart';
+import 'package:vkuniversal/features/auth/presentation/bloc/add_user_info/bloc/add_user_info_bloc.dart';
 import 'package:vkuniversal/features/auth/presentation/bloc/sign_up/bloc/sign_up_bloc.dart';
 import 'package:vkuniversal/features/auth/presentation/bloc/sign_in/bloc/sign_in_bloc.dart';
 import 'package:vkuniversal/features/auth/presentation/bloc/welcome/bloc/welcome_bloc.dart';
@@ -19,23 +27,33 @@ Future<void> initializeDependencies() async {
   // Dio
   sl.registerSingleton<Dio>(
       Dio(BaseOptions(connectTimeout: Duration(milliseconds: 5000))));
-  // Dependencies
+  // // Dependencies
 
   sl.registerFactory<AuthApiService>(() => AuthApiService(sl()));
+  sl.registerFactory<UserApiService>(() => UserApiService(sl()));
   sl.registerFactory<ProfileApiService>(() => ProfileApiService(sl()));
+  sl.registerFactory<ClassLocalService>(() => ClassLocalService());
 
   sl.registerFactory<AuthRepository>(
       () => AuthRepositoryImpl(authApiService: sl()));
 
   sl.registerFactory<ProfileRepository>(
       () => ProfileRepositoryImpl(profileApiService: sl()));
+  sl.registerFactory<UserInfoRepository>(
+      () => UserInfoReposiroryImpl(sl(), classLocalService: sl()));
 
   sl.registerFactory<SignUpWithEmail>(() => SignUpWithEmail(sl()));
+  sl.registerFactory<RefreshToken>(() => RefreshToken(authRepository: sl()));
+  sl.registerFactory<CheckUserInfoExists>(
+      () => CheckUserInfoExists(authRepository: sl()));
   sl.registerFactory<SignInWithEmail>(
       () => SignInWithEmail(authRepository: sl()));
+  sl.registerFactory<UpdateStudentInfo>(
+      () => UpdateStudentInfo(infoReposirory: sl()));
 
   sl.registerFactory<SignUpBloc>(() => SignUpBloc(sl()));
   sl.registerFactory<SignInBloc>(() => SignInBloc(sl()));
   sl.registerSingleton<WelcomeBloc>(WelcomeBloc());
   sl.registerSingleton<BottomNavigationBloc>(BottomNavigationBloc());
+  sl.registerSingleton<AddUserInfoBloc>(AddUserInfoBloc(sl(), sl()));
 }

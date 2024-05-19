@@ -2,7 +2,6 @@ import 'dart:io';
 import 'package:dio/dio.dart';
 import 'package:logger/logger.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:vkuniversal/core/constants/constants.dart';
 import 'package:vkuniversal/core/resources/data_state.dart';
 import 'package:vkuniversal/features/auth/data/data_sources/remote/auth_api_service.dart';
 import 'package:vkuniversal/features/auth/data/models/sign_in_request.dart';

@@ -7,6 +7,7 @@ import 'package:vkuniversal/features/chat/presentation/pages/chat.dart';
 import 'package:vkuniversal/features/chat/presentation/pages/list_chat.dart';
 import 'package:vkuniversal/features/profile/presentation/pages/profile.dart';
 import 'package:vkuniversal/features/newsfeed/presentation/pages/home.dart';
+import 'package:vkuniversal/main.dart';
 
 import '../../features/profile/presentation/pages/update_profile.dart';
 import 'router_name.dart';
@@ -40,6 +41,9 @@ class Routes {
       case RoutesName.updateProfile:
         return MaterialPageRoute(
             builder: (BuildContext context) => UpdateProfileScreen());
+      case RoutesName.noInternet:
+        return MaterialPageRoute(
+            builder: (BuildContext context) => NoInternetPage());
       default:
         return MaterialPageRoute(builder: (_) {
           return const Scaffold(

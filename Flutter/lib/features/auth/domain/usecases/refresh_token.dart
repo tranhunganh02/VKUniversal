@@ -12,11 +12,11 @@ class RefreshToken
       : _authRepository = authRepository;
 
   @override
-  Future<DataState<UserResponseEntity>> call({Authorization? params}) {
+  Future<DataState<UserResponseEntity>> call({Authorization? data}) {
     return _authRepository.refreshToken(
-      userID: params!.userID,
-      refreshToken: params.refreshToken,
-      accessToken: params.accessToken,
+      userID: data!.userID,
+      refreshToken: data.refreshToken,
+      accessToken: data.accessToken,
     );
   }
 }
