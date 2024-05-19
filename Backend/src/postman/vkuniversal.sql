@@ -78,7 +78,6 @@ CREATE TABLE Student (
   date_of_birth DATE,
   gender SMALLINT,
   class_id SMALLINT,
-  status INT,
   FOREIGN KEY (class_id) REFERENCES university_class(class_id)
 );
 
@@ -913,3 +912,42 @@ GROUP BY
 
 
 SELECT sell_post_id, image_url[1], product_name, price FROM sell_post ORDER BY created_at LIMIT 6 OFFSET 12;
+
+  SELECT
+        s.user_id,
+        s.student_code,
+        s.surname,
+        s.last_name,
+        s.date_of_birth,
+        s.gender,
+        uc.class_id,
+        uc.class_name,
+        m.major_id,
+        m.major_name
+    FROM
+        student s
+    JOIN
+        university_class uc ON s.class_id = uc.class_id
+    JOIN
+        major m ON uc.major_id = m.major_id
+    WHERE
+        s.user_id = 18
+
+
+
+   SELECT p.post_id, p.content, p.created_at, p.updated_at, u.avatar
+    FROM post p
+    JOIN users u ON p.user_id = u.user_id
+    WHERE p.privacy = true
+    ORDER BY p.created_at DESC
+    LIMIT 6 OFFSET 0;
+
+SELECT p.user_id, p.post_id, p.content, p.created_at, p.updated_at, u.avatar
+FROM post p
+JOIN users u ON p.user_id = u.user_id
+WHERE p.user_id IN (
+    SELECT followed_id
+    FROM follow
+    WHERE follower_id = 18
+)
+ORDER BY p.created_at DESC

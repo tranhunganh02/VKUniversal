@@ -13,5 +13,9 @@ router.put('', asyncHandler(userController.updateUser))
 
 router.put('/profile', asyncHandler(userController.updateUserProfile))
 router.get('/profile', asyncHandler(userController.getUserProfile)) 
-router.get('/checkStudent', asyncHandler(userController.checkStudentExist))
+
+router.get('/checkStudent', asyncHandler(userController.checkStudentExist)) 
+
+router.post('/follow',asyncHandler(userController.createFollow))
+router.delete('/follow',asyncHandler(userController.unFollow))
 module.exports = router

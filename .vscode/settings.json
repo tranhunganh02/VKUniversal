@@ -8,6 +8,15 @@
             "name": "vkuniversal",
             "database": "vkuniversal",
             "username": "postgres"
+        },
+        {
+            "previewLimit": 50,
+            "server": "localhost",
+            "port": 5432,
+            "driver": "PostgreSQL",
+            "database": "vkuniversal",
+            "username": "postgres",
+            "name": "nhaHungAnh"
         }
     ]
 }

@@ -38,11 +38,44 @@ const findUserByEmail = async (email) => {
     return result[0];
   }
 
+const createStudentAndProfile = async (user_id) => {
+  const query = `
+  INSERT INTO Student (user_id, student_code, surname, last_name) VALUES ($1, $2, $3, $4) ;
+  `;
+  const values = [user_id, user_id, "null", "null"];
+
+  const query2 = `
+  INSERT INTO user_profile (user_id) VALUES($1);
+  `;
+  const values2 = [user_id];
+  const result = await db.query(query, values);
+  const result2 = await db.query(query2, values2);
+  return result[0];
+}
+
+const createDeparmentAndProfile = async (user_id, department_name) => {
+  const query = `
+  INSERT INTO department (user_id, department_name) VALUES ($1, $2) ;
+  `;
+  const values = [user_id, department_name];
+
+  const query2 = `
+  INSERT INTO user_profile (user_id) VALUES($1);
+  `;
+  const values2 = [user_id];
+  const result = await db.query(query, values);
+  const result2 = await db.query(query2, values2);
+  return result[0];
+}
+
+
    
    module.exports = {
      checkUserByEmail,
      signUpUser,
      createNewKeyToken,
-     findUserByEmail
+     findUserByEmail,
+     createStudentAndProfile,
+     createDeparmentAndProfile
    };
    

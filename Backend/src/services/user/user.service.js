@@ -4,7 +4,9 @@ const {
   updateLecture,
   getUserInformationAndProfile,
   updateUserProfile,
-  checkStudentExist
+  checkStudentExist,
+  makeFollow,
+  unFollow
 } = require("../../dbs/user/pg.user");
 
 const { BadRequestError, NotFoundError } = require("../../core/error.response");
@@ -22,9 +24,7 @@ class UserService {
     console.log("role", role);
 
     if (role == 1) {
-      const student_id = payload.student_id;
-      delete payload.student_id;
-      updatedUser = await updateStudent(user_id, student_id, payload);
+      updatedUser = await updateStudent(user_id, payload);
     } else if (role == 2) {
       const lecture_id = payload.lecture_id;
       delete payload.lecture_id;
@@ -35,7 +35,6 @@ class UserService {
       updatedUser = await updateDepartment(user_id, department_id, payload);
     }
 
-    console.log("result:", updatedUser);
     if (!updatedUser) throw new BadRequestError("cannot update");
   }
   //update vao profile
@@ -73,6 +72,28 @@ class UserService {
     const result = checkStudentExist(user_id);
 
     if (!result)throw new NotFoundError();
+
+    return result;
+  }
+
+  static async searchUsers(user_ame) {
+    const result = checkStudentExist(user_id);
+
+    if (!result)throw new NotFoundError();
+
+    return result;
+  }
+  static async createFollow(follower_id, followed_id) {
+    const result = await  makeFollow(follower_id, followed_id);
+
+    if (!result)throw new BadRequestError();
+
+    return result;
+  }
+  static async deleteFollow(follower_id, followed_id) {
+    const result = await unFollow(follower_id, followed_id);
+
+    if (!result)throw new BadRequestError();
 
     return result;
   }

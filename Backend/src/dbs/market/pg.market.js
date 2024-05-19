@@ -104,24 +104,16 @@ const getImagesMarketPostById = async (sellProductId, userId) => {
   const result = await db.query(query, [sellProductId, userId]);
   return result[0];
 };
-const getAllMarketPost = async (orderBy=null, type_order_by =null, page=null) => {
-     let query
-     const limit = 6
+const getAllMarketPost = async (orderBy="created_at", type_order_by ="desc", page=1) => {
+    const limit = 6
 
-     if (!orderBy && !type_order_by && page==1 ) {
-          query = `SELECT sell_post_id, image_url[1], product_name, price FROM sell_post ORDER BY created_at LIMIT 6;`;
-     }
-     if(!orderBy && !type_order_by && page >1) {
-          const offset = (page-1)*limit
-          query = `SELECT sell_post_id, image_url[1], product_name, price FROM sell_post ORDER BY created_at LIMIT ${limit} OFFSET ${offset};`;
-     }
-     const result = await db.query(query);
-     if ((Array.isArray(result[0])).length ==0 ) {
-          // Trả về một thông báo hoặc kết quả trống tùy thuộc vào yêu cầu của ứng dụng của bạn
-          return { message: 'No sell posts found' };
-      }
- 
-     return result[0];
+    const offset = (page-1)*limit
+
+    query = `SELECT sell_post_id, image_url[1], product_name, price FROM sell_post ORDER BY ${orderBy} ${type_order_by} LIMIT ${limit} OFFSET ${offset};`;
+
+    const result = await db.query(query);
+     
+     return result;
    };
    
 

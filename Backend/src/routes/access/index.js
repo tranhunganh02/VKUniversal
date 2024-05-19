@@ -6,7 +6,7 @@ const asyncHandler = require('../../helper/asyncHandler')
 //touter for login and signup
 router.post('/signup', asyncHandler(accessController.signUp)) 
 router.post('/login', asyncHandler(accessController.login)) 
-
+router.post('/signupDepartment', asyncHandler(accessController.signUpDepartment)) 
 //authentication
 router.use(authenticationV2)
 

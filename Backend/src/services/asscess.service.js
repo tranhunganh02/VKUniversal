@@ -8,7 +8,7 @@ const { getInfoData } = require("../utils/index.js");
 const { BadRequestError, AuthFailureError, ForbiddenError } = require("../core/error.response.js");
 const UserService = require("./user.service.js");
 const { includes } = require("lodash");
-const { createStudentAndProfile } = require("../dbs/user/pg.user.js");
+const { createStudentAndProfile, createDeparmentAndProfile } = require("../dbs/access/pg.access.js");
 
 const roleAccount = {
   student: 1,
@@ -230,6 +230,60 @@ class AccessService {
         };
       }
     }
+
+    static async signUpDerpartment({ email, password, department_name }) {
+      // check permisson mail vku
+      const isMailVku = await UserService.checkRoleEmail(email)
+      if (!isMailVku) {
+      console.log("email: " + email);
+       throw new ForbiddenError('Error: Your email is forbidden');
+      }
+      // Check if mail user already exists
+      const existingMailUser = await UserService.checkMailUserExists(email);
+      if (existingMailUser) {
+      console.log("email: " + email);
+        throw new BadRequestError('Error: Email already exists')
+      }
+      // Hash password using bcrypt (replace with your preferred hashing method)
+      const hashedPassword = await bcrypt.hash(password, 10);
+
+      console.log("email: " + email);
+      const saveUser = await signUpUser(
+        email,
+        hashedPassword,
+        roleAccount.department
+      );
+      if (saveUser) {
+
+        const privateKey = crypto.randomBytes(64).toString('hex')
+        const publicKey = crypto.randomBytes(64).toString('hex')
+
+        //create token
+        const tokens = await createTokenPair(
+          { userId: saveUser.user_id, email, role: roleAccount.department },
+          publicKey,
+          privateKey
+        );
+        const keyStore = await KeyTokenService.createKeyToken({
+          userId :  saveUser.user_id,
+          publicKey : publicKey,
+          privateKey : privateKey,
+          refreshToken: tokens.refreshToken
+      });
+
+        if (!keyStore) {
+          throw new BadRequestError("publicKeyString error")
+        }
+
+        const department = await createDeparmentAndProfile(saveUser.user_id, department_name)
+
+        return {
+            user: getInfoData({fileds: ['user_id', 'email', ], Object: saveUser}),
+            tokens,
+        };
+      }
+    }
+  
   }
 
  

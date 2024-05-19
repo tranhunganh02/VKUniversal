@@ -39,6 +39,13 @@ class AccessController {
           metadata: await AccessService.logout(req.keyStore)
      }).send(res)
   };
+  signUpDepartment = async (req, res, next) => {
+
+     new CREATED({
+          message: "Registerted sucess",
+          metadata: await AccessService.signUpDerpartment(req.body)
+     }).send(res)
+  };
 }
 
 module.exports = new AccessController();
