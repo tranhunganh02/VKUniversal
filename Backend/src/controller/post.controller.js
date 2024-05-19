@@ -9,7 +9,13 @@ class PostController {
   getPost = async (req, res, next) => {
     new SuccessResponse({
       message: "get data success",
-      metadata: await PostService.getPost(req.body.page),
+      metadata: await PostService.getPost(req.query.post_id),
+    }).send(res);
+  };
+  getAllPost = async (req, res, next) => {
+    new SuccessResponse({
+      message: "get data success",
+      metadata: await PostService.getAllPost(req.body.page),
     }).send(res);
   };
   createPost = async (req, res, next) => {

@@ -15,10 +15,13 @@ const createPost = async (content, userId, privacy, postType, attachment) => {
 
 // Get post
 const getPostById = async (postId) => {
-  const query = `SELECT * FROM Post WHERE post_id = $1`;
+  const query = `SELECT p.*, a.attachment_id, a.file_url
+  FROM Post p
+  LEFT JOIN Attachment a ON p.post_id = a.post_id
+  WHERE p.post_id = $1;`;
   const values = [postId];
   const result = await db.query(query, values);
-  return result[0] || null;
+  return result || null;
 };
 //update here
 const updatePostByIdAndUserId = async (postId, userId, updatedFields) => {
@@ -176,7 +179,7 @@ const getLatestPosts = async (page) => {
   const offset = (page - 1) * limit; // Tính offset dựa trên trang
 
   const query = `
-  SELECT p.user_id, p.post_id, p.content, p.created_at, p.updated_at, u.avatar
+  SELECT p.user_id, p.post_id, p.content, p.created_at, p.updated_at, u.avatar, u.role
   FROM post p
   JOIN users u ON p.user_id = u.user_id
   WHERE p.privacy = false

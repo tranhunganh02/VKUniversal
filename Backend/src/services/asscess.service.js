@@ -9,6 +9,9 @@ const { BadRequestError, AuthFailureError, ForbiddenError } = require("../core/e
 const UserService = require("./user.service.js");
 const { includes } = require("lodash");
 const { createStudentAndProfile, createDeparmentAndProfile } = require("../dbs/access/pg.access.js");
+const { getStudentId } = require("../dbs/user/student/pg.student.js");
+const { getLectureId } = require("../dbs/user/lecture/pg.lecture.js");
+const { getDepartmentId } = require("../dbs/user/department/pg.department.js");
 
 const roleAccount = {
   student: 1,
@@ -164,10 +167,25 @@ class AccessService {
       publicKey: publicKey
     })
 
+    let id 
+      if (1=== roleAccount.student) {
+        id = await getStudentId(foundUser.user_id)
+      } else if (2=== roleAccount.lecture) {
+        id = await getLectureId(foundUser.user_id)
+      } else if (3 === roleAccount.department) {
+        id = await getDepartmentId(foundUser.user_id)
+      } else if (4 === roleAccount.admin) {
+     
+      } else {
+        console.log("Role not recognized.");
+      }
 
+    console.log("id found ", id, foundUser);
+  
     return {
-      user: getInfoData({fileds: ['user_id', 'email', ], Object: foundUser}),
+      user: getInfoData({fileds: ['user_id', 'email', 'avatar'], Object: foundUser}),
       tokens,
+      
     }
 
   }
@@ -225,7 +243,7 @@ class AccessService {
         console.log("student", student);
 
         return {
-            user: getInfoData({fileds: ['user_id', 'email', ], Object: saveUser}),
+            user: getInfoData({fileds: ['user_id', 'email', 'avatar'], Object: saveUser}),
             tokens,
         };
       }
@@ -278,7 +296,7 @@ class AccessService {
         const department = await createDeparmentAndProfile(saveUser.user_id, department_name)
 
         return {
-            user: getInfoData({fileds: ['user_id', 'email', ], Object: saveUser}),
+            user: getInfoData({fileds: ['user_id', 'email', 'avatar', 'role',], Object: saveUser}),
             tokens,
         };
       }

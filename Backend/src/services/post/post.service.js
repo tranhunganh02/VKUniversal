@@ -1,17 +1,18 @@
 const {
   createPost,
-  getPostById,
   deletePostById,
   updatePost,
   updatePostByIdAndUserId,
   updateAttachmentFileUrl,
   getLatestPosts,
-  getLatestPostsFollowed
+  getLatestPostsFollowed,
+  getPostById
 } = require("../../dbs/post/pg.post");
 
 const { BadRequestError } = require("../../core/error.response");
 const { uploadFileToFirebase, deleteFileFromFirebase, updateFileFromFirebase } = require("../../dbs/post/firebase.post");
 const { createAttachment } = require("../../dbs/post/pg.attachment");
+const { NoContentSuccess } = require("../../core/success.response");
 class PostService {
   // create post here
   // file_type:0 "image/jpg", :1"video"
@@ -91,14 +92,27 @@ class PostService {
     throw error
    }
   }
+  static async getPost(post_id) {
 
-  static async getPost(page) {
+    const result = await getPostById(post_id);
+
+    console.log("ssdad", result);
+    if (!result) {
+      throw new BadRequestError("Cannot get post");
+    } 
+    return result
+  }
+
+  static async getAllPost(page) {
 
     const result = await getLatestPosts(page);
 
+    console.log("ssdad", result);
     if (!result) {
       throw new BadRequestError("Cannot get post");
-    }
+    } 
+
+    if ( result.length == 0 ) throw new NoContentSuccess("Out of posts to get")
 
     return result
   }

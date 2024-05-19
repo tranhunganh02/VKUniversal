@@ -144,15 +144,6 @@ const getCommentsByCommentId = async(comment_id, post_id=null, path= null, level
 
   // Trả về danh sách các comment
   return comments;
-
-  // // Lưu trữ dữ liệu của các comment được lấy
-  // const comments = [];
-  // snapshot.forEach(doc => {
-  //   comments.push(doc.data());
-  // });
-
-  // // Trả về danh sách các comment
-  // return comments;
 }
 
 module.exports = {getCommentsByCommentId, createCommentToFb, updateCommentToFb, deleteCommentToFb, checkCommentExists };

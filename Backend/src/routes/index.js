@@ -9,4 +9,5 @@ router.use("/v1/api/vkuniversal/", require('./access'))
 router.use("/v1/api/vkuniversal/post/", require('./post'))
 router.use("/v1/api/vkuniversal/market/", require('./market'))
 router.use("/v1/api/vkuniversal/user/", require('./user'))
+router.use("/v1/api/vkuniversal/chat/", require('./chat'))
 module.exports = router

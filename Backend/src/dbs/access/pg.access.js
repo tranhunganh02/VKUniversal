@@ -11,7 +11,7 @@ const checkUserByEmail = async (email) => {
      return result[0].exists;
 };
 const findUserByEmail = async (email) => {
-     const query = `SELECT user_id, email, password, role FROM users WHERE email = $1`;
+     const query = `SELECT user_id, email, password, role, avatar FROM users WHERE email = $1`;
      const values = [email];
      const result = await db.query(query, values);
      
@@ -40,7 +40,7 @@ const findUserByEmail = async (email) => {
 
 const createStudentAndProfile = async (user_id) => {
   const query = `
-  INSERT INTO Student (user_id, student_code, surname, last_name) VALUES ($1, $2, $3, $4) ;
+  INSERT INTO Student (user_id, student_code, surname, last_name) VALUES ($1, $2, $3, $4) returning *;
   `;
   const values = [user_id, user_id, "null", "null"];
 
