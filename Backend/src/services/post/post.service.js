@@ -4,7 +4,9 @@ const {
   deletePostById,
   updatePost,
   updatePostByIdAndUserId,
-  updateAttachmentFileUrl
+  updateAttachmentFileUrl,
+  getLatestPosts,
+  getLatestPostsFollowed
 } = require("../../dbs/post/pg.post");
 
 const { BadRequestError } = require("../../core/error.response");
@@ -28,7 +30,6 @@ class PostService {
       const attachmentURLs = await Promise.all(
         attachments.map(async (attachment) => {
           const url = await uploadFileToFirebase(attachment.buffer, attachment);
-          console.log("attachment", attachment, file_type);
           return createAttachment(newPost.post_id, `${attachment.fieldname}/${attachment.originalname}`, attachment.mimetype == ("video/mp4") ? 1 : 0, url);
         })
       );
@@ -89,6 +90,28 @@ class PostService {
    } catch (error) {
     throw error
    }
+  }
+
+  static async getPost(page) {
+
+    const result = await getLatestPosts(page);
+
+    if (!result) {
+      throw new BadRequestError("Cannot get post");
+    }
+
+    return result
+  }
+  
+  static async getPostFollowed(page) {
+
+    const result = await getLatestPostsFollowed(page);
+
+    if (!result) {
+      throw new BadRequestError("Cannot get post");
+    }
+
+    return result
   }
 
 }

@@ -90,18 +90,13 @@ class MarketService {
 
     return result;
   }
-  static async getAllPost(params) {
-     const { order_by, type_order_by, page } = params;
-     let result
+  static async getAllPost(order_by, type_order_by, page) {
 
 
-
-     result = await getAllMarketPost( order_by, type_order_by, page);
+     const result = await getAllMarketPost( order_by, type_order_by, page);
 
      if (!result) throw new BadRequestError("Cannot get data");
 
-     if (result.message) throw new BadRequestError(result.message);
- 
      return result;
   }
 }

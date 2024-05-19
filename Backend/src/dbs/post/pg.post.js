@@ -35,7 +35,9 @@ const updatePostByIdAndUserId = async (postId, userId, updatedFields) => {
   }
 
   // Thêm điều kiện cập nhật cho bài viết có post_id và user_id tương ứng
-  query += `updated_at = CURRENT_TIMESTAMP WHERE post_id = $${index} AND user_id = $${index + 1}`;
+  query += `updated_at = CURRENT_TIMESTAMP WHERE post_id = $${index} AND user_id = $${
+    index + 1
+  }`;
 
   // Thêm giá trị của post_id và user_id vào mảng values
   values.push(postId);
@@ -51,16 +53,15 @@ const updatePostByIdAndUserId = async (postId, userId, updatedFields) => {
 // Delete post by post_id
 const deletePostById = async (postId, userId) => {
   try {
-      const query = `SELECT delete_post_and_attachments($1, $2)`;
-      const result = await db.query(query, [postId, userId]);
-      console.log("result", result);
-      return result;
+    const query = `SELECT delete_post_and_attachments($1, $2)`;
+    const result = await db.query(query, [postId, userId]);
+    console.log("result", result);
+    return result;
   } catch (error) {
-      console.error('Error deleting post and attachments:', error);
-      throw error;
+    console.error("Error deleting post and attachments:", error);
+    throw error;
   }
 };
-
 
 // Update content and time of post by post_id
 const updatePost = async (postId, newContent, newUpdatedAt) => {
@@ -97,7 +98,6 @@ const updatePostPrivacy = async (postId, newPrivacy) => {
   return result[0];
 };
 
-
 // Cập nhật loại bài đăng
 const updatePostType = async (postId, newPostType) => {
   const query = `
@@ -111,25 +111,83 @@ const updatePostType = async (postId, newPostType) => {
   return result[0];
 };
 const updateAttachmentFileUrl = async (attachmentId, newFileUrl) => {
-
-    // Thực hiện truy vấn SQL để cập nhật đường dẫn file mới cho attachment
-    const query = `
+  // Thực hiện truy vấn SQL để cập nhật đường dẫn file mới cho attachment
+  const query = `
       UPDATE Attachment
       SET file_url = $1
       WHERE attachment_id = $2
       RETURNING *;
     `;
-    const values = [newFileUrl, attachmentId];
-    const result = await db.query(query, values);
+  const values = [newFileUrl, attachmentId];
+  const result = await db.query(query, values);
 
-    // In kết quả ra console để kiểm tra
-    console.log("result", result);
-
-    // Trả về kết quả sau khi cập nhật
-    return result[0];
- 
+  // Trả về kết quả sau khi cập nhật
+  return result[0];
 };
 
+const getLatestPostsFollowed = async (
+  page
+) => {
+  const limit = 6;
+  const offset = (page - 1) * limit;
+  const query = `
+  SELECT p.user_id, p.post_id, p.content, p.created_at, p.updated_at, u.avatar
+  FROM post p
+  JOIN users u ON p.user_id = u.user_id
+  WHERE p.user_id IN (
+      SELECT followed_id
+      FROM follow
+      WHERE follower_id = 18
+  )
+  ORDER BY p.created_at DESC
+  LIMIT $1 OFFSET $2;
+`;
+
+  const values = [limit, offset];
+  const result = await db.query(query, values);
+
+  return result;
+};
+
+const getLatestPostsByDepartment = async (
+  order = Math.floor(Math.random() * 8) + 1,
+  offset = 0
+) => {
+  const query = `
+    WITH OrderedDepartments AS (
+      SELECT user_id, ROW_NUMBER() OVER (ORDER BY department_id) as row_num
+      FROM department
+  )
+  SELECT p.post_id, p.title, p.content, p.created_at, p.updated_at
+  FROM post p
+  JOIN OrderedDepartments od ON p.user_id = od.user_id
+  WHERE od.row_num = $1
+  ORDER BY p.created_at DESC
+  LIMIT 2 OFFSET $2;  
+  `;
+
+  const values = [order, offset];
+  const result = await db.query(query, values);
+
+  return result;
+};
+const getLatestPosts = async (page) => {
+  const limit = 6;
+  const offset = (page - 1) * limit; // Tính offset dựa trên trang
+
+  const query = `
+  SELECT p.user_id, p.post_id, p.content, p.created_at, p.updated_at, u.avatar
+  FROM post p
+  JOIN users u ON p.user_id = u.user_id
+  WHERE p.privacy = false
+  ORDER BY p.created_at DESC
+  LIMIT $1 OFFSET $2;
+  `;
+  const values = [limit, offset];
+
+  const result = await db.query(query, values);
+  return result;
+};
 
 module.exports = {
   createPost,
@@ -140,5 +198,8 @@ module.exports = {
   updatePostPrivacy,
   updatePostType,
   updatePostByIdAndUserId,
-  updateAttachmentFileUrl
+  updateAttachmentFileUrl,
+  getLatestPostsByDepartment,
+  getLatestPostsFollowed,
+  getLatestPosts,
 };

@@ -20,9 +20,10 @@ class MarketController {
      }).send(res);
    };
    getAllMarketPost = async (req, res, next) => {
+    const { order_by, type_order_by, page } = req.query;
      new SuccessResponse({
        message: "Getdata success",
-       metadata: await MarketService.getAllPost(req.query),
+       metadata: await MarketService.getAllPost(order_by, type_order_by, page),
      }).send(res);
    };
   updateMarket = async (req, res, next) => {

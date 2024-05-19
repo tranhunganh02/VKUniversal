@@ -6,6 +6,12 @@ const {
 const PostService = require("../services/post/post.service");
 
 class PostController {
+  getPost = async (req, res, next) => {
+    new SuccessResponse({
+      message: "get data success",
+      metadata: await PostService.getPost(req.body.page),
+    }).send(res);
+  };
   createPost = async (req, res, next) => {
     new CREATED({
       message: "Created success",
@@ -28,6 +34,12 @@ class PostController {
     new NoContentSuccess({
       message: "Delete success",
       metadata: await PostService.deletePostById(req.body, req.user.userId),
+    }).send(res);
+  };
+  getPostFollowed = async (req, res, next) => {
+    new SuccessResponse({
+      message: "get data success",
+      metadata: await PostService.getPostFollowed(req.body.page),
     }).send(res);
   };
 }

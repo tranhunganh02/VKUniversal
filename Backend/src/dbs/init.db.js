@@ -1,7 +1,6 @@
 const { Pool } = require('pg');
 const { db } = require('../configs/config.pg');
 const admin = require('firebase-admin');
-
 class Database {
 
   constructor(){
@@ -59,7 +58,7 @@ class Database {
   async query(query, values = []) {
     try {
       const result = await this.pool.query(query, values);
-      console.log("cau lenh truy van", query);
+      console.log("res", result.rowCount);
       return result.rows;
     } catch (error) {
       console.error('Error executing query:', error);

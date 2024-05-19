@@ -1,20 +1,5 @@
 const db = require("../init.db.js");
 
-const createStudentAndProfile = async (user_id) => {
-  const query = `
-  INSERT INTO Student (user_id, student_code, surname, last_name) VALUES ($1, $2, $3, $4) ;
-  `;
-  const values = [user_id, user_id, "null", "null"];
-
-  const query2 = `
-  INSERT INTO user_profile (user_id) VALUES($1);
-  `;
-  const values2 = [user_id];
-  const result = await db.query(query, values);
-  const result2 = await db.query(query2, values2);
-  return result[0];
-}
-
 // Get a student by student_id
 const getStudentById = async (studentId) => {
   const query = `
@@ -26,8 +11,8 @@ const getStudentById = async (studentId) => {
 };
 
 // Update student information
-const updateStudent = async (userId, studentId, updates) => {
-  console.log(`id: ${userId} ${studentId}`);
+const updateStudent = async (userId, updates) => {
+  console.log(`id: ${userId}`);
   console.log("data,", updates);
   let query = "UPDATE student SET ";
   let values = [];
@@ -47,12 +32,11 @@ const updateStudent = async (userId, studentId, updates) => {
   query += setClause;
 
   // Thêm điều kiện WHERE
-  query += ` WHERE student_id = $${updateFields.length + 1} AND user_id = $${
-    updateFields.length + 2
+  query += ` WHERE user_id = $${
+    updateFields.length + 1
   } RETURNING *;`;
 
   // Thêm giá trị studentId và userId vào mảng values
-  values.push(studentId);
   values.push(userId);
 
   console.log(query);
@@ -141,6 +125,7 @@ const getUserInformationAndProfile = async (user_id, role) => {
 
   let query2 = null;
   if (role == 1) {
+    console.log("vo day");
     query2 = `
     SELECT
         s.user_id,
@@ -190,17 +175,56 @@ const getUserInformationAndProfile = async (user_id, role) => {
   }
 
   const result2 = await db.query(query2, values)
-
+  console.log("result", result2);
 
   return {user_bio : result[0], user : result2[0]};
 };
 
+const checkStudentExist = async (userId) => {
+  const query = `
+  SELECT 1 FROM student WHERE user_id = $1 AND class_id IS NOT NULL;
+  `;
+  const values = [userId];
+  const result = await db.query(query, values);
+  if(result[0] == null) return false
+
+  return true
+};
+
+const makeFollow = async (follower_id, followed_id) => {
+  const query = `
+  INSERT INTO follow (follower_id, followed_id) VALUES ($1, $2) returning *;
+  `;
+  const values = [follower_id, followed_id];
+  const result = await db.query(query, values);
+  return result[0]
+};
+
+const unFollow = async (follower_id, followed_id) => {
+  const query = `
+  DELETE FROM follow WHERE follower_id = $1 AND followed_id = $2 RETURNING *;
+  `;
+  const values = [follower_id, followed_id];
+  const result = await db.query(query, values);
+  
+  if (result.length > 0) {
+    return true;
+  } else {
+    return false;
+  }
+};
+
+
+
 module.exports = {
-  createStudentAndProfile,
+  
   getStudentById,
   updateStudent,
   updateLecture,
   updateDepartment,
   getUserInformationAndProfile,
   updateUserProfile,
+  checkStudentExist,
+  makeFollow,
+  unFollow
 };

@@ -4,9 +4,12 @@ const {
   updateLecture,
   getUserInformationAndProfile,
   updateUserProfile,
+  checkStudentExist,
+  makeFollow,
+  unFollow
 } = require("../../dbs/user/pg.user");
 
-const { BadRequestError } = require("../../core/error.response");
+const { BadRequestError, NotFoundError } = require("../../core/error.response");
 class UserService {
   //de update can truy thong tin cua bang ( student, lecture, apartment ) va role
   static async updateUser(user_id, role, payload) {
@@ -21,9 +24,7 @@ class UserService {
     console.log("role", role);
 
     if (role == 1) {
-      const student_id = payload.student_id;
-      delete payload.student_id;
-      updatedUser = await updateStudent(user_id, student_id, payload);
+      updatedUser = await updateStudent(user_id, payload);
     } else if (role == 2) {
       const lecture_id = payload.lecture_id;
       delete payload.lecture_id;
@@ -34,7 +35,6 @@ class UserService {
       updatedUser = await updateDepartment(user_id, department_id, payload);
     }
 
-    console.log("result:", updatedUser);
     if (!updatedUser) throw new BadRequestError("cannot update");
   }
   //update vao profile
@@ -51,7 +51,7 @@ class UserService {
 
     console.log("result", user_bio, user);
 
-    if (!user_bio || !user) throw new BadRequestError("Something went wrong");
+    if (!user) throw new NotFoundError();
 
     return {
       user_bio: user_bio ? user_bio.bio : null, 
@@ -64,6 +64,36 @@ class UserService {
     const result = getUserInformationAndProfile(user_id, payload.role);
 
     if (!result)throw new BadRequestError("Something went wrong");
+
+    return result;
+  }
+
+  static async checkStudentExist(user_id) {
+    const result = checkStudentExist(user_id);
+
+    if (!result)throw new NotFoundError();
+
+    return result;
+  }
+
+  static async searchUsers(user_ame) {
+    const result = checkStudentExist(user_id);
+
+    if (!result)throw new NotFoundError();
+
+    return result;
+  }
+  static async createFollow(follower_id, followed_id) {
+    const result = await  makeFollow(follower_id, followed_id);
+
+    if (!result)throw new BadRequestError();
+
+    return result;
+  }
+  static async deleteFollow(follower_id, followed_id) {
+    const result = await unFollow(follower_id, followed_id);
+
+    if (!result)throw new BadRequestError();
 
     return result;
   }
