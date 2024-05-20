@@ -1,4 +1,4 @@
-const { signUpUser } = require("../dbs/access/pg.access.js");
+const { signUpUser, createLectureAndProfile } = require("../dbs/access/pg.access.js");
 const bcrypt = require("bcrypt");
 const crypto = require("node:crypto");
 const User = require("../models/userModel.js");
@@ -213,7 +213,7 @@ class AccessService {
       const saveUser = await signUpUser(
         email,
         hashedPassword,
-        roleAccount.student
+        roleAccount.lecture
       );
       if (saveUser) {
 
@@ -294,6 +294,59 @@ class AccessService {
         }
 
         const department = await createDeparmentAndProfile(saveUser.user_id, department_name)
+
+        return {
+            user: getInfoData({fileds: ['user_id', 'email', 'avatar', 'role',], Object: saveUser}),
+            tokens,
+        };
+      }
+    }
+
+    static async signUpLecture({ email, password }) {
+      // check permisson mail vku
+      const isMailVku = await UserService.checkRoleEmail(email)
+      if (!isMailVku) {
+      console.log("email: " + email);
+       throw new ForbiddenError('Error: Your email is forbidden');
+      }
+      // Check if mail user already exists
+      const existingMailUser = await UserService.checkMailUserExists(email);
+      if (existingMailUser) {
+      console.log("email: " + email);
+        throw new BadRequestError('Error: Email already exists')
+      }
+      // Hash password using bcrypt (replace with your preferred hashing method)
+      const hashedPassword = await bcrypt.hash(password, 10);
+
+      console.log("email: " + email);
+      const saveUser = await signUpUser(
+        email,
+        hashedPassword,
+        roleAccount.lecture
+      );
+      if (saveUser) {
+
+        const privateKey = crypto.randomBytes(64).toString('hex')
+        const publicKey = crypto.randomBytes(64).toString('hex')
+
+        //create token
+        const tokens = await createTokenPair(
+          { userId: saveUser.user_id, email, role: roleAccount.lecture },
+          publicKey,
+          privateKey
+        );
+        const keyStore = await KeyTokenService.createKeyToken({
+          userId :  saveUser.user_id,
+          publicKey : publicKey,
+          privateKey : privateKey,
+          refreshToken: tokens.refreshToken
+      });
+
+        if (!keyStore) {
+          throw new BadRequestError("publicKeyString error")
+        }
+
+        await createLectureAndProfile(saveUser.user_id)
 
         return {
             user: getInfoData({fileds: ['user_id', 'email', 'avatar', 'role',], Object: saveUser}),

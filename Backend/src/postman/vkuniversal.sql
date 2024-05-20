@@ -947,8 +947,8 @@ SELECT sell_post_id, image_url[1], product_name, price FROM sell_post ORDER BY c
             WHERE follower_id = 18 AND followed_id = 177
         ) AS user2_follows_user1;
 
-
-SELECT p.*, a.attachment_id, a.file_url
-FROM Post p
-LEFT JOIN Attachment a ON p.post_id = a.post_id
-WHERE p.post_id = 33;
+SELECT p.post_id, p.content, p.content, p.created_at, p.updated_at, u.email
+FROM post p
+JOIN users u ON p.user_id = u.user_id
+WHERE p.content ILIKE '%con%' OR u.email LIKE '%con%'
+LIMIT 5;

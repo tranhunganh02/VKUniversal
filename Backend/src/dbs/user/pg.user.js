@@ -162,7 +162,7 @@ const getUserInformationAndProfile = async (user_id, role) => {
     FROM 
       lecturer le
     JOIN 
-      academic_rank l ON le.academic_id = l.ar_id
+      acedemic_rank l ON le.academic_id = l.ar_id
     JOIN 
       degree d ON le.degree_id = d.degree_id
     JOIN 

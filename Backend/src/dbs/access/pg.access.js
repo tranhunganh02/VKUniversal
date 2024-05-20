@@ -52,7 +52,20 @@ const createStudentAndProfile = async (user_id) => {
   const result2 = await db.query(query2, values2);
   return result[0];
 }
+const createLectureAndProfile = async (user_id) => {
+  const query = `
+  INSERT INTO lecturer (user_id, lecturer_code, surname, last_name) VALUES ($1, $2, $3, $4) returning *;
+  `;
+  const values = [user_id, user_id, "null", "null"];
 
+  const query2 = `
+  INSERT INTO user_profile (user_id) VALUES($1);
+  `;
+  const values2 = [user_id];
+  const result = await db.query(query, values);
+  const result2 = await db.query(query2, values2);
+  return result[0];
+}
 const createDeparmentAndProfile = async (user_id, department_name) => {
   const query = `
   INSERT INTO department (user_id, department_name) VALUES ($1, $2) ;
@@ -76,6 +89,7 @@ const createDeparmentAndProfile = async (user_id, department_name) => {
      createNewKeyToken,
      findUserByEmail,
      createStudentAndProfile,
-     createDeparmentAndProfile
+     createDeparmentAndProfile,
+     createLectureAndProfile
    };
    
