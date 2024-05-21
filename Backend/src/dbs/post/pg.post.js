@@ -192,6 +192,24 @@ const getLatestPosts = async (page) => {
   return result;
 };
 
+const getLatestPostsByField = async (field, page=1) => {
+  const limit = 6;
+  const offset = (page - 1) * limit; // Tính offset dựa trên trang
+
+  console.log("s", field);
+
+  const query = `
+  SELECT p.post_id, p.content, p.created_at, u.email
+  FROM post p
+  JOIN users u ON p.user_id = u.user_id
+  WHERE p.content ILIKE '%${field}%' OR u.email LIKE '%${field}%'
+  ORDER BY p.post_id DESC
+  LIMIT ${limit} OFFSET ${offset};
+  `;
+  const result = await db.query(query);
+  return result;
+};
+
 module.exports = {
   createPost,
   getPostById,
@@ -205,4 +223,5 @@ module.exports = {
   getLatestPostsByDepartment,
   getLatestPostsFollowed,
   getLatestPosts,
+  getLatestPostsByField
 };

@@ -54,9 +54,9 @@ const createStudentAndProfile = async (user_id) => {
 }
 const createLectureAndProfile = async (user_id) => {
   const query = `
-  INSERT INTO lecturer (user_id, lecturer_code, surname, last_name) VALUES ($1, $2, $3, $4) returning *;
+  INSERT INTO lecturer (user_id, surname, last_name) VALUES ($1, $2, $3, $4) returning *;
   `;
-  const values = [user_id, user_id, "null", "null"];
+  const values = [user_id, "null", "null"];
 
   const query2 = `
   INSERT INTO user_profile (user_id) VALUES($1);

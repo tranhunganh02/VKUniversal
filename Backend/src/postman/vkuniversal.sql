@@ -785,38 +785,6 @@ VALUES
   ('Kinh tế số & thương mại điện tử'),
   ('Kỹ thuật máy tính và điện tử');
 
-INSERT INTO lecturer (academic_id, user_id, gender, surname, last_name, date_of_birth)
-VALUES 
-  (2, NULL, NULL, 'Dương', 'Hữu Ái', '1983-07-12');
-  (2, NULL, NULL, 'Phạm Nguyễn', 'Minh Nhựt', '1990-11-04'),
-  (2, NULL, NULL, 'Lê', 'Tân', '1987-05-20'),
-  (2, NULL, NULL, 'Đỗ', 'Trường Xuân', '1981-09-08'),
-  (2, NULL, NULL, 'Văn', 'Hùng Trọng', '1989-02-16'),
-  (2, NULL, NULL, 'Ngô', 'Hải Quỳnh', '1985-12-03'),
-  (2, NULL, NULL, 'Nguyễn Thị', 'Kiều Trang', '1993-08-28'),
-  (2, NULL, NULL, 'Phan Văn', 'Thành', '1980-10-19'),
-  (2, NULL, NULL, 'Vương Công', 'Đạt', '1996-04-05'),
-  (2, NULL, NULL, 'Hồ Phan', 'Hiếu', '1982-06-14'),
-  (2, NULL, NULL, 'Lý Quỳnh', 'Trân', '1994-01-09'),
-  (2, NULL, NULL, 'Trần Nguyễn', 'Hồng Phúc', '1979-09-23'),
-  (2, NULL, NULL, 'Phan Thị', 'Lan Anh', '1988-07-07'),
-  (2, NULL, NULL, 'Nguyễn Hữu', 'Tài', '1997-12-10'),
-  (2, NULL, NULL, 'Hồ Văn', 'Phi', '1986-03-25'),
-  (2, NULL, NULL, 'Nguyễn Văn', 'Lợi', '1984-11-30'),
-  (2, NULL, NULL, 'Trần Văn', 'Đại', '1992-02-11'),
-  (2, NULL, NULL, 'Nguyễn Sĩ', 'Thìn', '1995-10-01'),
-  (2, NULL, NULL, 'Võ Duy', 'Thanh', '1980-09-06'),
-  (2, NULL, NULL, 'Nguyễn Hoàng', 'Hải', '1991-08-18'),
-  (2, NULL, NULL, 'Hoàng Thị Lan', 'Giao', '1987-06-22'),
-  (2, NULL, NULL, 'Trần', 'Thanh', '1983-04-17'),
-  (2, NULL, NULL, 'Ngô Văn', 'Sỹ', '1996-05-02'),
-  (2, NULL, NULL, 'Nguyễn Thị Minh', 'Chi', '1984-07-15'),
-  (2, NULL, NULL, 'Trần Thiện', 'Vũ', '1982-10-29'),
-  (2, NULL, NULL, 'Lê Mai', 'Anh', '1990-12-24'),
-  (2, NULL, NULL, 'Nguyễn Thanh', 'Hoài', '1989-11-13'),
-  (2, NULL, NULL, 'Đặng Trung', 'Thành', '1993-01-26'),
-  (2, NULL, NULL, 'Nguyễn Tấn', 'Thuận', '1985-09-21'),
-  (2, NULL, NULL, 'Vũ Đình', 'Chinh', '1997-03-27');
 
 --tao san user phong ban va profile
 INSERT INTO users ( email, password, role, created_at)
@@ -947,8 +915,8 @@ SELECT sell_post_id, image_url[1], product_name, price FROM sell_post ORDER BY c
             WHERE follower_id = 18 AND followed_id = 177
         ) AS user2_follows_user1;
 
-SELECT p.post_id, p.content, p.content, p.created_at, p.updated_at, u.email
+SELECT p.post_id, p.content, p.content, p.created_at, u.email
 FROM post p
 JOIN users u ON p.user_id = u.user_id
 WHERE p.content ILIKE '%con%' OR u.email LIKE '%con%'
-LIMIT 5;
+LIMIT 6;
