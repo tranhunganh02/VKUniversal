@@ -20,6 +20,8 @@ import 'package:vkuniversal/features/newsfeed/presentation/state/home/bloc/home_
 import 'package:vkuniversal/features/profile/data/data_sourse/remote/profile_api_service.dart';
 import 'package:vkuniversal/features/profile/data/repository/profile_repository_impl.dart';
 import 'package:vkuniversal/features/profile/domain/repository/profile_repository.dart';
+import 'package:vkuniversal/features/profile/domain/usecase/load_profile.dart';
+import 'package:vkuniversal/features/profile/presentation/state/bloc/profile_bloc.dart';
 
 final sl = GetIt.instance;
 
@@ -50,9 +52,12 @@ Future<void> initializeDependencies() async {
       () => SignInWithEmail(authRepository: sl()));
   sl.registerFactory<UpdateStudentInfo>(
       () => UpdateStudentInfo(infoReposirory: sl()));
+  sl.registerFactory<LoadProfileUseCase>(
+      () => LoadProfileUseCase(profileRepository: sl()));
 
   sl.registerFactory<SignUpBloc>(() => SignUpBloc(sl()));
   sl.registerFactory<SignInBloc>(() => SignInBloc(sl()));
+  sl.registerSingleton<ProfileBloc>(ProfileBloc(sl()));
   sl.registerSingleton<WelcomeBloc>(WelcomeBloc());
   sl.registerSingleton<BottomNavigationBloc>(BottomNavigationBloc());
   sl.registerSingleton<AddUserInfoBloc>(AddUserInfoBloc(sl(), sl()));

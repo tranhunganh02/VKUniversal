@@ -19,8 +19,8 @@ class UserModel extends UserEntity {
     return UserModel(
       uid: json['user_id'] ?? 0,
       email: json['email'] ?? '',
-      displayName: json['displayName'] ?? '',
-      role: json['role'] ?? '',
+    displayName: json['displayName'] ?? '',
+      role: json['role'] ?? 0,
       phoneNumber: json['phoneNumber'] ?? '',
       createdAt: json['createdAt'] ?? '',
       lastLoginAt: json['lastLoginAt'] ?? '',
@@ -28,7 +28,8 @@ class UserModel extends UserEntity {
     );
   }
 
-  static UserModel formJson(Map<String, dynamic> json, int role) {
+  factory UserModel.formJson(Map<String, dynamic> json, int role) {
+    print("Model___: ${json} ${role}");
     switch (role) {
       case 1:
         return StudentModel.fromJson(json);

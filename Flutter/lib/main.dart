@@ -5,8 +5,12 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:vkuniversal/config/routes/router_name.dart';
 import 'package:vkuniversal/config/routes/routes.dart';
 import 'package:vkuniversal/config/theme/theme_const.dart';
+import 'package:vkuniversal/core/constants/share_pref.dart';
 import 'package:vkuniversal/core/utils/injection_container.dart';
 import 'package:vkuniversal/core/widgets/loader.dart';
+import 'package:vkuniversal/features/auth/data/models/sign_in_request.dart';
+import 'package:vkuniversal/features/auth/domain/usecases/check_student_info.dart';
+import 'package:vkuniversal/features/auth/domain/usecases/sign_in_with_email.dart';
 import 'package:vkuniversal/features/auth/presentation/bloc/add_user_info/bloc/add_user_info_bloc.dart';
 import 'package:vkuniversal/features/auth/presentation/bloc/sign_up/bloc/sign_up_bloc.dart';
 import 'package:vkuniversal/features/auth/presentation/bloc/sign_in/bloc/sign_in_bloc.dart';
@@ -14,6 +18,7 @@ import 'package:vkuniversal/features/auth/presentation/bloc/welcome/bloc/welcome
 import 'package:vkuniversal/features/auth/presentation/pages/welcome.dart';
 import 'package:vkuniversal/features/newsfeed/presentation/state/home/bloc/home_bloc.dart';
 import 'package:intl/date_symbol_data_local.dart';
+import 'package:vkuniversal/features/profile/presentation/state/bloc/profile_bloc.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -21,7 +26,11 @@ Future<void> main() async {
   initializeDateFormatting();
   final prefs = await SharedPreferences.getInstance();
   String? email = await prefs.getString('email');
+  String? password = await prefs.getString('password');
   bool isLoggedIn = email != null;
+
+  // final signInWithEmail = sl<SignInWithEmail>();
+  // signInWithEmail(data: SignInRequest(email: email!, password: password!));
   runApp(MultiBlocProvider(
     providers: [
       BlocProvider(
@@ -38,7 +47,10 @@ Future<void> main() async {
       ),
       BlocProvider(
         create: (_) => sl<AddUserInfoBloc>(),
-      )
+      ),
+      BlocProvider(
+        create: (_) => sl<ProfileBloc>(),
+      ),
     ],
     child: MyApp(
       isLoggedIn: isLoggedIn,
@@ -95,16 +107,24 @@ class _CheckUserStateState extends State<CheckUserState> {
   Future<void> _checkStudentState() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
 
-    // final checkUser = sl<CheckUserInfoExists>();
+    final checkUserInfo = await sl<CheckUserInfoExists>();
+    final result = await checkUserInfo(data: SetUpAuthData(prefs));
+
+    if (result.data?.isExist == true) {
+      await prefs.setBool('hasUserInfo', true);
+    } else {
+      await prefs.setBool('hasUserInfo', false);
+    }
 
     String? email = prefs.getString('email');
+    int? role = prefs.getInt('role');
     bool isLogin = email != null;
 
     bool hasStudentInfo = prefs.getBool('hasUserInfo') ?? false;
 
     if (!isLogin) {
       Navigator.pushReplacementNamed(context, RoutesName.welcome);
-    } else if (hasStudentInfo) {
+    } else if (hasStudentInfo || role != 1) {
       Navigator.pushReplacementNamed(context, RoutesName.home);
     } else {
       Navigator.pushReplacementNamed(context, RoutesName.addUserInfor);

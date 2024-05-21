@@ -6,10 +6,11 @@ const {
   updateAttachmentFileUrl,
   getLatestPosts,
   getLatestPostsFollowed,
-  getPostById
+  getPostById,
+  getLatestPostsByField
 } = require("../../dbs/post/pg.post");
 
-const { BadRequestError } = require("../../core/error.response");
+const { BadRequestError, NotFoundError } = require("../../core/error.response");
 const { uploadFileToFirebase, deleteFileFromFirebase, updateFileFromFirebase } = require("../../dbs/post/firebase.post");
 const { createAttachment } = require("../../dbs/post/pg.attachment");
 const { NoContentSuccess } = require("../../core/success.response");
@@ -124,6 +125,19 @@ class PostService {
     if (!result) {
       throw new BadRequestError("Cannot get post");
     }
+
+    return result
+  }
+
+  static async getPostsByField(field, page) {
+
+    const result = await getLatestPostsByField(field, page);
+
+    if (!result) {
+      throw new BadRequestError("Cannot get post");
+    }
+    
+    if (result.length == 0) throw new NotFoundError("Out of posts to get")
 
     return result
   }

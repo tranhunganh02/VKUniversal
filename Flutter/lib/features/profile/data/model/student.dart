@@ -1,3 +1,4 @@
+import 'package:vkuniversal/core/enum/gender_enum.dart';
 import 'package:vkuniversal/features/auth/data/models/user.dart';
 
 class StudentModel extends UserModel {
@@ -6,7 +7,7 @@ class StudentModel extends UserModel {
   final String? surname;
   final String? lastname;
   final DateTime? dateOfBirth;
-  final int? gender;
+  final Gender? gender;
   final int? addMissionYear;
   final int? status;
   final int? class_id;
@@ -45,7 +46,7 @@ class StudentModel extends UserModel {
       surname: json['surname'],
       lastname: json['last_name'],
       dateOfBirth: json['date_of_birth'],
-      gender: json['gender'],
+      gender: GenderEnumExt.fromJson(json),
       addMissionYear: json['addMissionYear'],
       status: json['status'],
       class_id: json['class_id'],

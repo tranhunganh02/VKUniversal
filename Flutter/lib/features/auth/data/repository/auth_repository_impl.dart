@@ -2,14 +2,18 @@ import 'dart:io';
 import 'package:dio/dio.dart';
 import 'package:logger/logger.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:vkuniversal/core/constants/share_pref.dart';
 import 'package:vkuniversal/core/resources/data_state.dart';
+import 'package:vkuniversal/core/utils/injection_container.dart';
 import 'package:vkuniversal/features/auth/data/data_sources/remote/auth_api_service.dart';
+import 'package:vkuniversal/features/auth/data/models/email_password.dart';
 import 'package:vkuniversal/features/auth/data/models/sign_in_request.dart';
 import 'package:vkuniversal/features/auth/data/models/sign_up_request.dart';
 import 'package:vkuniversal/features/auth/data/models/student_info_checker.dart';
 import 'package:vkuniversal/features/auth/data/models/user_response.dart';
 import 'package:vkuniversal/features/auth/domain/entities/user_response.dart';
 import 'package:vkuniversal/features/auth/domain/repository/auth_repository.dart';
+import 'package:vkuniversal/features/auth/domain/usecases/sign_in_with_email.dart';
 
 class AuthRepositoryImpl implements AuthRepository {
   final AuthApiService _authApiService;
@@ -46,6 +50,7 @@ class AuthRepositoryImpl implements AuthRepository {
       _logger.d("Signing in...");
       if (response.response.statusCode == HttpStatus.ok) {
         _logger.d("Sign in successful");
+        _logger.d("Access token: " + response.data.token.accessToken);
         return DataSuccess(response.data);
       } else {
         RequestOptions options = RequestOptions();
@@ -97,19 +102,25 @@ class AuthRepositoryImpl implements AuthRepository {
     required String accessToken,
   }) async {
     try {
+      SharedPreferences _pref = await SharedPreferences.getInstance();
+
       final response = await _authApiService.refreshToken(
         userID,
         refreshToken,
       );
       _logger.d("Refreshing token...");
       if (response.response.statusCode == HttpStatus.ok) {
-        SharedPreferences _pref = await SharedPreferences.getInstance();
         _pref.setString('refreshToken', response.data.token.refreshToken);
         _pref.setString('accessToken', response.data.token.accessToken);
         _logger.d("Refresh token successful");
         return DataSuccess(response.data);
       } else {
         _logger.e("Refresh token failed: ");
+        final signIn = sl<SignInWithEmail>();
+        LoginInfo loginInfo = SetUpLoginInfo(_pref);
+        signIn(
+            data: SignInRequest(
+                email: loginInfo.email, password: loginInfo.password));
         RequestOptions options = RequestOptions();
         return DataFailed(DioException(requestOptions: options));
       }

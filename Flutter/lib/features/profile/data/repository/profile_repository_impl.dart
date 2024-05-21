@@ -27,15 +27,19 @@ class ProfileRepositoryImpl implements ProfileRepository {
       Authorization authorization = SetUpAuthData(_prefs);
 
       final response = await _profileApiService.getProfile(
-          authorization.accessToken,
-          authorization.userID,
-          role,
-          userIDToLoadProfile);
+        authorization.accessToken,
+        authorization.userID,
+        userIDToLoadProfile,
+        role,
+      );
 
       if (response.response.statusCode == HttpStatus.ok) {
         _logger.d("Get Profile Data Successfully");
-        Map<String, dynamic> profileData = response.data.toJson(role);
-        return DataSuccess(ProfileModel.fromJson(profileData, role));
+        // Map<String, dynamic> profileData = response.data.toJson(role);
+        // _logger.d("Profile IMPL Response: ${response.data}");
+        // _logger.d("Profile IMPL Response: ${response.data}");
+        return DataSuccess(response.data);
+        // return DataSuccess(ProfileModel.fromJson(profileData, role));
       } else if (response.response.statusCode ==
           HttpStatus.internalServerError) {}
       RequestOptions options = RequestOptions();

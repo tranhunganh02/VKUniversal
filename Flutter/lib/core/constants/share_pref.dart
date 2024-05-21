@@ -1,13 +1,18 @@
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:vkuniversal/features/auth/data/models/authorization.dart';
+import 'package:vkuniversal/features/auth/data/models/email_password.dart';
 
 Authorization SetUpAuthData(SharedPreferences _pref) {
   String accessToken = _pref.getString('accessToken') ?? '';
   String refreshToken = _pref.getString('refreshToken') ?? '';
-  String userID = _pref.getString('userID') ?? "0";
-
-  int userIDInt = int.parse(userID);
+  int userID = _pref.getInt('userID') ?? 0;
 
   return Authorization(
-      userID: userIDInt, refreshToken: refreshToken, accessToken: accessToken);
+      userID: userID, refreshToken: refreshToken, accessToken: accessToken);
+}
+
+LoginInfo SetUpLoginInfo(SharedPreferences _pref) {
+  String email = _pref.getString('email') ?? '';
+  String password = _pref.getString('password') ?? '';
+  return LoginInfo(email: email, password: password);
 }

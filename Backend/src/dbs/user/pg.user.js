@@ -32,9 +32,7 @@ const updateStudent = async (userId, updates) => {
   query += setClause;
 
   // Thêm điều kiện WHERE
-  query += ` WHERE user_id = $${
-    updateFields.length + 1
-  } RETURNING *;`;
+  query += ` WHERE user_id = $${updateFields.length + 1} RETURNING *;`;
 
   // Thêm giá trị studentId và userId vào mảng values
   values.push(userId);
@@ -119,13 +117,12 @@ const updateUserProfile = async (user_id, bio) => {
 };
 const getUserInformationAndProfile = async (user_id, role) => {
   console.log("in db", user_id, role);
-  const query = "SELECT bio from user_profile WHERE user_id = $1 ;"
+  const query = "SELECT bio from user_profile WHERE user_id = $1 ;";
   const values = [user_id];
   const result = await db.query(query, values);
 
   let query2 = null;
   if (role == 1) {
-
     query2 = `
     SELECT
         s.user_id,
@@ -137,42 +134,49 @@ const getUserInformationAndProfile = async (user_id, role) => {
         uc.class_id,
         uc.class_name,
         m.major_id,
-        m.major_name
+        m.major_name,
+        u.email,
+        u.avatar
     FROM
         student s
     JOIN
         university_class uc ON s.class_id = uc.class_id
     JOIN
         major m ON uc.major_id = m.major_id
+    JOIN
+        users u ON s.user_id = u.user_id
     WHERE
         s.user_id = $1;
   `;
-  } else if(role ==2 ){
-    query2 =`
+  } else if (role == 2) {
+    query2 = `
     SELECT 
-      l.ar_name,
-      d.degree_name,
-      f.faculty_name,
-      le.lecturer_code,
-      le.user_id,
-      le.gender,
-      le.surname,
-      le.last_name,
-      le.date_of_birth
-    FROM 
-      lecturer le
-    JOIN 
-      acedemic_rank l ON le.academic_id = l.ar_id
-    JOIN 
-      degree d ON le.degree_id = d.degree_id
-    JOIN 
-      faculty f ON le.faculty_id = f.faculty_id
-    WHERE 
-      le.user_id = $1;  
-  `
-  }  else if(role ==3 ) {
+    jsonb_build_object('ar_id',a.ar_id, 'ar_name', a.ar_name) AS acedemic_rank,
+   jsonb_build_object('degree_id', d.degree_id, 'degree_name', d.degree_name) AS degree,
+   jsonb_build_object('faculty_id', f.faculty_id, 'faculty_name', f.faculty_name) AS faculty,
+   le.user_id,
+   le.gender,
+   le.surname,
+   le.last_name,
+   le.date_of_birth,
+   u.email,
+   u.avatar
+FROM 
+   lecturer le
+LEFT JOIN 
+   acedemic_rank a ON le.academic_id = a.ar_id
+LEFT JOIN 
+   degree d ON le.degree_id = d.degree_id
+LEFT JOIN 
+   faculty f ON le.faculty_id = f.faculty_id
+LEFT JOIN 
+   users u ON le.user_id = u.user_id
+WHERE 
+   le.user_id = $1;
+  `;
+  } else if (role == 3) {
     console.log("vo day");
-    query2 =`
+    query2 = `
     SELECT 
       department_id,
       department_name,
@@ -181,13 +185,13 @@ const getUserInformationAndProfile = async (user_id, role) => {
       department 
     WHERE
         user_id = $1;
-  `
-  } else return false
+  `;
+  } else return false;
 
-  const result2 = await db.query(query2, values)
+  const result2 = await db.query(query2, values);
   console.log("result", result2);
 
-  return {user_bio : result[0], user : result2[0]};
+  return { user_bio: result[0], user: result2[0] };
 };
 
 const checkStudentExist = async (userId) => {
@@ -196,9 +200,9 @@ const checkStudentExist = async (userId) => {
   `;
   const values = [userId];
   const result = await db.query(query, values);
-  if(result[0] == null) return false
+  if (result[0] == null) return false;
 
-  return true
+  return true;
 };
 
 const makeFollow = async (follower_id, followed_id) => {
@@ -207,7 +211,7 @@ const makeFollow = async (follower_id, followed_id) => {
   `;
   const values = [follower_id, followed_id];
   const result = await db.query(query, values);
-  return result[0]
+  return result[0];
 };
 
 const unFollow = async (follower_id, followed_id) => {
@@ -216,7 +220,7 @@ const unFollow = async (follower_id, followed_id) => {
   `;
   const values = [follower_id, followed_id];
   const result = await db.query(query, values);
-  
+
   if (result.length > 0) {
     return true;
   } else {
@@ -229,17 +233,14 @@ const getUserAvatar = async (userNumber) => {
   const values = [userNumber];
   const result = await db.query(query, values);
   if (result.length > 0) {
-      console.log("sau khi lay", result[0]);
-      return result[0].avatar;
+    console.log("sau khi lay", result[0]);
+    return result[0].avatar;
   } else {
-      return null;
+    return null;
   }
-
-}
-
+};
 
 module.exports = {
-  
   getStudentById,
   updateStudent,
   updateLecture,
@@ -249,6 +250,5 @@ module.exports = {
   checkStudentExist,
   makeFollow,
   unFollow,
-  getUserAvatar
-
+  getUserAvatar,
 };

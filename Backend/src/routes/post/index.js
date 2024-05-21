@@ -14,8 +14,10 @@ router.put('/attachment', (postController.updatePostAttachment))
 router.post('', asyncHandler(postController.createPost)) 
 router.put('', asyncHandler(postController.updatePost)) 
 router.delete('', asyncHandler(postController.deletePost))
+
 router.get('', asyncHandler(postController.getPost))
 router.get('/all', asyncHandler(postController.getAllPost)) 
+router.get('/search', asyncHandler(postController.getPostsByField)) 
 router.get('/follow', asyncHandler(postController.getPostFollowed)) 
 
 //comment

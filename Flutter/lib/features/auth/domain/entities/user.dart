@@ -4,7 +4,7 @@ class UserEntity extends Equatable {
   final int? uid;
   final String? email;
   final String? displayName;
-  final String? role;
+  final int? role;
   final String? phoneNumber;
   final String? createdAt;
   final String? lastLoginAt;
@@ -20,8 +20,6 @@ class UserEntity extends Equatable {
     required this.lastLoginAt,
     required this.avatar,
   });
-
-  
 
   @override
   List<Object?> get props {

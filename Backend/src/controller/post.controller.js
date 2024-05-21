@@ -12,6 +12,13 @@ class PostController {
       metadata: await PostService.getPost(req.query.post_id),
     }).send(res);
   };
+  getPostsByField = async (req, res, next) => {
+    const { field, page } = req.query
+    new SuccessResponse({
+      message: "get data success",
+      metadata: await PostService.getPostsByField(field, page),
+    }).send(res);
+  };
   getAllPost = async (req, res, next) => {
     new SuccessResponse({
       message: "get data success",

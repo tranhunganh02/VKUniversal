@@ -52,11 +52,16 @@ class SignInBloc extends Bloc<SignInEvent, SignInState> {
 
           final SharedPreferences prefs = await SharedPreferences.getInstance();
           await prefs.setString('email', _response.data!.user.email.toString());
-          await prefs.setString('userID', _response.data!.user.uid.toString());
+          await prefs.setString('password', event.password);
+
+          await prefs.setInt('userID', _response.data!.user.uid!);
+          await prefs.setInt('role', _response.data!.user.role!);
           await prefs.setString(
               'refreshToken', _response.data!.token.refreshToken);
           await prefs.setString(
               'accessToken', _response.data!.token.accessToken);
+          _logger.d('Access: ' + _response.data!.token.accessToken);
+
           emit(LoginSuccess(_response.data?.user as UserModel));
         }
         if (_response is DataFailed) {

@@ -1,15 +1,18 @@
+import 'package:vkuniversal/core/enum/academic_rank_enum.dart';
+import 'package:vkuniversal/core/enum/degree_enum.dart';
+import 'package:vkuniversal/core/enum/faculty_enum.dart';
+import 'package:vkuniversal/core/enum/gender_enum.dart';
 import 'package:vkuniversal/features/auth/data/models/user.dart';
 
 class LectureModel extends UserModel {
   final int? lectureID;
-  final String? lectererCode;
   final String? surname;
   final String? lastname;
-  final int? gender;
+  final Gender? gender;
   final String? dateOfBirth;
-  final String? faculty;
-  final String? degree;
-  final String? academicRank;
+  final Faculty? faculty;
+  final Degree? degree;
+  final AcademicRank? academicRank;
 
   LectureModel({
     super.uid,
@@ -21,7 +24,6 @@ class LectureModel extends UserModel {
     super.lastLoginAt,
     super.avatar,
     this.lectureID,
-    this.lectererCode,
     this.surname,
     this.lastname,
     this.gender,
@@ -32,45 +34,57 @@ class LectureModel extends UserModel {
   });
 
   factory LectureModel.fromJson(Map<String, dynamic> json) {
+    print("Model in lecture: ${LectureModel(
+      uid: json['user_id'],
+      email: json['email'],
+      avatar: json['avatar'],
+      surname: json['surname'],
+      lastname: json['last_name'],
+      displayName: json['surname'] + " " + json['last_name'],
+      gender: GenderEnumExt.fromJson(json),
+      dateOfBirth: json['date_of_birth'],
+      faculty: FacultyExt.fromJson(json),
+      degree: DegreeExt.fromJson(json),
+      academicRank: AcademicRankExt.fromJson(json),
+    )}");
     return LectureModel(
       uid: json['user_id'],
       email: json['email'],
-      displayName: json['displayName'],
-      role: json['role'],
-      phoneNumber: json['phoneNumber'],
-      createdAt: json['createdAt'],
-      lastLoginAt: json['lastLoginAt'],
+      phoneNumber: "json['phoneNumber']",
+      createdAt: "json['createdAt']",
+      lastLoginAt: "json['lastLoginAt']",
       avatar: json['avatar'],
-      lectureID: json['lectureID'],
-      lectererCode: json['lectererCode'],
       surname: json['surname'],
       lastname: json['last_name'],
-      gender: json['gender'],
+      displayName: json['surname'] + " " + json['last_name'],
+      gender: GenderEnumExt.fromJson(json),
       dateOfBirth: json['date_of_birth'],
-      faculty: json['faculty_name'],
-      degree: json['degree_name'],
-      academicRank: json['ar_name'],
+      faculty: FacultyExt.fromJson(json),
+      degree: DegreeExt.fromJson(json),
+      academicRank: AcademicRankExt.fromJson(json),
     );
   }
   Map<String, dynamic> toJson() {
     return {
       'user_id': uid,
-      'email': email,
-      'displayName': displayName,
-      'role': role,
-      'phoneNumber': phoneNumber,
-      'createdAt': createdAt,
-      'lastLoginAt': lastLoginAt,
-      'avatar': avatar,
       'lectureID': lectureID,
-      'lectererCode': lectererCode,
+      'gender': gender,
       'surname': surname,
       'last_name': lastname,
-      'gender': gender,
       'date_of_birth': dateOfBirth,
-      'faculty_name': faculty,
-      'degree_name': degree,
-      'ar_name': academicRank,
+      'acedemic_rank': {
+        'ar_id': academicRank,
+        'ar_name': academicRank?.name,
+      },
+      'degree': {
+        'degree_id': degree,
+        'degree_name': degree?.name,
+      },
+      'faculty': {
+        'faculty_id': faculty,
+        'faculty_name': faculty?.name,
+      },
+      'avatar': avatar,
     };
   }
 }
