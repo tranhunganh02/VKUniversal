@@ -1,4 +1,11 @@
 SELECT * from student;
+SELECT * FROM user_profile;
+SELECT * FROM degree;
+SELECT * FROM department;
+
+
+
+
 -- SELECT * from users;
 -- SELECT * FROM major;
 -- SELECT * FROM major;

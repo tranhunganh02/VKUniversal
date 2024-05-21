@@ -24,10 +24,14 @@ class _ProfileApiService implements ProfileApiService {
   Future<HttpResponse<ProfileModel>> getProfile(
     String? token,
     int? userId,
+    int? userIdToLoadProfile,
     int? role,
   ) async {
     const _extra = <String, dynamic>{};
-    final queryParameters = <String, dynamic>{r'role': role};
+    final queryParameters = <String, dynamic>{
+      r'user_id': userIdToLoadProfile,
+      r'role': role,
+    };
     queryParameters.removeWhere((k, v) => v == null);
     final _headers = <String, dynamic>{
       r'authorization': token,
@@ -52,7 +56,7 @@ class _ProfileApiService implements ProfileApiService {
               _dio.options.baseUrl,
               baseUrl,
             ))));
-    final value = ProfileModel.fromJson(_result.data!);
+    final value = ProfileModel.fromJson(_result.data!, role!);
     final httpResponse = HttpResponse(value, _result);
     return httpResponse;
   }

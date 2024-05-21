@@ -46,11 +46,8 @@ void main() {
           'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEzLCJlbWFpbCI6Imh1eXRuLjIxaXRAdmt1LnVkbi52biIsInJvbGUiOjAsImlhdCI6MTcxNTc5MjM2NywiZXhwIjoxNzE1Nzk0MTY3fQ.JqndJQhpEbWCPfquvsmHk8rXldZqI5vesucMDx9V75Q';
       final role = 1;
 
-      final response = await profileService.getProfile(
-        accessToke,
-        userID,
-        role,
-      );
+      final response =
+          await profileService.getProfile(accessToke, userID, role, 1);
 
       _logger.d(response.data.toString());
 
@@ -109,6 +106,60 @@ void main() {
 
     final response = await _userInfoService.updateStudentInfo(
         userID, accessToken, userInfo2);
+    _logger.d(response.response.data.toString());
+
+    expect(response.response.statusCode, HttpStatus.ok);
+  });
+  test("Test Get Student Profile", () async {
+    initializeDependencies();
+
+    Logger _logger = Logger();
+
+    final userID = 12;
+    final accessToken =
+        'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEyLCJlbWFpbCI6InRuaEB2a3UudWRuLnZuIiwicm9sZSI6MSwiaWF0IjoxNzE2MTk4MjU2LCJleHAiOjE3MTYyMTQ0NTZ9.P18HrD2c1Ob5zWOM9POmjWt_8FHrJY0HSWqT2J6i6_Q';
+    final role = 1;
+
+    final _profileService = sl<ProfileApiService>();
+    final response =
+        await _profileService.getProfile(accessToken, userID, userID, role);
+
+    _logger.d(response.response.data.toString());
+
+    expect(response.response.statusCode, HttpStatus.ok);
+  });
+  test("Get Lecture Profile", () async {
+    initializeDependencies();
+
+    Logger _logger = Logger();
+
+    final userID = 13;
+    final accessToken =
+        'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEzLCJlbWFpbCI6Imx2bWluaEB2a3UudWRuLnZuIiwicm9sZSI6MiwiaWF0IjoxNzE2MjAwNDk5LCJleHAiOjE3MTYyMTY2OTl9.njxH4LC6v6KPxm3GWqUTQDzaG8ljVAmsknxMaMrjR9E';
+    final role = 2;
+
+    final _profileService = sl<ProfileApiService>();
+    final response =
+        await _profileService.getProfile(accessToken, userID, userID, role);
+
+    _logger.d(response.response.data.toString());
+
+    expect(response.response.statusCode, HttpStatus.ok);
+  });
+  test("Get Department Profile", () async {
+    initializeDependencies();
+
+    Logger _logger = Logger();
+
+    final userID = 16;
+    final accessToken =
+        'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjE2LCJlbWFpbCI6ImNzQHZrdS51ZG4udm4iLCJyb2xlIjozLCJpYXQiOjE3MTYyMDA1NzYsImV4cCI6MTcxNjIxNjc3Nn0.X0XvPENKnj3GCJq4_AhvtcKNBJK8mUXmiIt1wTT5Re4';
+    final role = 3;
+
+    final _profileService = sl<ProfileApiService>();
+    final response =
+        await _profileService.getProfile(accessToken, userID, userID, role);
+
     _logger.d(response.response.data.toString());
 
     expect(response.response.statusCode, HttpStatus.ok);

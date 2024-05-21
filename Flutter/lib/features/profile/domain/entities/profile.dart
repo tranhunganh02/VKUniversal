@@ -10,15 +10,16 @@ class ProfileEntity extends Equatable {
   final String? majorName;
   final String? className;
 
-  ProfileEntity(
-      {required this.userID,
-      required this.studentCode,
-      required this.surName,
-      required this.firstName,
-      required this.dateOfBirth,
-      required this.gender,
-      required this.majorName,
-      required this.className});
+  ProfileEntity({
+    this.userID,
+    this.studentCode,
+    this.surName,
+    this.firstName,
+    this.dateOfBirth,
+    this.gender,
+    this.majorName,
+    this.className,
+  });
 
   @override
   List<Object?> get props => [

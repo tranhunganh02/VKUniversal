@@ -12,7 +12,7 @@ POST http://localhost:5055/v1/api/vkuniversal/login
 Content-Type: application/json
 
 {
-     "email": "DEP2@vku.udn.vn",
+     "email": "tranvanhuy@vku.udn.vn",
      "password": "123456789"
 }
 

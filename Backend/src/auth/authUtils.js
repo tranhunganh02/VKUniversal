@@ -15,11 +15,11 @@ const createTokenPair = async (payload, publicKey, privateKey) => {
           // access token
           
           const asscessToken = await JWT.sign(payload, publicKey, {
-               expiresIn: '30m'
+               expiresIn: '270m'
           })
 
           const refreshToken = await JWT.sign(payload, privateKey, {
-               expiresIn: '1 days'
+               expiresIn: '2 days'
           })
 
           JWT.verify(asscessToken, publicKey, (err, decode) => {
@@ -32,7 +32,7 @@ const createTokenPair = async (payload, publicKey, privateKey) => {
      } catch (error) {
           
      }
- }
+}
 // // Xác thực accessToken với Google
 // const checkTokenGoogle = async (accessToken)=> {
 //      const ticket = await client.verifyIdToken({

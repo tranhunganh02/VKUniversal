@@ -21,7 +21,6 @@ class MarketService {
     if (!product_name || !product_type || !price || !detail || !attachments) {
       throw new BadRequestError("Some fields required are missing");
     }
-
     // upload file
     const attachmentURLs = await Promise.all(
       attachments.map(async (attachment) => {

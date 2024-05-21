@@ -5,21 +5,13 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:vkuniversal/config/routes/router_name.dart';
 import 'package:vkuniversal/config/routes/routes.dart';
 import 'package:vkuniversal/config/theme/theme_const.dart';
-import 'package:vkuniversal/core/constants/refresh_token.dart';
-import 'package:vkuniversal/core/constants/share_pref.dart';
-import 'package:vkuniversal/core/resources/data_state.dart';
 import 'package:vkuniversal/core/utils/injection_container.dart';
 import 'package:vkuniversal/core/widgets/loader.dart';
-import 'package:vkuniversal/features/auth/data/models/authorization.dart';
-import 'package:vkuniversal/features/auth/domain/usecases/check_student_info.dart';
 import 'package:vkuniversal/features/auth/presentation/bloc/add_user_info/bloc/add_user_info_bloc.dart';
 import 'package:vkuniversal/features/auth/presentation/bloc/sign_up/bloc/sign_up_bloc.dart';
 import 'package:vkuniversal/features/auth/presentation/bloc/sign_in/bloc/sign_in_bloc.dart';
 import 'package:vkuniversal/features/auth/presentation/bloc/welcome/bloc/welcome_bloc.dart';
-import 'package:vkuniversal/features/auth/presentation/pages/add_user_info.dart';
 import 'package:vkuniversal/features/auth/presentation/pages/welcome.dart';
-import 'package:vkuniversal/features/newsfeed/presentation/pages/home.dart';
-import 'package:vkuniversal/features/newsfeed/presentation/pages/newsfeed.dart';
 import 'package:vkuniversal/features/newsfeed/presentation/state/home/bloc/home_bloc.dart';
 import 'package:intl/date_symbol_data_local.dart';
 
@@ -107,20 +99,6 @@ class _CheckUserStateState extends State<CheckUserState> {
 
     String? email = prefs.getString('email');
     bool isLogin = email != null;
-
-    // final authorization = SetUpAuthData(prefs);
-
-    // final _response = await checkUser(data: authorization);
-
-    // if (_response is DataSuccess) {
-    //   prefs.setBool('hasUserInfo', _response.data!.isExist);
-    // } else {
-    //   RefreshTokenCommon(prefs);
-    //   final _response = await checkUser(data: authorization);
-    //   if (_response is DataSuccess) {
-    //     prefs.setBool('hasUserInfo', _response.data!.isExist);
-    //   }
-    // }
 
     bool hasStudentInfo = prefs.getBool('hasUserInfo') ?? false;
 

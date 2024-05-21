@@ -3,12 +3,11 @@ import 'dart:io';
 import 'package:dio/dio.dart';
 import 'package:logger/logger.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:vkuniversal/core/constants/share_pref.dart';
 import 'package:vkuniversal/core/resources/data_state.dart';
 import 'package:vkuniversal/features/auth/data/models/authorization.dart';
-import 'package:vkuniversal/features/auth/domain/usecases/refresh_token.dart';
 import 'package:vkuniversal/features/profile/data/data_sourse/remote/profile_api_service.dart';
 import 'package:vkuniversal/features/profile/data/model/profile.dart';
-import 'package:vkuniversal/features/profile/domain/entities/profile.dart';
 import 'package:vkuniversal/features/profile/domain/repository/profile_repository.dart';
 
 class ProfileRepositoryImpl implements ProfileRepository {
@@ -20,42 +19,23 @@ class ProfileRepositoryImpl implements ProfileRepository {
   @override
   Future<DataState<ProfileModel>> getProfile({
     required int role,
+    required int userIDToLoadProfile,
   }) async {
     try {
       final _prefs = await SharedPreferences.getInstance();
 
-      String? accessToken = _prefs.getString("accessToken");
-      String? refreshToken = _prefs.getString("refreshToken");
-      String? userID = _prefs.getString("userID");
-      int userIDInt = int.parse(userID!);
+      Authorization authorization = SetUpAuthData(_prefs);
 
-      Authorization _authorization = Authorization(
-        userID: userIDInt,
-        refreshToken: refreshToken!,
-        accessToken: accessToken!,
-      );
+      final response = await _profileApiService.getProfile(
+          authorization.accessToken,
+          authorization.userID,
+          role,
+          userIDToLoadProfile);
 
-      // if (accessToken == null) {
-      //   final _tokenParam = Authorization(
-      //     userID: userIDInt,
-      //     refreshToken: refreshToken!,
-      //     accessToken: accessToken!,
-      //   );
-      //   final tokenResponse = await _refreshToken(params: _tokenParam);
-      //   if (_tokenParam is DataSuccess) {
-      //     await _prefs.setString(
-      //         'email', tokenResponse.data!.user.email.toString());
-      //     await _prefs.setString(
-      //         'refreshToken', tokenResponse.data!.token.refreshToken);
-      //     await _prefs.setString(
-      //         'accessToken', tokenResponse.data!.token.accessToken);
-      //   } else {}
-      // }
-      final response =
-          await _profileApiService.getProfile(accessToken, userIDInt, role);
       if (response.response.statusCode == HttpStatus.ok) {
         _logger.d("Get Profile Data Successfully");
-        return DataSuccess(response.data);
+        Map<String, dynamic> profileData = response.data.toJson(role);
+        return DataSuccess(ProfileModel.fromJson(profileData, role));
       } else if (response.response.statusCode ==
           HttpStatus.internalServerError) {}
       RequestOptions options = RequestOptions();
@@ -66,15 +46,16 @@ class ProfileRepositoryImpl implements ProfileRepository {
   }
 
   @override
-  Future<DataState<void>> updateProfile(
-      {int? userId,
-      String? studentCode,
-      String? surname,
-      String? firstName,
-      DateTime? dayOfBirth,
-      int? gender,
-      String? majorName,
-      String? className}) {
+  Future<DataState<void>> updateProfile({
+    int? userId,
+    String? studentCode,
+    String? surname,
+    String? firstName,
+    DateTime? dayOfBirth,
+    int? gender,
+    String? majorName,
+    String? className,
+  }) {
     throw UnimplementedError();
   }
 }

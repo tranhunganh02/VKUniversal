@@ -1,4 +1,7 @@
 import 'package:vkuniversal/features/auth/domain/entities/User.dart';
+import 'package:vkuniversal/features/profile/data/model/department.dart';
+import 'package:vkuniversal/features/profile/data/model/lecture.dart';
+import 'package:vkuniversal/features/profile/data/model/student.dart';
 
 class UserModel extends UserEntity {
   UserModel({
@@ -23,5 +26,31 @@ class UserModel extends UserEntity {
       lastLoginAt: json['lastLoginAt'] ?? '',
       avatar: json['avatar'] ?? '',
     );
+  }
+
+  static UserModel formJson(Map<String, dynamic> json, int role) {
+    switch (role) {
+      case 1:
+        return StudentModel.fromJson(json);
+      case 2:
+        return LectureModel.fromJson(json);
+      case 3:
+        return DepartmentModel.fromJson(json);
+      default:
+        throw Exception('Invalid role');
+    }
+  }
+
+  static Map<String, dynamic> toJson(int role) {
+    switch (role) {
+      case 1:
+        return StudentModel().toJson();
+      case 2:
+        return LectureModel().toJson();
+      case 3:
+        return DepartmentModel().toJson();
+      default:
+        throw Exception('Invalid role');
+    }
   }
 }

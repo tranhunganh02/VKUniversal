@@ -125,7 +125,7 @@ const getUserInformationAndProfile = async (user_id, role) => {
 
   let query2 = null;
   if (role == 1) {
-    console.log("vo day");
+
     query2 = `
     SELECT
         s.user_id,
@@ -162,7 +162,7 @@ const getUserInformationAndProfile = async (user_id, role) => {
     FROM 
       lecturer le
     JOIN 
-      academic_rank l ON le.academic_id = l.ar_id
+      acedemic_rank l ON le.academic_id = l.ar_id
     JOIN 
       degree d ON le.degree_id = d.degree_id
     JOIN 
@@ -170,9 +170,19 @@ const getUserInformationAndProfile = async (user_id, role) => {
     WHERE 
       le.user_id = $1;  
   `
-  } else {
-    return false
-  }
+  }  else if(role ==3 ) {
+    console.log("vo day");
+    query2 =`
+    SELECT 
+      department_id,
+      department_name,
+      user_id
+    FROM 
+      department 
+    WHERE
+        user_id = $1;
+  `
+  } else return false
 
   const result2 = await db.query(query2, values)
   console.log("result", result2);
@@ -214,6 +224,18 @@ const unFollow = async (follower_id, followed_id) => {
   }
 };
 
+const getUserAvatar = async (userNumber) => {
+  const query = "SELECT avatar FROM users WHERE user_id = $1";
+  const values = [userNumber];
+  const result = await db.query(query, values);
+  if (result.length > 0) {
+      console.log("sau khi lay", result[0]);
+      return result[0].avatar;
+  } else {
+      return null;
+  }
+
+}
 
 
 module.exports = {
@@ -226,5 +248,7 @@ module.exports = {
   updateUserProfile,
   checkStudentExist,
   makeFollow,
-  unFollow
+  unFollow,
+  getUserAvatar
+
 };

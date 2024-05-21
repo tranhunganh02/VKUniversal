@@ -935,19 +935,20 @@ SELECT sell_post_id, image_url[1], product_name, price FROM sell_post ORDER BY c
 
 
 
-   SELECT p.post_id, p.content, p.created_at, p.updated_at, u.avatar
-    FROM post p
-    JOIN users u ON p.user_id = u.user_id
-    WHERE p.privacy = true
-    ORDER BY p.created_at DESC
-    LIMIT 6 OFFSET 0;
 
-SELECT p.user_id, p.post_id, p.content, p.created_at, p.updated_at, u.avatar
+ SELECT EXISTS (
+            SELECT 1
+            FROM follow
+            WHERE follower_id = 17 AND followed_id = 18
+        ) AS user1_follows_user2,
+        EXISTS (
+            SELECT 1
+            FROM follow
+            WHERE follower_id = 18 AND followed_id = 177
+        ) AS user2_follows_user1;
+
+SELECT p.post_id, p.content, p.content, p.created_at, p.updated_at, u.email
 FROM post p
 JOIN users u ON p.user_id = u.user_id
-WHERE p.user_id IN (
-    SELECT followed_id
-    FROM follow
-    WHERE follower_id = 18
-)
-ORDER BY p.created_at DESC
+WHERE p.content ILIKE '%con%' OR u.email LIKE '%con%'
+LIMIT 5;

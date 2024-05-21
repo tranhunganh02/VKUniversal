@@ -1,26 +1,36 @@
+import 'package:vkuniversal/features/auth/data/models/user.dart';
 import 'package:vkuniversal/features/profile/domain/entities/profile.dart';
 
 class ProfileModel extends ProfileEntity {
-  ProfileModel(
-      {required super.userID,
-      required super.studentCode,
-      required super.surName,
-      required super.firstName,
-      required super.dateOfBirth,
-      required super.gender,
-      required super.majorName,
-      required super.className});
+  final String? userBio;
+  final UserModel user;
 
-  factory ProfileModel.fromJson(Map<String, dynamic> map) {
+  factory ProfileModel.fromJson(Map<String, dynamic> map, int role) {
     return ProfileModel(
-      userID: map['user_id'],
-      studentCode: map['student_code'],
-      surName: map['surname'],
-      firstName: map['last_name'],
-      dateOfBirth: map['date_of_birth'],
-      gender: map['gender'],
-      majorName: map['major_name'],
-      className: map['class_name'],
+      userBio: map['metadata']['user_bio'],
+      user: UserModel.formJson(map['metadata']['user'], role),
     );
   }
+
+  Map<String, dynamic> toJson(int role) {
+    return {
+      'metadata': {
+        'user_bio': userBio,
+        'user': UserModel.toJson(role),
+      }
+    };
+  }
+
+  ProfileModel({
+    super.userID,
+    super.studentCode,
+    super.surName,
+    super.firstName,
+    super.dateOfBirth,
+    super.gender,
+    super.majorName,
+    super.className,
+    required this.userBio,
+    required this.user,
+  });
 }
