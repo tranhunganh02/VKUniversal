@@ -16,3 +16,8 @@ LoginInfo SetUpLoginInfo(SharedPreferences _pref) {
   String password = _pref.getString('password') ?? '';
   return LoginInfo(email: email, password: password);
 }
+
+Future<int> GetUserRoleDefault() async {
+  SharedPreferences _pref = await SharedPreferences.getInstance();
+  return _pref.getInt('role') ?? 0;
+}

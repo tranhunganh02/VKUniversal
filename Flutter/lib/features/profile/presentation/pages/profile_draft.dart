@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:logger/logger.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:vkuniversal/core/enum/gender_enum.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:vkuniversal/core/constants/share_pref.dart';
 import 'package:vkuniversal/core/utils/injection_container.dart';
 import 'package:vkuniversal/core/widgets/avatat.dart';
 import 'package:vkuniversal/core/widgets/loader.dart';
@@ -30,11 +32,25 @@ class ProfilePage extends StatefulWidget {
 class _ProfilePageState extends State<ProfilePage>
     with TickerProviderStateMixin {
   var scrollController = ScrollController();
+  var roleDefault = GetUserRoleDefault();
 
   @override
   void initState() {
     super.initState();
-    sl<ProfileBloc>().add(LoadProfile(role: 2, userID: 14));
+    _loadDefault();
+  }
+
+  Future<void> _loadDefault() async {
+    Logger _logger = Logger();
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    setState(() {
+      int roleDefault = widget.role ?? prefs.getInt('role') ?? 2;
+      int userIDDefault =
+          widget.userIDToLoadProfile ?? prefs.getInt('userID') ?? 14;
+      sl<ProfileBloc>()
+          .add(LoadProfile(role: roleDefault, userID: userIDDefault));
+      _logger.d("${roleDefault} ${userIDDefault}");
+    });
   }
 
   @override
