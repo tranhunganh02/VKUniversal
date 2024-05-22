@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:dio/dio.dart';
 import 'package:logger/logger.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:vkuniversal/core/constants/refresh_token.dart';
 import 'package:vkuniversal/core/constants/share_pref.dart';
 import 'package:vkuniversal/core/resources/data_state.dart';
 import 'package:vkuniversal/features/auth/data/models/authorization.dart';
@@ -35,13 +36,10 @@ class ProfileRepositoryImpl implements ProfileRepository {
 
       if (response.response.statusCode == HttpStatus.ok) {
         _logger.d("Get Profile Data Successfully");
-        // Map<String, dynamic> profileData = response.data.toJson(role);
-        // _logger.d("Profile IMPL Response: ${response.data}");
-        // _logger.d("Profile IMPL Response: ${response.data}");
         return DataSuccess(response.data);
-        // return DataSuccess(ProfileModel.fromJson(profileData, role));
-      } else if (response.response.statusCode ==
-          HttpStatus.internalServerError) {}
+      } else if (response.response.statusCode == HttpStatus.unauthorized) {
+        RefreshTokenCommon(_prefs);
+      }
       RequestOptions options = RequestOptions();
       return DataFailed(DioException(requestOptions: options));
     } on DioException catch (e) {

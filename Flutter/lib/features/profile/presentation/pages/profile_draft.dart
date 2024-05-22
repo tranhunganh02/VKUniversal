@@ -1,12 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:vkuniversal/core/enum/gender_enum.dart';
 import 'package:vkuniversal/core/utils/injection_container.dart';
 import 'package:vkuniversal/core/widgets/avatat.dart';
 import 'package:vkuniversal/core/widgets/loader.dart';
 import 'package:vkuniversal/features/profile/data/model/department.dart';
 import 'package:vkuniversal/features/profile/data/model/lecture.dart';
-import 'package:vkuniversal/features/profile/data/model/profile.dart';
 import 'package:vkuniversal/features/profile/data/model/student.dart';
 import 'package:vkuniversal/features/profile/presentation/pages/profile_tabs/post_tab.dart';
 import 'package:vkuniversal/features/profile/presentation/state/bloc/profile_bloc.dart';
@@ -35,7 +34,7 @@ class _ProfilePageState extends State<ProfilePage>
   @override
   void initState() {
     super.initState();
-    sl<ProfileBloc>().add(LoadProfile(role: 2, userID: 13));
+    sl<ProfileBloc>().add(LoadProfile(role: 2, userID: 14));
   }
 
   @override
@@ -44,8 +43,6 @@ class _ProfilePageState extends State<ProfilePage>
     double heightScreen = MediaQuery.of(context).size.width;
     ColorScheme colorScheme = Theme.of(context).colorScheme;
     TextTheme textTheme = Theme.of(context).textTheme;
-
-    late ProfileModel profileModel;
 
     var image =
         "https://scontent.fdad1-4.fna.fbcdn.net/v/t39.30808-6/427931630_3730941007228005_4002607693884312382_n.jpg?_nc_cat=103&ccb=1-7&_nc_sid=5f2048&_nc_ohc=pKahOw0j4ZkQ7kNvgFkW0xf&_nc_ht=scontent.fdad1-4.fna&oh=00_AYBjZPBhQ9i1AfywfNQgXyJ4Bd5mI2kn7eKTsgi5yMHFaQ&oe=664B9F13";
@@ -70,8 +67,6 @@ class _ProfilePageState extends State<ProfilePage>
           builder: (context, state) {
             if (state is ProfileLoaded) {
               final profile = state.profile;
-              final user = profile.user as LectureModel;
-              if (profile.user is StudentModel) {}
               return Container(
                 decoration: BoxDecoration(
                   color: colorScheme.surfaceContainer,
@@ -91,21 +86,55 @@ class _ProfilePageState extends State<ProfilePage>
                           child: Column(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
-                              Avatar(image, 80),
-                              UserLabel(
-                                name: profile.user.displayName!,
+                              Avatar(profile.user.avatar ?? "", 80),
+                              BlocBuilder<ProfileBloc, ProfileState>(
+                                builder: (context, state) {
+                                  if (profile.user is DepartmentModel) {
+                                    final department =
+                                        profile.user as DepartmentModel;
+                                    return UserLabel(
+                                        name: department.departmentName!);
+                                  }
+                                  return UserLabel(
+                                    name: profile.user.displayName!,
+                                  );
+                                },
                               ),
                               BioLabel(
-                                bioContent: profile.userBio ?? "Not Showing",
+                                bioContent: profile.userBio,
                               ),
                               ProfileButtons(),
                             ],
                           ),
                         ),
-                        BioUser(
-                          email: user.email!,
-                          date_of_birth: user.dateOfBirth!,
-                          class_user: profile.className ?? "Not Showing",
+                        BlocBuilder<ProfileBloc, ProfileState>(
+                          builder: (context, state) {
+                            if (profile.user is DepartmentModel) {
+                              final department =
+                                  profile.user as DepartmentModel;
+                              return BioUser(
+                                email: profile.user.email ?? "Not Showing",
+                              );
+                            }
+                            if (profile.user is LectureModel) {
+                              final lecture = profile.user as LectureModel;
+                              return BioUser(
+                                email: profile.user.email ?? "Not Showing",
+                                date_of_birth: lecture.dateOfBirth,
+                                faculty_name: lecture.faculty!.name,
+                              );
+                            }
+                            if (profile.user is StudentModel) {
+                              final student = profile.user as StudentModel;
+                              return BioUser(
+                                email: profile.user.email ?? "Not Showing",
+                                date_of_birth: date_of_birth,
+                                // class_user: ,
+                              );
+                            } else {
+                              return Container();
+                            }
+                          },
                         ),
                         Container(
                           width: double.maxFinite,

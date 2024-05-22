@@ -7,7 +7,6 @@ import 'package:meta/meta.dart';
 import 'package:logger/logger.dart';
 import 'package:vkuniversal/core/resources/data_state.dart';
 import 'package:vkuniversal/features/profile/data/model/profile.dart';
-import 'package:vkuniversal/features/profile/data/model/student.dart';
 import 'package:vkuniversal/features/profile/domain/usecase/load_profile.dart';
 
 part 'profile_event.dart';
@@ -26,7 +25,7 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
               role: event.role, userIDToLoadProfile: event.userID);
 
           if (response is DataSuccess) {
-             _logger.d("API Response: ${response.data}");
+            _logger.d("API Response: ${response.data}");
             if (response.data != null) {
               _logger.d("API Response: ${response.data}");
               _logger.d("Get thanh cong");

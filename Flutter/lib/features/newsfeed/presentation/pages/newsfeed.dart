@@ -18,7 +18,7 @@ class _NewsfeedPageState extends State<NewsfeedPage> {
     TextTheme textTheme = Theme.of(context).textTheme;
     return Scaffold(
       appBar: AppBar(
-        leading: null,
+        automaticallyImplyLeading: false,
         title: SizedBox(
           width: width * 0.35,
           child: Image.asset(

@@ -31,4 +31,5 @@ class IconList {
   static Icon person_solid = Icon(Iconsax.profile_circle_bold);
   static Icon menu_outline = Icon(Iconsax.menu_outline);
   static Icon menu_solid = Icon(Iconsax.menu_bold);
+  static Icon briefcase_outline = Icon(Iconsax.briefcase_outline);
 }

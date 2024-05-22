@@ -13,18 +13,23 @@ class UserLabel extends StatelessWidget {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        Text(
-          name,
-          style: textTheme.displaySmall?.copyWith(
-            color: colorScheme.onSurface,
+        Flexible(
+          child: Center(
+            child: Text(
+              name,
+              style: textTheme.displaySmall?.copyWith(
+                color: colorScheme.onSurface,
+              ),
+            ),
           ),
         ),
-        SizedBox(
-          width: 10,
-        ),
-        UpdateButton(
-            updateAvate: () =>
-                Navigator.pushNamed(context, RoutesName.updateProfile))
+        // SizedBox(
+        //   width: 10,
+        // ),
+        // UpdateButton(
+        //   updateAvate: () =>
+        //       Navigator.pushNamed(context, RoutesName.updateProfile),
+        // )
       ],
     );
   }
