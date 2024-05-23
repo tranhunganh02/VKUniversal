@@ -180,10 +180,9 @@ class AccessService {
         console.log("Role not recognized.");
       }
 
-    console.log("id found ", id, foundUser);
   
     return {
-      user: getInfoData({fileds: ['user_id', 'email', 'avatar'], Object: foundUser}),
+      user: getInfoData({fileds: ['user_id', 'email', 'avatar', 'role'], Object: foundUser}),
       tokens,
       
     }

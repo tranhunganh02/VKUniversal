@@ -129,12 +129,18 @@ const updateAttachmentFileUrl = async (attachmentId, newFileUrl) => {
 };
 
 const getLatestPostsFollowed = async (
-  page
+  page, user_id
 ) => {
   const limit = 6;
   const offset = (page - 1) * limit;
   const query = `
-  SELECT p.user_id, p.post_id, p.content, p.created_at, p.updated_at, u.avatar
+  SELECT p.user_id, p.post_id, p.content, p.created_at, p.updated_at, u.avatar,
+  (SELECT COUNT(*) FROM Post_like pl WHERE pl.post_id = p.post_id) AS like_count,
+  EXISTS (
+    SELECT 1
+    FROM Post_like pl
+    WHERE pl.user_id = $1 AND pl.post_id = p.post_id
+  ) AS liked_by_user
   FROM post p
   JOIN users u ON p.user_id = u.user_id
   WHERE p.user_id IN (
@@ -143,10 +149,10 @@ const getLatestPostsFollowed = async (
       WHERE follower_id = 18
   )
   ORDER BY p.created_at DESC
-  LIMIT $1 OFFSET $2;
+  LIMIT $2 OFFSET $3;
 `;
 
-  const values = [limit, offset];
+  const values = [user_id, limit, offset];
   const result = await db.query(query, values);
 
   return result;
@@ -174,19 +180,35 @@ const getLatestPostsByDepartment = async (
 
   return result;
 };
-const getLatestPosts = async (page) => {
+const getLatestPosts = async (page, user_id) => {
+  console.log(
+    user_id
+  );
   const limit = 6;
   const offset = (page - 1) * limit; // Tính offset dựa trên trang
 
   const query = `
-  SELECT p.user_id, p.post_id, p.content, p.created_at, p.updated_at, u.avatar, u.role
-  FROM post p
-  JOIN users u ON p.user_id = u.user_id
-  WHERE p.privacy = false
-  ORDER BY p.created_at DESC
-  LIMIT $1 OFFSET $2;
+  SELECT 
+  p.user_id, 
+  p.post_id, 
+  p.content, 
+  p.created_at, 
+  p.updated_at, 
+  u.avatar, 
+  u.role,
+  (SELECT COUNT(*) FROM Post_like pl WHERE pl.post_id = p.post_id) AS like_count,
+  EXISTS (
+    SELECT 1
+    FROM Post_like pl
+    WHERE pl.user_id = $1 AND pl.post_id = p.post_id
+  ) AS liked_by_user
+FROM post p
+JOIN users u ON p.user_id = u.user_id
+WHERE p.privacy = false
+ORDER BY p.created_at DESC
+LIMIT $2 OFFSET $3;
   `;
-  const values = [limit, offset];
+  const values = [user_id, limit, offset];
 
   const result = await db.query(query, values);
   return result;
@@ -199,7 +221,13 @@ const getLatestPostsByField = async (field, page=1) => {
   console.log("s", field);
 
   const query = `
-  SELECT p.post_id, p.content, p.created_at, u.email
+  SELECT p.post_id, p.content, p.created_at, u.email,
+  (SELECT COUNT(*) FROM Post_like pl WHERE pl.post_id = p.post_id) AS like_count,
+  EXISTS (
+    SELECT 1
+    FROM Post_like pl
+    WHERE pl.user_id = $1 AND pl.post_id = p.post_id
+  ) AS liked_by_user
   FROM post p
   JOIN users u ON p.user_id = u.user_id
   WHERE p.content ILIKE '%${field}%' OR u.email LIKE '%${field}%'
@@ -209,6 +237,35 @@ const getLatestPostsByField = async (field, page=1) => {
   const result = await db.query(query);
   return result;
 };
+
+const likePost = async (post_id, user_id) => {
+  const queryCheck = "  SELECT 1 FROM Post_like WHERE user_id = $2 AND post_id = $1 "
+  const valuesCheck = [post_id, user_id];
+  const resultCheck = await db.queryGetRowCount(queryCheck, valuesCheck)
+  if (resultCheck == 0) {
+    const query = 'INSERT INTO Post_like (post_id, user_id) VALUES ($1, $2)';
+  const values = [post_id, user_id];
+  
+  const result = await db.queryGetRowCount(query, values);
+  
+  return result == 1 ?  true :  false
+  } else {
+    return false
+  }
+  
+};
+
+const unlikePost = async (post_id, user_id) => {
+  const query = 'DELETE FROM Post_like WHERE post_id = $1 AND user_id = $2';
+  const values = [post_id, user_id];
+  
+  const result = await db.queryGetRowCount(query, values);
+  
+  return result == 1 ?  true :  false
+  
+};
+
+
 
 module.exports = {
   createPost,
@@ -223,5 +280,7 @@ module.exports = {
   getLatestPostsByDepartment,
   getLatestPostsFollowed,
   getLatestPosts,
-  getLatestPostsByField
+  getLatestPostsByField,
+  likePost,
+  unlikePost
 };

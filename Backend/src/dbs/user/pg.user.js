@@ -154,12 +154,13 @@ const getUserInformationAndProfile = async (user_id, role) => {
     jsonb_build_object('ar_id',a.ar_id, 'ar_name', a.ar_name) AS acedemic_rank,
    jsonb_build_object('degree_id', d.degree_id, 'degree_name', d.degree_name) AS degree,
    jsonb_build_object('faculty_id', f.faculty_id, 'faculty_name', f.faculty_name) AS faculty,
-   le.lecturer_code,
    le.user_id,
    le.gender,
    le.surname,
    le.last_name,
-   le.date_of_birth
+   le.date_of_birth,
+   u.email,
+   u.avatar
 FROM 
    lecturer le
 LEFT JOIN 
@@ -168,18 +169,24 @@ LEFT JOIN
    degree d ON le.degree_id = d.degree_id
 LEFT JOIN 
    faculty f ON le.faculty_id = f.faculty_id
+LEFT JOIN 
+  users u ON le.user_id = u.user_id
 WHERE 
-   le.user_id = = $1;
+   le.user_id = $1;
   `;
   } else if (role == 3) {
     console.log("vo day");
     query2 = `
     SELECT 
-      department_id,
-      department_name,
-      user_id
+      d.department_id,
+      d.department_name,
+      d.user_id,
+      u.email,
+      u.avatar
     FROM 
-      department 
+      department d
+    LEFT JOIN
+      users u ON d.user_id = u.user_id
     WHERE
         user_id = $1;
   `;
