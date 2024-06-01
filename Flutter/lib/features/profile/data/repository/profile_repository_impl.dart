@@ -38,7 +38,8 @@ class ProfileRepositoryImpl implements ProfileRepository {
         _logger.d("Get Profile Data Successfully");
         return DataSuccess(response.data);
       } else if (response.response.statusCode == HttpStatus.unauthorized) {
-        RefreshTokenCommon(_prefs);
+        RefreshTokenCommon();
+        getProfile(role: role, userIDToLoadProfile: userIDToLoadProfile);
       }
       RequestOptions options = RequestOptions();
       return DataFailed(DioException(requestOptions: options));

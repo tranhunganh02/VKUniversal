@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:vkuniversal/config/routes/router_name.dart';
-import 'package:vkuniversal/features/profile/presentation/widgets/update_button.dart';
 
 class UserLabel extends StatelessWidget {
   final String name;
@@ -14,11 +12,14 @@ class UserLabel extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         Flexible(
-          child: Center(
-            child: Text(
-              name,
-              style: textTheme.displaySmall?.copyWith(
-                color: colorScheme.onSurface,
+          child: Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Center(
+              child: Text(
+                name,
+                style: textTheme.displaySmall?.copyWith(
+                  color: colorScheme.onSurface,
+                ),
               ),
             ),
           ),

@@ -13,7 +13,7 @@ class _UserApiService implements UserApiService {
     this._dio, {
     this.baseUrl,
   }) {
-    baseUrl ??= 'http://192.168.1.135:5055/v1/api/vkuniversal';
+    baseUrl ??= 'http://192.168.1.3:5055/v1/api/vkuniversal';
   }
 
   final Dio _dio;

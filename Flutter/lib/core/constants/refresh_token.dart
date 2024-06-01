@@ -5,7 +5,8 @@ import 'package:vkuniversal/core/utils/injection_container.dart';
 import 'package:vkuniversal/features/auth/domain/usecases/refresh_token.dart';
 import 'package:vkuniversal/features/auth/presentation/bloc/welcome/bloc/welcome_bloc.dart';
 
-Future<void> RefreshTokenCommon(SharedPreferences _pref) async {
+Future<void> RefreshTokenCommon() async {
+  SharedPreferences _pref = await SharedPreferences.getInstance();
   final refreshTokenUseCase = sl<RefreshToken>();
 
   final authorization = SetUpAuthData(_pref);

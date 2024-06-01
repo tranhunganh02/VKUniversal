@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:vkuniversal/core/utils/icon_string.dart';
 import 'package:vkuniversal/features/chat/presentation/pages/list_chat.dart';
+import 'package:vkuniversal/features/menu/presentation/pages/menu.dart';
 import 'package:vkuniversal/features/newsfeed/presentation/pages/newsfeed.dart';
 import 'package:vkuniversal/features/profile/presentation/pages/profile_draft.dart';
 
@@ -21,9 +22,7 @@ class _HomeState extends State<Home> {
     ),
     ListChatScreen(),
     ProfilePage(),
-    Container(
-      color: Colors.brown,
-    ),
+    MenuPage()
   ];
   @override
   Widget build(BuildContext context) {
