@@ -44,7 +44,7 @@ class _LoginPageState extends State<LoginPage> {
       body: BlocConsumer<SignInBloc, SignInState>(
         listener: (context, state) {
           if (state is LoginSuccess) {
-            Navigator.popAndPushNamed(context, RoutesName.home);
+            Navigator.pushReplacementNamed(context, RoutesName.checkUserState);
           } else if (state is LoginFailure) {
             showErrorSnackBar(context, state.message);
           }

@@ -6,6 +6,7 @@ import 'package:vkuniversal/core/constants/share_pref.dart';
 import 'package:vkuniversal/core/resources/data_state.dart';
 import 'package:vkuniversal/core/utils/injection_container.dart';
 import 'package:vkuniversal/features/auth/data/data_sources/remote/auth_api_service.dart';
+import 'package:vkuniversal/features/auth/data/models/authorization.dart';
 import 'package:vkuniversal/features/auth/data/models/email_password.dart';
 import 'package:vkuniversal/features/auth/data/models/sign_in_request.dart';
 import 'package:vkuniversal/features/auth/data/models/sign_up_request.dart';
@@ -23,8 +24,22 @@ class AuthRepositoryImpl implements AuthRepository {
       : _authApiService = authApiService;
 
   @override
-  Future<DataFailed<void>> logout() {
-    throw UnimplementedError();
+  Future<DataState<void>> logout() async {
+    try {
+      SharedPreferences pref = await SharedPreferences.getInstance();
+      Authorization authorization = SetUpAuthData(pref);
+      final response = await _authApiService.logout(
+          authorization.userID, authorization.accessToken);
+
+      if (response.response.statusCode == HttpStatus.ok) {
+        return DataSuccess(response.response.data);
+      }
+      RequestOptions options = RequestOptions();
+      return DataFailed(DioException(requestOptions: options));
+    } catch (e) {
+      RequestOptions options = RequestOptions();
+      return DataFailed(DioException(requestOptions: options));
+    }
   }
 
   @override

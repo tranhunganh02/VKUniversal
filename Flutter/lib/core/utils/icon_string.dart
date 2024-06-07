@@ -32,4 +32,6 @@ class IconList {
   static Icon menu_outline = Icon(Iconsax.menu_outline);
   static Icon menu_solid = Icon(Iconsax.menu_bold);
   static Icon briefcase_outline = Icon(Iconsax.briefcase_outline);
+  static Icon x_close = Icon(Iconsax.close_circle_outline);
+  static Icon logout = Icon(Iconsax.logout_1_outline);
 }

@@ -170,7 +170,7 @@ LEFT JOIN
 LEFT JOIN 
    faculty f ON le.faculty_id = f.faculty_id
 LEFT JOIN 
-   users u ON le.user_id = u.user_id
+  users u ON le.user_id = u.user_id
 WHERE 
    le.user_id = $1;
   `;
@@ -178,11 +178,15 @@ WHERE
     console.log("vo day");
     query2 = `
     SELECT 
-      department_id,
-      department_name,
-      user_id
+      d.department_id,
+      d.department_name,
+      d.user_id,
+      u.email,
+      u.avatar
     FROM 
-      department 
+      department d
+    LEFT JOIN
+      users u ON d.user_id = u.user_id
     WHERE
         user_id = $1;
   `;

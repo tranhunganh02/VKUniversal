@@ -8,9 +8,7 @@ import 'package:vkuniversal/config/theme/theme_const.dart';
 import 'package:vkuniversal/core/constants/share_pref.dart';
 import 'package:vkuniversal/core/utils/injection_container.dart';
 import 'package:vkuniversal/core/widgets/loader.dart';
-import 'package:vkuniversal/features/auth/data/models/sign_in_request.dart';
 import 'package:vkuniversal/features/auth/domain/usecases/check_student_info.dart';
-import 'package:vkuniversal/features/auth/domain/usecases/sign_in_with_email.dart';
 import 'package:vkuniversal/features/auth/presentation/bloc/add_user_info/bloc/add_user_info_bloc.dart';
 import 'package:vkuniversal/features/auth/presentation/bloc/sign_up/bloc/sign_up_bloc.dart';
 import 'package:vkuniversal/features/auth/presentation/bloc/sign_in/bloc/sign_in_bloc.dart';
@@ -126,6 +124,10 @@ class _CheckUserStateState extends State<CheckUserState> {
       Navigator.pushReplacementNamed(context, RoutesName.welcome);
     } else if (hasStudentInfo || role != 1) {
       Navigator.pushReplacementNamed(context, RoutesName.home);
+      Navigator.pushAndRemoveUntil(
+          context,
+          Routes.generateRoute(RouteSettings(name: RoutesName.home)),
+          (Route<dynamic> route) => false);
     } else {
       Navigator.pushReplacementNamed(context, RoutesName.addUserInfor);
     }

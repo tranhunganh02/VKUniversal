@@ -920,3 +920,36 @@ FROM post p
 JOIN users u ON p.user_id = u.user_id
 WHERE p.content ILIKE '%con%' OR u.email LIKE '%con%'
 LIMIT 6;
+
+    SELECT 
+      p.user_id, 
+      p.post_id, 
+      p.content, 
+      p.created_at, 
+      p.updated_at, 
+      u.avatar, 
+      u.role,
+      (SELECT COUNT(*) FROM Post_like pl WHERE pl.post_id = p.post_id) AS like_count,
+      EXISTS (
+        SELECT 1
+        FROM Post_like pl
+        WHERE pl.user_id = 30 AND pl.post_id = p.post_id
+      ) AS liked_by_user
+    FROM post p
+    JOIN users u ON p.user_id = u.user_id
+    WHERE p.privacy = false
+    ORDER BY p.created_at DESC
+    LIMIT 6 OFFSET 0;
+
+    INSERT INTO Post_like (post_id, user_id) VALUES (8, 30);
+explain SELECT COUNT(*) FROM Post_like WHERE post_id = 30 AND user_id = 8
+
+explain SELECT 1
+        FROM Post_like 
+        WHERE user_id = 30 AND post_id = 8
+
+
+    SELECT 1
+    FROM Post_like pl
+    WHERE pl.user_id = 30 AND pl.post_id = 33
+  ) AS liked_by_user

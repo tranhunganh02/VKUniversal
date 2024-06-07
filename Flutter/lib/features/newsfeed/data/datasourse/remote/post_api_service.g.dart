@@ -1,6 +1,6 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'profile_api_service.dart';
+part of 'post_api_service.dart';
 
 // **************************************************************************
 // RetrofitGenerator
@@ -8,8 +8,8 @@ part of 'profile_api_service.dart';
 
 // ignore_for_file: unnecessary_brace_in_string_interps,no_leading_underscores_for_local_identifiers
 
-class _ProfileApiService implements ProfileApiService {
-  _ProfileApiService(
+class _PostApiService implements PostApiService {
+  _PostApiService(
     this._dio, {
     this.baseUrl,
   }) {
@@ -21,33 +21,28 @@ class _ProfileApiService implements ProfileApiService {
   String? baseUrl;
 
   @override
-  Future<HttpResponse<ProfileModel>> getProfile(
-    String? token,
-    int? userId,
-    int? userIdToLoadProfile,
-    int? role,
+  Future<HttpResponse<PostModel>> getPosts(
+    int userID,
+    String accessToken,
+    int page,
   ) async {
     const _extra = <String, dynamic>{};
-    final queryParameters = <String, dynamic>{
-      r'user_id': userIdToLoadProfile,
-      r'role': role,
-    };
-    queryParameters.removeWhere((k, v) => v == null);
+    final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{
-      r'authorization': token,
-      r'x-client-id': userId,
+      r'x-client-id': userID,
+      r'x-rtoken-id': accessToken,
     };
     _headers.removeWhere((k, v) => v == null);
-    final Map<String, dynamic>? _data = null;
+    final _data = page;
     final _result = await _dio.fetch<Map<String, dynamic>>(
-        _setStreamType<HttpResponse<ProfileModel>>(Options(
-      method: 'GET',
+        _setStreamType<HttpResponse<PostModel>>(Options(
+      method: 'POST',
       headers: _headers,
       extra: _extra,
     )
             .compose(
               _dio.options,
-              '/user/profile',
+              '/post/all',
               queryParameters: queryParameters,
               data: _data,
             )
@@ -56,7 +51,7 @@ class _ProfileApiService implements ProfileApiService {
               _dio.options.baseUrl,
               baseUrl,
             ))));
-    final value = ProfileModel.fromJson(_result.data!, role!);
+    final value = PostModel.fromJson(_result.data!);
     final httpResponse = HttpResponse(value, _result);
     return httpResponse;
   }

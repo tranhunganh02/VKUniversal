@@ -11,4 +11,8 @@ class PostModel extends PostEntity {
     required super.likes,
     required this.user,
   });
+
+  factory PostModel.fromJson(Map<String, dynamic> json) {
+    return PostModel(post_id: 0, likes: 1, user: null!);
+  }
 }

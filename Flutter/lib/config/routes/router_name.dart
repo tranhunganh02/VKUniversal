@@ -9,4 +9,5 @@ class RoutesName {
   static const String profile = '/profile';
   static const String updateProfile = '/update_profile';
   static const String noInternet = '/noInternet';
+  static const String checkUserState = '/checkUserState';
 }

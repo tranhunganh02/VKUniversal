@@ -44,6 +44,9 @@ class Routes {
       case RoutesName.noInternet:
         return MaterialPageRoute(
             builder: (BuildContext context) => NoInternetPage());
+      case RoutesName.checkUserState:
+        return MaterialPageRoute(
+            builder: (BuildContext context) => CheckUserState());
       default:
         return MaterialPageRoute(builder: (_) {
           return const Scaffold(

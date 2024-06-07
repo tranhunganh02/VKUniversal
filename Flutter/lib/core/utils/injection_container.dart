@@ -8,6 +8,7 @@ import 'package:vkuniversal/features/auth/data/repository/user_info_reposirory_i
 import 'package:vkuniversal/features/auth/domain/repository/auth_repository.dart';
 import 'package:vkuniversal/features/auth/domain/repository/user_info_repository.dart';
 import 'package:vkuniversal/features/auth/domain/usecases/check_student_info.dart';
+import 'package:vkuniversal/features/auth/domain/usecases/logout.dart';
 import 'package:vkuniversal/features/auth/domain/usecases/refresh_token.dart';
 import 'package:vkuniversal/features/auth/domain/usecases/sign_in_with_email.dart';
 import 'package:vkuniversal/features/auth/domain/usecases/sign_up_with_email.dart';
@@ -54,6 +55,7 @@ Future<void> initializeDependencies() async {
       () => UpdateStudentInfo(infoReposirory: sl()));
   sl.registerFactory<LoadProfileUseCase>(
       () => LoadProfileUseCase(profileRepository: sl()));
+  sl.registerFactory<Logout>(() => Logout(authRepository: sl()));
 
   sl.registerFactory<SignUpBloc>(() => SignUpBloc(sl()));
   sl.registerFactory<SignInBloc>(() => SignInBloc(sl()));

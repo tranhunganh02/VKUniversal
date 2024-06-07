@@ -6,7 +6,7 @@ class StudentModel extends UserModel {
   final String? studentCode;
   final String? surname;
   final String? lastname;
-  final DateTime? dateOfBirth;
+  final String? dateOfBirth;
   final Gender? gender;
   final int? addMissionYear;
   final int? status;
@@ -35,7 +35,7 @@ class StudentModel extends UserModel {
     return StudentModel(
       uid: json['user_id'],
       email: json['email'],
-      displayName: json['displayName'],
+      displayName: json['surname'] + " " + json['last_name'],
       role: json['role'],
       phoneNumber: json['phoneNumber'],
       createdAt: json['createdAt'],

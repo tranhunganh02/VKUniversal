@@ -6,8 +6,7 @@ class ProfileModel extends ProfileEntity {
   final UserModel user;
 
   factory ProfileModel.fromJson(Map<String, dynamic> map, int role) {
-    print("Map: ${map}");
-    final userBio = map['metadata']['user_bio'] as String?;
+    final userBio = map['metadata']['user_bio']['bio'] as String?;
     if (userBio == null || userBio.isEmpty) {
       print("Warning: user_bio is null or empty");
       // Handle empty userBio (e.g., return default value, throw exception)
@@ -15,8 +14,6 @@ class ProfileModel extends ProfileEntity {
       return ProfileModel(
           userBio: '', user: UserModel.formJson(map['metadata']['user'], role));
     }
-
-    print("Test : ${userBio}");
 
     final profileModel = ProfileModel(
       userBio: userBio,

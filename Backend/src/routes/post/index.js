@@ -20,6 +20,10 @@ router.get('/all', asyncHandler(postController.getAllPost))
 router.get('/search', asyncHandler(postController.getPostsByField)) 
 router.get('/follow', asyncHandler(postController.getPostFollowed)) 
 
+//like
+router.post('/like', asyncHandler(postController.createLikePost)) 
+router.delete('/like', asyncHandler(postController.UnLikePost)) 
+
 //comment
 router.get('/comment', asyncHandler(commentController.getCommentsById)) 
 router.post('/comment', asyncHandler(commentController.createComment)) 
