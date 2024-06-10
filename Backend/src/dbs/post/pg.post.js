@@ -127,38 +127,73 @@ const updateAttachmentFileUrl = async (attachmentId, newFileUrl) => {
   // Trả về kết quả sau khi cập nhật
   return result[0];
 };
-const getLatestPostsFollowed = async (
-  page, user_id
-) => {
+const getLatestPostsFollowed = async (page, user_id) => {
   const limit = 6;
   const offset = (page - 1) * limit;
+  
   const query = `
-  SELECT p.user_id, p.post_id, p.content, p.created_at, p.updated_at, u.avatar,
-  CASE 
-    WHEN u.role = 1 THEN CONCAT(s.surname, ' ', s.last_name)
-    WHEN u.role = 2 THEN CONCAT(l.surname, ' ', l.last_name)
-    WHEN u.role = 3 THEN d.department_name
-    ELSE NULL
-  END AS user_name,
-  (SELECT COUNT(*) FROM Post_like pl WHERE pl.post_id = p.post_id) AS like_count,
-  EXISTS (
-    SELECT 1
-    FROM Post_like pl
-    WHERE pl.user_id = $1 AND pl.post_id = p.post_id
-  ) AS liked_by_user
-  FROM post p
-  JOIN users u ON p.user_id = u.user_id
-  LEFT JOIN student s ON u.role = 1 AND u.user_id = s.user_id
-  LEFT JOIN lecturer l ON u.role = 2 AND u.user_id = l.user_id
-  LEFT JOIN department d ON u.role = 3 AND u.user_id = d.user_id
-  WHERE p.user_id IN (
-      SELECT followed_id
-      FROM follow
-      WHERE follower_id = $1
-  )
-  ORDER BY p.created_at DESC
-  LIMIT $2 OFFSET $3;
-`;
+    WITH UserRoles AS (
+      SELECT 
+        u.user_id,
+        u.role,
+        u.avatar,
+        COALESCE(
+          CASE 
+            WHEN u.role = 1 THEN CONCAT(s.surname, ' ', s.last_name)
+            WHEN u.role = 2 THEN CONCAT(l.surname, ' ', l.last_name)
+            WHEN u.role = 3 THEN d.department_name
+          END,
+          'Unknown'
+        ) AS user_name
+      FROM users u
+      LEFT JOIN student s ON u.user_id = s.user_id AND u.role = 1
+      LEFT JOIN lecturer l ON u.user_id = l.user_id AND u.role = 2
+      LEFT JOIN department d ON u.user_id = d.user_id AND u.role = 3
+    ),
+    PostLikes AS (
+      SELECT 
+        pl.post_id,
+        COUNT(*)::int AS like_count
+      FROM Post_like pl
+      GROUP BY pl.post_id
+    ),
+    PostAttachments AS (
+      SELECT 
+        a.post_id,
+        COALESCE(
+          STRING_AGG(a.file_url, ', ') FILTER (WHERE a.file_url IS NOT NULL),
+          'No image'
+        ) AS image_urls
+      FROM Attachment a
+      GROUP BY a.post_id
+    )
+    SELECT 
+      p.user_id, 
+      p.post_id, 
+      p.content, 
+      p.created_at, 
+      p.updated_at, 
+      ur.avatar,
+      ur.user_name,
+      COALESCE(pl.like_count, 0) AS like_count,
+      EXISTS (
+        SELECT 1
+        FROM Post_like pl
+        WHERE pl.user_id = $1 AND pl.post_id = p.post_id
+      ) AS liked_by_user,
+      pa.image_urls
+    FROM post p
+    JOIN UserRoles ur ON p.user_id = ur.user_id
+    LEFT JOIN PostLikes pl ON p.post_id = pl.post_id
+    LEFT JOIN PostAttachments pa ON p.post_id = pa.post_id
+    WHERE p.user_id IN (
+        SELECT followed_id
+        FROM follow
+        WHERE follower_id = $1
+    )
+    ORDER BY p.created_at DESC
+    LIMIT $2 OFFSET $3;
+  `;
 
   const values = [user_id, limit, offset];
   const result = await db.query(query, values);
@@ -192,91 +227,147 @@ const getLatestPostsByDepartment = async (
 };
 
 const getLatestPosts = async (page, user_id) => {
-  console.log(
-    user_id
-  );
+  console.log(user_id);
   const limit = 6;
-  const offset = (page - 1) * limit; // Tính offset dựa trên trang
+  const offset = (page - 1) * limit;
 
   const query = `
- SELECT 
-  p.user_id, 
-  p.post_id, 
-  p.content, 
-  p.created_at, 
-  p.updated_at, 
-  u.avatar, 
-  u.role,
-  COALESCE(
-    CASE 
-      WHEN u.role = 1 THEN (SELECT CONCAT(s.surname, ' ', s.last_name) FROM student s WHERE s.user_id = u.user_id)
-      WHEN u.role = 2 THEN (SELECT CONCAT(l.surname, ' ', l.last_name) FROM lecturer l WHERE l.user_id = u.user_id)
-      WHEN u.role = 3 THEN (SELECT d.department_name FROM department d WHERE d.user_id = u.user_id)
-    END,
-    'Unknown'
-  ) AS user_name,
-  (SELECT COUNT(*)::int FROM Post_like pl WHERE pl.post_id = p.post_id) AS like_count,
-  EXISTS (
-    SELECT 1
-    FROM Post_like pl
-    WHERE pl.user_id = $1 AND pl.post_id = p.post_id
-  ) AS liked_by_user
-FROM post p
-JOIN users u ON p.user_id = u.user_id
-WHERE p.privacy = false
-ORDER BY p.created_at DESC
-LIMIT $2 OFFSET $3;
-
+    WITH UserRoles AS (
+      SELECT 
+        u.user_id,
+        u.role,
+        u.avatar,
+        COALESCE(
+          CASE 
+            WHEN u.role = 1 THEN CONCAT(s.surname, ' ', s.last_name)
+            WHEN u.role = 2 THEN CONCAT(l.surname, ' ', l.last_name)
+            WHEN u.role = 3 THEN d.department_name
+          END,
+          'Unknown'
+        ) AS user_name
+      FROM users u
+      LEFT JOIN student s ON u.user_id = s.user_id AND u.role = 1
+      LEFT JOIN lecturer l ON u.user_id = l.user_id AND u.role = 2
+      LEFT JOIN department d ON u.user_id = d.user_id AND u.role = 3
+    ),
+    PostLikes AS (
+      SELECT 
+        pl.post_id,
+        COUNT(*)::int AS like_count
+      FROM Post_like pl
+      GROUP BY pl.post_id
+    ),
+    PostAttachments AS (
+      SELECT 
+        a.post_id,
+        COALESCE(
+          STRING_AGG(a.file_url, ', ') FILTER (WHERE a.file_url IS NOT NULL),
+          'No image'
+        ) AS image_urls
+      FROM Attachment a
+      GROUP BY a.post_id
+    )
+    SELECT 
+      p.user_id, 
+      p.post_id, 
+      p.content, 
+      p.created_at, 
+      p.updated_at, 
+      ur.avatar, 
+      ur.role,
+      ur.user_name,
+      COALESCE(pl.like_count, 0) AS like_count,
+      EXISTS (
+        SELECT 1
+        FROM Post_like pl
+        WHERE pl.user_id = $1 AND pl.post_id = p.post_id
+      ) AS liked_by_user,
+      pa.image_urls
+    FROM post p
+    JOIN UserRoles ur ON p.user_id = ur.user_id
+    LEFT JOIN PostLikes pl ON p.post_id = pl.post_id
+    LEFT JOIN PostAttachments pa ON p.post_id = pa.post_id
+    WHERE p.privacy = false
+    ORDER BY p.created_at DESC
+    LIMIT $2 OFFSET $3;
   `;
+  
   const values = [user_id, limit, offset];
-
   const result = await db.query(query, values);
   return result;
 };
 
-const getLatestPostsByField = async (field, page=1) => {
+
+const getLatestPostsByField = async (field, page = 1, user_id) => {
   const limit = 6;
-  const offset = (page - 1) * limit; // Tính offset dựa trên trang
+  const offset = (page - 1) * limit;
 
   console.log("s", field);
 
   const query = `
-  SELECT p.post_id, p.content, p.created_at, u.email,
-  COALESCE(pl.like_count, 0) AS like_count,
-  EXISTS (
-    SELECT 1
-    FROM Post_like pl
-    WHERE pl.user_id = $1 AND pl.post_id = p.post_id
-  ) AS liked_by_user,
-  (
-    SELECT
-      CASE 
-        WHEN u.role = 1 THEN CONCAT(s.surname, ' ', s.last_name)
-        WHEN u.role = 2 THEN CONCAT(l.surname, ' ', l.last_name)
-        WHEN u.role = 3 THEN d.department_name
-        ELSE 'Unknown'
-      END AS user_name
-    FROM dual -- Hoặc bất kỳ bảng nhỏ nào có ít dòng nhất trong cơ sở dữ liệu
-    LEFT JOIN student s ON u.user_id = s.user_id AND u.role = 1
-    LEFT JOIN lecturer l ON u.user_id = l.user_id AND u.role = 2
-    LEFT JOIN department d ON u.user_id = d.user_id AND u.role = 3
-    WHERE u.user_id = p.user_id
-  ) AS name
-FROM post p
-JOIN users u ON p.user_id = u.user_id
-LEFT JOIN (
-  SELECT post_id, COUNT(*) AS like_count
-  FROM Post_like
-  GROUP BY post_id
-) pl ON p.post_id = pl.post_id
-WHERE p.content ILIKE '%${field}%' OR u.email LIKE '%${field}%'
-ORDER BY p.post_id DESC
-LIMIT ${limit} OFFSET ${offset};
-
+    WITH UserRoles AS (
+      SELECT 
+        u.user_id,
+        u.role,
+        u.email,
+        COALESCE(
+          CASE 
+            WHEN u.role = 1 THEN CONCAT(s.surname, ' ', s.last_name)
+            WHEN u.role = 2 THEN CONCAT(l.surname, ' ', l.last_name)
+            WHEN u.role = 3 THEN d.department_name
+          END,
+          'Unknown'
+        ) AS user_name
+      FROM users u
+      LEFT JOIN student s ON u.user_id = s.user_id AND u.role = 1
+      LEFT JOIN lecturer l ON u.user_id = l.user_id AND u.role = 2
+      LEFT JOIN department d ON u.user_id = d.user_id AND u.role = 3
+    ),
+    PostLikes AS (
+      SELECT 
+        pl.post_id,
+        COUNT(*)::int AS like_count
+      FROM Post_like pl
+      GROUP BY pl.post_id
+    ),
+    PostAttachments AS (
+      SELECT 
+        a.post_id,
+        COALESCE(
+          STRING_AGG(a.file_url, ', ') FILTER (WHERE a.file_url IS NOT NULL),
+          'No image'
+        ) AS image_urls
+      FROM Attachment a
+      GROUP BY a.post_id
+    )
+    SELECT 
+      p.post_id, 
+      p.content, 
+      p.created_at, 
+      ur.email,
+      COALESCE(pl.like_count, 0) AS like_count,
+      EXISTS (
+        SELECT 1
+        FROM Post_like pl
+        WHERE pl.user_id = $1 AND pl.post_id = p.post_id
+      ) AS liked_by_user,
+      ur.user_name,
+      pa.image_urls
+    FROM post p
+    JOIN UserRoles ur ON p.user_id = ur.user_id
+    LEFT JOIN PostLikes pl ON p.post_id = pl.post_id
+    LEFT JOIN PostAttachments pa ON p.post_id = pa.post_id
+    WHERE 
+      p.content ILIKE '%' || $2 || '%' OR ur.email LIKE '%' || $2 || '%'
+    ORDER BY p.post_id DESC
+    LIMIT $3 OFFSET $4;
   `;
-  const result = await db.query(query);
+  
+  const values = [user_id, field, limit, offset];
+  const result = await db.query(query, values);
   return result;
 };
+
 
 const likePost = async (post_id, user_id) => {
   const queryCheck = "  SELECT 1 FROM Post_like WHERE user_id = $2 AND post_id = $1 "
