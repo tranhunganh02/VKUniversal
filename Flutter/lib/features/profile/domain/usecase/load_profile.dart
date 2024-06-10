@@ -4,7 +4,8 @@ import 'package:vkuniversal/features/auth/data/models/authorization.dart';
 import 'package:vkuniversal/features/profile/domain/entities/profile.dart';
 import 'package:vkuniversal/features/profile/domain/repository/profile_repository.dart';
 
-class LoadProfileUseCase implements UseCase<DataState<ProfileEntity>, Authorization> {
+class LoadProfileUseCase
+    implements UseCase<DataState<ProfileEntity>, Authorization> {
   final ProfileRepository _profileRepository;
 
   LoadProfileUseCase({required ProfileRepository profileRepository})

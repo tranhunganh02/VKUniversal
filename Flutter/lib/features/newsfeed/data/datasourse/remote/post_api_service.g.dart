@@ -13,7 +13,7 @@ class _PostApiService implements PostApiService {
     this._dio, {
     this.baseUrl,
   }) {
-    baseUrl ??= 'http://192.168.1.7:5055/v1/api/vkuniversal';
+    baseUrl ??= 'https://hunganhvku.id.vn/v1/api/vkuniversal';
   }
 
   final Dio _dio;
@@ -21,22 +21,23 @@ class _PostApiService implements PostApiService {
   String? baseUrl;
 
   @override
-  Future<HttpResponse<PostModel>> getPosts(
+  Future<HttpResponse<List<PostModel>>> getPosts(
     int userID,
     String accessToken,
-    int page,
+    PageRequest page,
   ) async {
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{
       r'x-client-id': userID,
-      r'x-rtoken-id': accessToken,
+      r'authorization': accessToken,
     };
     _headers.removeWhere((k, v) => v == null);
-    final _data = page;
+    final _data = <String, dynamic>{};
+    _data.addAll(page.toJson());
     final _result = await _dio.fetch<Map<String, dynamic>>(
-        _setStreamType<HttpResponse<PostModel>>(Options(
-      method: 'POST',
+        _setStreamType<HttpResponse<List<PostModel>>>(Options(
+      method: 'GET',
       headers: _headers,
       extra: _extra,
     )
@@ -51,7 +52,10 @@ class _PostApiService implements PostApiService {
               _dio.options.baseUrl,
               baseUrl,
             ))));
-    final value = PostModel.fromJson(_result.data!);
+    List<PostModel> value = _result.data!['metadata']
+        .map<PostModel>(
+            (dynamic i) => PostModel.fromJson(i as Map<String, dynamic>))
+        .toList();
     final httpResponse = HttpResponse(value, _result);
     return httpResponse;
   }

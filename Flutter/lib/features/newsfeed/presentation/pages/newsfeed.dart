@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:icons_plus/icons_plus.dart';
 import 'package:vkuniversal/core/utils/screen_scale.dart';
+import 'package:vkuniversal/features/newsfeed/presentation/pages/tabs/explore_tab.dart';
+import 'package:vkuniversal/features/newsfeed/presentation/pages/tabs/following_tab.dart';
 import 'package:vkuniversal/features/newsfeed/presentation/widgets/create_post_bottom_sheet.dart';
-import 'package:vkuniversal/features/newsfeed/presentation/widgets/post_card.dart';
 
 class NewsfeedPage extends StatefulWidget {
   const NewsfeedPage({super.key});
@@ -11,12 +12,32 @@ class NewsfeedPage extends StatefulWidget {
   State<NewsfeedPage> createState() => _NewsfeedPageState();
 }
 
-class _NewsfeedPageState extends State<NewsfeedPage> {
+class _NewsfeedPageState extends State<NewsfeedPage>
+    with TickerProviderStateMixin {
   @override
   Widget build(BuildContext context) {
     double width = ScreenScale(context: context).getWidth();
+    double height = ScreenScale(context: context).getHeight();
     ColorScheme colorScheme = Theme.of(context).colorScheme;
     TextTheme textTheme = Theme.of(context).textTheme;
+
+    final tabs = <Widget>[
+      Text(
+        "Explore",
+        style: textTheme.labelSmall?.copyWith(
+          color: colorScheme.primary,
+        ),
+      ),
+      Text(
+        "Following",
+        style: textTheme.labelSmall?.copyWith(
+          color: colorScheme.primary,
+        ),
+      ),
+    ];
+    TabController tabController =
+        TabController(length: tabs.length, vsync: this);
+
     return Scaffold(
       appBar: AppBar(
         automaticallyImplyLeading: false,
@@ -37,11 +58,11 @@ class _NewsfeedPageState extends State<NewsfeedPage> {
           ),
         ],
       ),
-      body: Container(
-        decoration: BoxDecoration(
-          color: colorScheme.surfaceContainer,
-        ),
-        child: SingleChildScrollView(
+      body: SingleChildScrollView(
+        child: Container(
+          decoration: BoxDecoration(
+            color: colorScheme.surfaceContainer,
+          ),
           child: Column(
             children: [
               Container(
@@ -84,8 +105,26 @@ class _NewsfeedPageState extends State<NewsfeedPage> {
                   ],
                 ),
               ),
-              PostCard(),
-              PostCard(),
+              Container(
+                width: double.maxFinite,
+                height: height * 0.07,
+                child: TabBar(
+                  tabs: tabs,
+                  controller: tabController,
+                  isScrollable: false,
+                ),
+              ),
+              Container(
+                width: double.maxFinite,
+                height: height * 1,
+                child: TabBarView(
+                  children: <Widget>[
+                    ExploreTab(),
+                    FollowingTab(),
+                  ],
+                  controller: tabController,
+                ),
+              ),
             ],
           ),
         ),

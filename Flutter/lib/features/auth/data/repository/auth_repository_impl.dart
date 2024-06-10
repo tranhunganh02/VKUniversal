@@ -2,6 +2,7 @@ import 'dart:io';
 import 'package:dio/dio.dart';
 import 'package:logger/logger.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:vkuniversal/core/constants/refresh_token.dart';
 import 'package:vkuniversal/core/constants/share_pref.dart';
 import 'package:vkuniversal/core/resources/data_state.dart';
 import 'package:vkuniversal/core/utils/injection_container.dart';
@@ -14,6 +15,7 @@ import 'package:vkuniversal/features/auth/data/models/student_info_checker.dart'
 import 'package:vkuniversal/features/auth/data/models/user_response.dart';
 import 'package:vkuniversal/features/auth/domain/entities/user_response.dart';
 import 'package:vkuniversal/features/auth/domain/repository/auth_repository.dart';
+import 'package:vkuniversal/features/auth/domain/usecases/logout.dart';
 import 'package:vkuniversal/features/auth/domain/usecases/sign_in_with_email.dart';
 
 class AuthRepositoryImpl implements AuthRepository {
@@ -113,7 +115,7 @@ class AuthRepositoryImpl implements AuthRepository {
   @override
   Future<DataState<UserResponseEntity>> refreshToken({
     required int userID,
-    required String refreshToken,
+    required String refreshTokenPara,
     required String accessToken,
   }) async {
     try {
@@ -121,7 +123,7 @@ class AuthRepositoryImpl implements AuthRepository {
 
       final response = await _authApiService.refreshToken(
         userID,
-        refreshToken,
+        refreshTokenPara,
       );
       _logger.d("Refreshing token...");
       if (response.response.statusCode == HttpStatus.ok) {
@@ -129,14 +131,24 @@ class AuthRepositoryImpl implements AuthRepository {
         _pref.setString('accessToken', response.data.token.accessToken);
         _logger.d("Refresh token successful");
         return DataSuccess(response.data);
-      } else {
+      }
+      if (response.response.statusCode == HttpStatus.unauthorized) {
         _logger.e("Refresh token failed: ");
         final signIn = sl<SignInWithEmail>();
         LoginInfo loginInfo = SetUpLoginInfo(_pref);
         signIn(
             data: SignInRequest(
-                email: loginInfo.email, password: loginInfo.password));
+          email: loginInfo.email,
+          password: loginInfo.password,
+        ));
+        Authorization authorization = SetUpAuthData(_pref);
+        return await refreshToken(
+            userID: authorization.userID,
+            refreshTokenPara: authorization.refreshToken,
+            accessToken: authorization.accessToken);
+      } else {
         RequestOptions options = RequestOptions();
+        Logout(authRepository: sl());
         return DataFailed(DioException(requestOptions: options));
       }
     } on DioException catch (e) {
@@ -158,6 +170,15 @@ class AuthRepositoryImpl implements AuthRepository {
 
       if (response.response.statusCode == HttpStatus.ok) {
         return DataSuccess(response.data);
+      } else if (response.response.statusCode == HttpStatus.unauthorized) {
+        RefreshTokenCommon();
+        SharedPreferences _pref = await SharedPreferences.getInstance();
+        Authorization authorization = SetUpAuthData(_pref);
+
+        return await checkUserInfoExists(
+          userID: authorization.userID,
+          accessToken: authorization.accessToken,
+        );
       } else {
         _logger.e("Refresh token failed: ");
         RequestOptions options = RequestOptions();

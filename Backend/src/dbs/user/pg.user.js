@@ -178,17 +178,17 @@ WHERE
     console.log("vo day");
     query2 = `
     SELECT 
-      d.department_id,
-      d.department_name,
-      d.user_id,
-      u.email,
-      u.avatar
-    FROM 
-      department d
-    LEFT JOIN
-      users u ON d.user_id = u.user_id
-    WHERE
-        user_id = $1;
+    d.department_id,
+    d.department_name,
+    d.user_id,
+    u.email,
+    u.avatar
+FROM 
+    department d
+LEFT JOIN
+    users u ON d.user_id = u.user_id
+WHERE
+    d.user_id = $1;
   `;
   } else return false;
 

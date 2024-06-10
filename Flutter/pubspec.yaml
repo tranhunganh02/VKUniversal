@@ -52,6 +52,7 @@ dependencies:
   lucide_icons_flutter: ^1.0.8
   connectivity_plus: ^6.0.3
   syncfusion_flutter_datepicker: ^25.2.4
+  redacted: ^1.0.11
 
 dev_dependencies:
   logger: any  #for logging purpose

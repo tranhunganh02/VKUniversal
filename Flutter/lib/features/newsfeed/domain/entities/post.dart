@@ -1,18 +1,18 @@
 import 'package:equatable/equatable.dart';
 
 class PostEntity extends Equatable {
-  final int post_id;
+  final int postID;
   final String? content;
   final bool privacy;
   final int likes;
 
   PostEntity({
-    required this.post_id,
+    required this.postID,
     this.content,
-    this.privacy = true,
+    this.privacy = false,
     required this.likes,
   });
 
   @override
-  List<Object?> get props => throw UnimplementedError();
+  List<Object?> get props => [postID];
 }

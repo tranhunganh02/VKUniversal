@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:vkuniversal/core/utils/icon_string.dart';
-import 'package:vkuniversal/core/utils/screen_scale.dart';
-import 'package:vkuniversal/features/newsfeed/presentation/widgets/avatar.dart';
 
 class PostBottomSheet extends StatefulWidget {
   const PostBottomSheet({super.key});

@@ -2,13 +2,11 @@ import 'dart:io';
 
 import 'package:dio/dio.dart';
 import 'package:vkuniversal/core/resources/data_state.dart';
-import 'package:vkuniversal/core/utils/injection_container.dart';
 import 'package:vkuniversal/features/auth/data/data_sources/local/class_local_service.dart';
 import 'package:vkuniversal/features/auth/data/data_sources/remote/user_api_service.dart';
 import 'package:vkuniversal/features/auth/data/models/university.dart';
 import 'package:vkuniversal/features/auth/domain/entities/major.dart';
 import 'package:vkuniversal/features/auth/domain/repository/user_info_repository.dart';
-import 'package:vkuniversal/features/auth/domain/usecases/refresh_token.dart';
 
 class UserInfoReposiroryImpl implements UserInfoRepository {
   final ClassLocalService _classLocalService;

@@ -17,7 +17,7 @@ abstract interface class AuthRepository {
 
   Future<DataState<UserResponseEntity>> refreshToken({
     required int userID,
-    required String refreshToken,
+    required String refreshTokenPara,
     required String accessToken,
   });
 

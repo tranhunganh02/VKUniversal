@@ -34,7 +34,7 @@ class PostService {
       const attachmentURLs = await Promise.all(
         attachments.map(async (attachment) => {
           const url = await uploadFileToFirebase(attachment.buffer, attachment);
-          return createAttachment(newPost.post_id, `${attachment.originalname}`, attachment.mimetype == ("video/mp4") ? 1 : 0, url);
+          return createAttachment(newPost.post_id, `${attachment.fieldname}/${attachment.originalname}`, attachment.mimetype == ("video/mp4") ? 1 : 0, url);
         })
       );
       if (!attachmentURLs) {

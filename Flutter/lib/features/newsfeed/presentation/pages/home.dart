@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:vkuniversal/config/routes/router_name.dart';
-import 'package:vkuniversal/core/constants/constants.dart';
 import 'package:vkuniversal/core/utils/icon_string.dart';
 import 'package:vkuniversal/features/chat/presentation/pages/list_chat.dart';
 import 'package:vkuniversal/features/menu/presentation/pages/menu.dart';

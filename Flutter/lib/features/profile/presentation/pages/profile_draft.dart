@@ -3,7 +3,6 @@ import 'package:logger/logger.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:vkuniversal/core/constants/share_pref.dart';
-import 'package:vkuniversal/core/enum/univeristy_class_enum.dart';
 import 'package:vkuniversal/core/utils/injection_container.dart';
 import 'package:vkuniversal/core/widgets/avatat.dart';
 import 'package:vkuniversal/core/widgets/loader.dart';
@@ -40,7 +39,7 @@ class _ProfilePageState extends State<ProfilePage>
     super.initState();
     _loadDefault();
   }
-
+  
   Future<void> _loadDefault() async {
     Logger _logger = Logger();
     SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -60,14 +59,6 @@ class _ProfilePageState extends State<ProfilePage>
     double heightScreen = MediaQuery.of(context).size.width;
     ColorScheme colorScheme = Theme.of(context).colorScheme;
     TextTheme textTheme = Theme.of(context).textTheme;
-
-    // var image =
-    //     "https://scontent.fdad1-4.fna.fbcdn.net/v/t39.30808-6/427931630_3730941007228005_4002607693884312382_n.jpg?_nc_cat=103&ccb=1-7&_nc_sid=5f2048&_nc_ohc=pKahOw0j4ZkQ7kNvgFkW0xf&_nc_ht=scontent.fdad1-4.fna&oh=00_AYBjZPBhQ9i1AfywfNQgXyJ4Bd5mI2kn7eKTsgi5yMHFaQ&oe=664B9F13";
-    // var username = "Ngọc Huy";
-
-    // String email = "fasfa.21it@gmail.com";
-    // String date_of_birth = "02/12/1992";
-    // String class_user = "21SE1";
 
     final tabs = <Widget>[
       Text("Post"),

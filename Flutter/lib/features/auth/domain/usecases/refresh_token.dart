@@ -15,7 +15,7 @@ class RefreshToken
   Future<DataState<UserResponseEntity>> call({Authorization? data}) {
     return _authRepository.refreshToken(
       userID: data!.userID,
-      refreshToken: data.refreshToken,
+      refreshTokenPara: data.refreshToken,
       accessToken: data.accessToken,
     );
   }

@@ -1,37 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:icons_plus/icons_plus.dart';
-import 'package:vkuniversal/core/utils/date_converter.dart';
 import 'package:vkuniversal/core/utils/screen_scale.dart';
+import 'package:vkuniversal/features/newsfeed/presentation/widgets/avatar.dart';
 
-class PostCard extends StatefulWidget {
-  final String username;
-  final String date;
-  final String avatar;
-  final String? content;
-  final List<String> images;
-  final int likes;
-  const PostCard({
-    super.key,
-    required this.username,
-    required this.date,
-    required this.avatar,
-    this.content,
-    required this.images,
-    required this.likes,
-  });
+class StatelessPostCard extends StatelessWidget {
+  const StatelessPostCard({super.key});
 
-  @override
-  State<PostCard> createState() => _PostCardState();
-}
-
-class _PostCardState extends State<PostCard> {
   @override
   Widget build(BuildContext context) {
     double width = ScreenScale(context: context).getWidth();
     double height = ScreenScale(context: context).getHeight();
     ColorScheme colorScheme = Theme.of(context).colorScheme;
     TextTheme textTheme = Theme.of(context).textTheme;
-    DateConverter dateConverter = convertDate(widget.date);
     return Container(
       color: colorScheme.surface,
       margin: EdgeInsets.only(bottom: 8),
@@ -46,8 +26,8 @@ class _PostCardState extends State<PostCard> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [
-                    CircleAvatar(
-                      backgroundImage: NetworkImage(widget.avatar),
+                    Avatar(
+                      imageUrl: 'assets/images/avatar/img_0542.jpg',
                     ),
                     Padding(
                       padding: const EdgeInsets.only(left: 8),
@@ -55,15 +35,13 @@ class _PostCardState extends State<PostCard> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            "${widget.username}",
+                            "Huyxoann",
                             style: textTheme.bodyMedium?.copyWith(
                               color: colorScheme.onSurface,
                             ),
                           ),
                           Text(
-                            dateConverter.formattedTime +
-                                " " +
-                                dateConverter.formattedDay,
+                            "18:10, Ngày 17/03/2024",
                             style: textTheme.bodySmall?.copyWith(
                               color: colorScheme.onSurface,
                             ),
@@ -85,15 +63,10 @@ class _PostCardState extends State<PostCard> {
             padding: const EdgeInsets.only(left: 16, right: 16, bottom: 8),
             child: Row(
               children: [
-                Expanded(
-                  child: RichText(
-                    text: TextSpan(
-                      text: widget.content ?? "",
-                      style: textTheme.bodyMedium?.copyWith(
-                        color: colorScheme.onSurface,
-                      ),
-                    ),
-                  ),
+                Text(
+                  "Hôm nay là một ngày đẹp trời.",
+                  style: textTheme.bodyMedium
+                      ?.copyWith(color: colorScheme.onSurface),
                 ),
               ],
             ),
@@ -136,16 +109,14 @@ class _PostCardState extends State<PostCard> {
             alignment: Alignment.centerLeft,
             child: Padding(
               padding: const EdgeInsets.only(left: 8, right: 8),
-              child: widget.likes != 0
-                  ? Text(
-                      widget.likes.toString() + " likes",
-                      overflow: TextOverflow.clip,
-                      maxLines: 1,
-                      style: textTheme.bodySmall?.copyWith(
-                        color: colorScheme.onSurface,
-                      ),
-                    )
-                  : Container(),
+              child: Text(
+                "Có Nanoo, Ngocvt.21it và những người khác thích bài viết này.",
+                overflow: TextOverflow.clip,
+                maxLines: 3,
+                style: textTheme.bodySmall?.copyWith(
+                  color: colorScheme.onSurface,
+                ),
+              ),
             ),
           ),
           Container(
@@ -153,7 +124,7 @@ class _PostCardState extends State<PostCard> {
             child: Padding(
               padding: const EdgeInsets.only(left: 8, right: 8),
               child: Text(
-                "Xem bình luận...",
+                "Xem tất cả 23 bình luận...",
                 style: textTheme.bodySmall?.copyWith(
                   color: colorScheme.onSurface,
                 ),

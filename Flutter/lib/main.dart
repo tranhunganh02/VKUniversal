@@ -16,6 +16,7 @@ import 'package:vkuniversal/features/auth/presentation/bloc/welcome/bloc/welcome
 import 'package:vkuniversal/features/auth/presentation/pages/welcome.dart';
 import 'package:vkuniversal/features/newsfeed/presentation/state/home/bloc/home_bloc.dart';
 import 'package:intl/date_symbol_data_local.dart';
+import 'package:vkuniversal/features/newsfeed/presentation/state/newfeeds/bloc/newfeed_bloc.dart';
 import 'package:vkuniversal/features/profile/presentation/state/bloc/profile_bloc.dart';
 
 Future<void> main() async {
@@ -49,6 +50,9 @@ Future<void> main() async {
       BlocProvider(
         create: (_) => sl<ProfileBloc>(),
       ),
+      BlocProvider(
+        create: (_) => sl<NewfeedBloc>(),
+      )
     ],
     child: MyApp(
       isLoggedIn: isLoggedIn,

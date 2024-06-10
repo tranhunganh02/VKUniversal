@@ -1,7 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:retrofit/retrofit.dart';
 import 'package:vkuniversal/core/constants/constants.dart';
-import 'package:vkuniversal/features/auth/data/models/student.dart';
 
 part 'user_api_service.g.dart';
 

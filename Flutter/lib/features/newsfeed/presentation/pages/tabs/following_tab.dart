@@ -1,21 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:vkuniversal/features/newsfeed/presentation/widgets/stateless_post_card.dart';
 
-class PostTab extends StatefulWidget {
-  const PostTab({super.key});
+class FollowingTab extends StatefulWidget {
+  const FollowingTab({super.key});
 
   @override
-  State<PostTab> createState() => _PostTabState();
+  State<FollowingTab> createState() => _FollowingTabState();
 }
 
-class _PostTabState extends State<PostTab> {
+class _FollowingTabState extends State<FollowingTab> {
   @override
   Widget build(BuildContext context) {
-    ColorScheme colorScheme = Theme.of(context).colorScheme;
-    TextTheme textTheme = Theme.of(context).textTheme;
-
-    return Container(
-      child: SingleChildScrollView(
+    return SingleChildScrollView(
+      child: Container(
+        margin: const EdgeInsets.only(
+          bottom: 223,
+        ),
         child: Column(
           children: [
             StatelessPostCard(),
