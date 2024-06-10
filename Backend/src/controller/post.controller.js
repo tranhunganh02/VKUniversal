@@ -22,7 +22,7 @@ class PostController {
   getAllPost = async (req, res, next) => {
     new SuccessResponse({
       message: "get data success",
-      metadata: await PostService.getAllPost(req.body.page),
+      metadata: await PostService.getAllPost(req.body.page, req.user.userId,),
     }).send(res);
   };
   createPost = async (req, res, next) => {
@@ -53,6 +53,18 @@ class PostController {
     new SuccessResponse({
       message: "get data success",
       metadata: await PostService.getPostFollowed(req.body.page),
+    }).send(res);
+  };
+  createLikePost = async (req, res, next) => {
+    new NoContentSuccess({
+      message: "creat like post success",
+      metadata: await PostService.createLikePost(req.body.post_id, req.user.userId),
+    }).send(res);
+  };
+  UnLikePost = async (req, res, next) => {
+    new NoContentSuccess({
+      message: "unlike post success",
+      metadata: await PostService.unLikePost(req.body.post_id, req.user.userId),
     }).send(res);
   };
 }

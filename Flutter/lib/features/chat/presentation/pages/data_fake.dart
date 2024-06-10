@@ -2,13 +2,13 @@ List<Map<String, dynamic>> users = [
   {
     "username": "Ngoc dasdsadss stupid",
     "image":
-        "https://scontent.fdad1-4.fna.fbcdn.net/v/t39.30808-6/427931630_3730941007228005_4002607693884312382_n.jpg?_nc_cat=103&ccb=1-7&_nc_sid=5f2048&_nc_ohc=pKahOw0j4ZkQ7kNvgFkW0xf&_nc_ht=scontent.fdad1-4.fna&oh=00_AYBjZPBhQ9i1AfywfNQgXyJ4Bd5mI2kn7eKTsgi5yMHFaQ&oe=664B9F13",
+        "https://s3-alpha-sig.figma.com/img/0ef5/a425/d54d5aac846685cd06919dd9ebffedcf?Expires=1717977600&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4&Signature=VafffynTy1Z5o15ROFVdDvQixSPWlh8pGxXebcY49YRbOQYJTXC1PKKdn03qbj7spe3fBvMEDhjsopS6xMMrCZ7AZLDcPkrdd-WbZk-QH5AE8qEDt6qPQzJtsNFQO7lHwEQCe2UXMqhBIhcWhPbWeI5yzaxBnIvtQ2hcJ-Bd0Dw9E6E6iNI9l9~TnooCZGoqoaWOHe3Z3w2XLj8sKcY9rTWEBOvEwe5ZDwioI3lndnEHaKLppVGZnV2ULMHHBq4aL9UcGfbKgvTGRnpVSOTDDbgp8lGuJTOqSOEyQqijlJEzxx87dsnAja323uAkV0DXXpnNhf-6g4B6Aty-9H04Ug__",
     "id": 10,
   },
   {
     "username": "Ngoc stupid",
     "image":
-        "https://scontent.fdad1-4.fna.fbcdn.net/v/t39.30808-6/427931630_3730941007228005_4002607693884312382_n.jpg?_nc_cat=103&ccb=1-7&_nc_sid=5f2048&_nc_ohc=pKahOw0j4ZkQ7kNvgFkW0xf&_nc_ht=scontent.fdad1-4.fna&oh=00_AYBjZPBhQ9i1AfywfNQgXyJ4Bd5mI2kn7eKTsgi5yMHFaQ&oe=664B9F13",
+        "https://s3-alpha-sig.figma.com/img/0ef5/a425/d54d5aac846685cd06919dd9ebffedcf?Expires=1717977600&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4&Signature=VafffynTy1Z5o15ROFVdDvQixSPWlh8pGxXebcY49YRbOQYJTXC1PKKdn03qbj7spe3fBvMEDhjsopS6xMMrCZ7AZLDcPkrdd-WbZk-QH5AE8qEDt6qPQzJtsNFQO7lHwEQCe2UXMqhBIhcWhPbWeI5yzaxBnIvtQ2hcJ-Bd0Dw9E6E6iNI9l9~TnooCZGoqoaWOHe3Z3w2XLj8sKcY9rTWEBOvEwe5ZDwioI3lndnEHaKLppVGZnV2ULMHHBq4aL9UcGfbKgvTGRnpVSOTDDbgp8lGuJTOqSOEyQqijlJEzxx87dsnAja323uAkV0DXXpnNhf-6g4B6Aty-9H04Ug__",
     "id": 1,
   },
   {
@@ -60,7 +60,7 @@ List<Map<String, dynamic>> messages = [
     "user_id": 456,
     "user_name": "Bob béo ",
     "avatar":
-        "https://scontent.fdad1-4.fna.fbcdn.net/v/t39.30808-6/427931630_3730941007228005_4002607693884312382_n.jpg?_nc_cat=103&ccb=1-7&_nc_sid=5f2048&_nc_ohc=pKahOw0j4ZkQ7kNvgFkW0xf&_nc_ht=scontent.fdad1-4.fna&oh=00_AYBjZPBhQ9i1AfywfNQgXyJ4Bd5mI2kn7eKTsgi5yMHFaQ&oe=664B9F13",
+        "https://s3-alpha-sig.figma.com/img/88bc/1ffb/51e0056818093212ad081b10dade8b43?Expires=1717977600&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4&Signature=KCk7BGJtJTcUXRqvI9j5PwQXXd5cfvOCaZfb2yGILbpawHBIUcl-51gEZ7hmbvDakfzphzi6x~vxms1FnbAzJCNel~yPfr1DKeLEn-n5sKlmHBd5MXXAjqgX4fWrgf5u4uUHMaGgGR9JzwVU560Fk9lUSZn294QitFLHKDHN68Qy0Ip0EQX7M5noy0Y~PjiS83jBj0RnPP62vmky3BIu1hFFOa4RgMbWbWlsAsl1LkwXMtQTgtDndeAR7SxHW4Sf~KSeJjOmzJcX-VWmweFas7ZHgwHL~gTfQAwbdJqatvNXmqR9zk4N~67oPi~Go-2VLziR6d9Yz7zFIIwS0L2ovg__",
     "last_message": "Message 2 content",
     "photo_url": null,
     "created_at": "2024-04-25T08:45:00"

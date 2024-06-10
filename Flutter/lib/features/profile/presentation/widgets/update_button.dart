@@ -23,9 +23,7 @@ class UpdateButton extends StatelessWidget {
         iconSize: 25,
         padding: EdgeInsets.all(2.5),
         tooltip: "Edit profile",
-        style: ButtonStyle().copyWith(
-            backgroundColor: WidgetStatePropertyAll(colorScheme.surfaceDim)),
-      ),
-    );
+        style: ButtonStyle().copyWith(),
+      ));
   }
 }

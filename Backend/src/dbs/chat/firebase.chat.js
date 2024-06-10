@@ -1,5 +1,5 @@
 const firebase = require("firebase-admin");
-const { getUserAvatar } = require("../user/pg.user");
+const {getUserChat } = require("../user/pg.user");
 const db = firebase.firestore();
 
 const PAGE_SIZE = 7; // Kích thước trang
@@ -38,8 +38,9 @@ const getListChatUser = async (user_id, page = 1) => {
 
      console.log("user kasc laf", userNumbers[0]);
      if (userNumbers.length > 0) {
-         const avatar = await getUserAvatar(userNumbers[0]);
-         chatData.avatar = avatar;
+         const user = await getUserChat(userNumbers[0]);
+         chatData.avatar = user.avatar;
+         chatData.username = user.department_name ? user.department_name : user.surname + user.last_name;
      }
 
      data.push(chatData);
@@ -75,7 +76,7 @@ const createChatRoom = async (user1, user2) => {
           const chatRoomRef = await firebase.firestore().collection('chatroom').add({
             create_at: timestamp,
             users: [user1, user2],
-            lastmessage: null,
+            last_message: null,
           });
           // Lấy thông tin của phòng chat vừa tạo và trả về cùng với Document ID
           const chatRoomSnapshot = await chatRoomRef.get();

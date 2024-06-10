@@ -13,7 +13,7 @@ class _ProfileApiService implements ProfileApiService {
     this._dio, {
     this.baseUrl,
   }) {
-    baseUrl ??= 'http://192.168.1.3:5055/v1/api/vkuniversal';
+    baseUrl ??= apiBaseUrlIos;
   }
 
   final Dio _dio;

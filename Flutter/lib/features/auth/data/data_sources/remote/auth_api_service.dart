@@ -7,7 +7,7 @@ import 'package:vkuniversal/features/auth/data/models/student_info_checker.dart'
 import 'package:vkuniversal/features/auth/data/models/user_response.dart';
 part 'auth_api_service.g.dart';
 
-@RestApi(baseUrl: authAPIBaseURL)
+@RestApi(baseUrl: apiBaseUrlWeb)
 abstract class AuthApiService {
   factory AuthApiService(Dio dio, {String baseUrl}) = _AuthApiService;
 

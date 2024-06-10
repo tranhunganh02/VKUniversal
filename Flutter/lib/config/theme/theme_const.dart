@@ -14,11 +14,11 @@ class MyThemeData {
     onError: Color(0xfffafafa),
     surface: Color(0xfff9f9f9),
     onSurface: Color(0xff000000),
-    surfaceBright: Color(0xfffef7ff),
-    surfaceContainer: Color(0xfff5f5f5),
+    surfaceTint: Color(0xfffef7ff),
     outline: Color(0xff000000),
     outlineVariant: Color(0xffe6e6e6),
-    surfaceDim: Color(0xffdcdcdc),
+    background: Colors.white,
+    onBackground: Colors.white,
   );
   static ColorScheme darkColorScheme = ColorScheme(
     brightness: Brightness.dark,
@@ -32,11 +32,11 @@ class MyThemeData {
     onError: Color(0xfffafafa),
     surface: Color(0xfff9f9f9),
     onSurface: Color(0xff000000),
-    surfaceBright: Color(0xffffffff),
-    surfaceContainer: Color(0xfff5f5f5),
+    surfaceTint: Color(0xffffffff),
     outline: Color(0xff000000),
     outlineVariant: Color(0xffe6e6e6),
-    surfaceDim: Color(0xffdcdcdc),
+    background: Colors.black,
+    onBackground: Colors.black,
   );
 
   static ThemeData lightTheme = ThemeData().copyWith(
@@ -111,6 +111,7 @@ class MyThemeData {
         textStyle: TextStyle(
           fontWeight: FontWeight.w400,
           fontSize: 10,
+          color: Colors.black
         ),
       ),
       labelLarge: GoogleFonts.montserrat(

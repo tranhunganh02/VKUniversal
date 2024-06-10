@@ -139,11 +139,11 @@ const getUserInformationAndProfile = async (user_id, role) => {
         u.avatar
     FROM
         student s
-    JOIN
+      LEFT JOIN 
         university_class uc ON s.class_id = uc.class_id
-    JOIN
+      LEFT JOIN 
         major m ON uc.major_id = m.major_id
-    JOIN
+      LEFT JOIN 
         users u ON s.user_id = u.user_id
     WHERE
         s.user_id = $1;
@@ -195,11 +195,15 @@ WHERE
 };
 
 const checkStudentExist = async (userId) => {
+  console.log("vo day r");
   const query = `
   SELECT 1 FROM student WHERE user_id = $1 AND class_id IS NOT NULL;
   `;
   const values = [userId];
   const result = await db.query(query, values);
+  console.log("result", result);
+
+  console.log("dasd", result[0] == null ? "dell" : "co");
   if (result[0] == null) return false;
 
   return true;
@@ -228,13 +232,40 @@ const unFollow = async (follower_id, followed_id) => {
   }
 };
 
-const getUserAvatar = async (userNumber) => {
-  const query = "SELECT avatar FROM users WHERE user_id = $1";
+const getUserChat = async (userNumber) => {
+  const query = `SELECT 
+  u.user_id,
+  u.avatar,
+  CASE 
+      WHEN u.role = 1 THEN s.surname
+      WHEN u.role = 2 THEN l.surname
+      ELSE NULL
+  END AS surname,
+  CASE 
+      WHEN u.role = 1 THEN s.last_name
+      WHEN u.role = 2 THEN l.last_name
+      ELSE NULL
+  END AS last_name,
+  CASE 
+      WHEN u.role = 3 THEN d.department_name
+      ELSE NULL
+  END AS department_name
+FROM 
+  users u
+LEFT JOIN 
+  student s ON u.user_id = s.user_id AND u.role = 1
+LEFT JOIN 
+  lecturer l ON u.user_id = l.user_id AND u.role = 2
+LEFT JOIN 
+  department d ON u.user_id = d.user_id AND u.role = 3
+WHERE 
+  u.user_id = $1;
+`;
   const values = [userNumber];
   const result = await db.query(query, values);
   if (result.length > 0) {
     console.log("sau khi lay", result[0]);
-    return result[0].avatar;
+    return result[0];
   } else {
     return null;
   }
@@ -250,5 +281,5 @@ module.exports = {
   checkStudentExist,
   makeFollow,
   unFollow,
-  getUserAvatar,
+  getUserChat,
 };

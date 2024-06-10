@@ -59,9 +59,9 @@ class _ProfilePageState extends State<ProfilePage>
     double heightScreen = MediaQuery.of(context).size.width;
     ColorScheme colorScheme = Theme.of(context).colorScheme;
     TextTheme textTheme = Theme.of(context).textTheme;
-
+    final hasNotch = MediaQuery.of(context).padding.top > 0;
     var image =
-        "https://scontent.fdad1-4.fna.fbcdn.net/v/t39.30808-6/427931630_3730941007228005_4002607693884312382_n.jpg?_nc_cat=103&ccb=1-7&_nc_sid=5f2048&_nc_ohc=pKahOw0j4ZkQ7kNvgFkW0xf&_nc_ht=scontent.fdad1-4.fna&oh=00_AYBjZPBhQ9i1AfywfNQgXyJ4Bd5mI2kn7eKTsgi5yMHFaQ&oe=664B9F13";
+        "https://scontent.fdad1-4.fna.fbcdn.net/v/t39.30808-1/427931630_3730941007228005_4002607693884312382_n.jpg?stp=dst-jpg_p480x480&_nc_cat=103&ccb=1-7&_nc_sid=5f2048&_nc_ohc=Bbajr25dO04Q7kNvgF23rqx&_nc_ht=scontent.fdad1-4.fna&oh=00_AYCloW6VeXO9qzUHfGkPi9nzFFx9Sv7ghDp_Lf902fISwQ&oe=6660EE91";
     var username = "Ngọc Huy";
 
     String email = "fasfa.21it@gmail.com";
@@ -85,7 +85,7 @@ class _ProfilePageState extends State<ProfilePage>
               final profile = state.profile;
               return Container(
                 decoration: BoxDecoration(
-                  color: colorScheme.surfaceContainer,
+                  color: colorScheme.onPrimary,
                 ),
                 width: widthScreen,
                 child: SingleChildScrollView(
@@ -98,7 +98,8 @@ class _ProfilePageState extends State<ProfilePage>
                         Container(
                           color: colorScheme.surface,
                           width: widthScreen,
-                          margin: EdgeInsets.only(bottom: 8),
+                          margin: EdgeInsets.only(
+                              bottom: 8, top: hasNotch ? 20 : 0),
                           child: Column(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [

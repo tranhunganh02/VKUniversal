@@ -41,6 +41,7 @@ class _LoginPageState extends State<LoginPage> {
     TextTheme textTheme = Theme.of(context).textTheme;
     ColorScheme colorScheme = Theme.of(context).colorScheme;
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       body: BlocConsumer<SignInBloc, SignInState>(
         listener: (context, state) {
           if (state is LoginSuccess) {

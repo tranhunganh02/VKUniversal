@@ -14,14 +14,15 @@ void main() {
       Logger _logger = Logger();
       final authApiService = AuthApiService(dio);
 
-      final expectedEmail = 'huytn2121@vku.udn.vn';
-      final expectedPassword = 'huyhuy007';
+      final expectedEmail = 'htsang.tg@vku.udn.vn';
+      final expectedPassword = '123456789';
 
       final response = await authApiService.signInWithEmail(SignInRequest(
         email: expectedEmail,
         password: expectedPassword,
       ));
 
+_logger.d(response.data);
       _logger.d(response.response.statusMessage);
 
       expect(response.response.statusCode, HttpStatus.ok);

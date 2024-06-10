@@ -26,9 +26,10 @@ class UserController {
     }).send(res);
   };
   checkStudentExist = async (req, res, next) => {
+    console.log("vao controller");
     new SuccessResponse({
       message: "Get data success",
-      metadata: await UserService.checkStudentExist(req.body.user_id),
+      metadata: await UserService.checkStudentExist(req.user.userId),
     }).send(res);
   };
   createFollow = async (req, res, next) => {

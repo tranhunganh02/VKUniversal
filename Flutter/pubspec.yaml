@@ -35,7 +35,6 @@ dependencies:
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.2
-  google_sign_in: ^6.2.1
   flutter_bloc: ^8.1.0
   shared_preferences: ^2.2.2
   equatable: ^2.0.5
@@ -52,16 +51,19 @@ dependencies:
   lucide_icons_flutter: ^1.0.8
   connectivity_plus: ^6.0.3
   syncfusion_flutter_datepicker: ^25.2.4
+  firebase_core: ^2.31.1
+  firebase_database: ^10.5.5
 
 dev_dependencies:
   logger: any  #for logging purpose
   retrofit_generator: '>=7.0.0 <8.0.0'
   build_runner: '>=2.3.0 <4.0.0'
   json_serializable: ^6.6.2
-  devtools_extensions: ^0.1.0
+  devtools_extensions: ^0.0.10
 
   flutter_test:
     sdk: flutter
+  test: ^1.24.9
 
 
 # For information on the generic Dart part of this file, see the

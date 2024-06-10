@@ -154,9 +154,9 @@ class _PostCardState extends State<PostCard> {
                   height: height * 0.04,
                   alignment: Alignment.centerLeft,
                   decoration: BoxDecoration(
-                      color: colorScheme.surfaceContainer,
+                      color: colorScheme.onPrimary,
                       borderRadius: BorderRadius.circular(20.0),
-                      border: Border.all(color: colorScheme.surfaceContainer)),
+                      border: Border.all(color: colorScheme.onPrimary)),
                   child: Padding(
                     padding: const EdgeInsets.only(left: 8.0),
                     child: Text(

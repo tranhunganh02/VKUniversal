@@ -16,6 +16,13 @@ import 'package:vkuniversal/features/auth/presentation/bloc/add_user_info/bloc/a
 import 'package:vkuniversal/features/auth/presentation/bloc/sign_up/bloc/sign_up_bloc.dart';
 import 'package:vkuniversal/features/auth/presentation/bloc/sign_in/bloc/sign_in_bloc.dart';
 import 'package:vkuniversal/features/auth/presentation/bloc/welcome/bloc/welcome_bloc.dart';
+import 'package:vkuniversal/features/chat/data/data_source/firebase/chat_service.g.dart';
+import 'package:vkuniversal/features/chat/data/data_source/remote/list_chat_api_service.dart';
+import 'package:vkuniversal/features/chat/data/repository/list_room_chat_repository_impl.dart';
+import 'package:vkuniversal/features/chat/domain/repository/list_room_chat_repository.dart';
+import 'package:vkuniversal/features/chat/domain/usecase/fetch_list_chat.dart';
+import 'package:vkuniversal/features/chat/presentation/bloc/list_chat/list_chat_bloc.dart';
+import 'package:vkuniversal/features/chat/presentation/bloc/room_chat/room_chat_bloc.dart';
 import 'package:vkuniversal/features/newsfeed/presentation/state/home/bloc/home_bloc.dart';
 import 'package:vkuniversal/features/profile/data/data_sourse/remote/profile_api_service.dart';
 import 'package:vkuniversal/features/profile/data/repository/profile_repository_impl.dart';
@@ -35,6 +42,8 @@ Future<void> initializeDependencies() async {
   sl.registerFactory<UserApiService>(() => UserApiService(sl()));
   sl.registerFactory<ProfileApiService>(() => ProfileApiService(sl()));
   sl.registerFactory<ClassLocalService>(() => ClassLocalService());
+  sl.registerSingleton<RoomChatService>(RoomChatService(sl()));
+  sl.registerFactory<FirebaseChatService>(() => FirebaseChatService());
 
   sl.registerFactory<AuthRepository>(
       () => AuthRepositoryImpl(authApiService: sl()));
@@ -44,6 +53,9 @@ Future<void> initializeDependencies() async {
   sl.registerFactory<UserInfoRepository>(
       () => UserInfoReposiroryImpl(sl(), classLocalService: sl()));
 
+  sl.registerSingleton<RoomChatRepository>(RoomChatRepositoryImpl(sl()));
+
+  //use case
   sl.registerFactory<SignUpWithEmail>(() => SignUpWithEmail(sl()));
   sl.registerFactory<RefreshToken>(() => RefreshToken(authRepository: sl()));
   sl.registerFactory<CheckUserInfoExists>(
@@ -54,11 +66,15 @@ Future<void> initializeDependencies() async {
       () => UpdateStudentInfo(infoReposirory: sl()));
   sl.registerFactory<LoadProfileUseCase>(
       () => LoadProfileUseCase(profileRepository: sl()));
+  sl.registerSingleton<FetchListChatUseCase>(FetchListChatUseCase(sl()));
 
+  //Bloc
   sl.registerFactory<SignUpBloc>(() => SignUpBloc(sl()));
   sl.registerFactory<SignInBloc>(() => SignInBloc(sl()));
   sl.registerSingleton<ProfileBloc>(ProfileBloc(sl()));
   sl.registerSingleton<WelcomeBloc>(WelcomeBloc());
   sl.registerSingleton<BottomNavigationBloc>(BottomNavigationBloc());
   sl.registerSingleton<AddUserInfoBloc>(AddUserInfoBloc(sl(), sl()));
+  sl.registerFactory<ListChatBloc>(() => ListChatBloc(sl()));
+  sl.registerFactory<RoomChatBloc>(() => RoomChatBloc(sl()));
 }

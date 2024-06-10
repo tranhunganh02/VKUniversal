@@ -7,7 +7,9 @@ const {
   getLatestPosts,
   getLatestPostsFollowed,
   getPostById,
-  getLatestPostsByField
+  getLatestPostsByField,
+  likePost,
+  unlikePost
 } = require("../../dbs/post/pg.post");
 
 const { BadRequestError, NotFoundError } = require("../../core/error.response");
@@ -104,9 +106,9 @@ class PostService {
     return result
   }
 
-  static async getAllPost(page) {
+  static async getAllPost(page, user_id) {
 
-    const result = await getLatestPosts(page);
+    const result = await getLatestPosts(page, user_id);
 
     console.log("ssdad", result);
     if (!result) {
@@ -140,6 +142,23 @@ class PostService {
     if (result.length == 0) throw new NotFoundError("Out of posts to get")
 
     return result
+  }
+  static async createLikePost(post_id, user_id) {
+
+    const result = await likePost(post_id, user_id);
+
+    if (!result) {
+      throw new BadRequestError("Cannot like post");
+    }
+  }
+  static async unLikePost(post_id, user_id) {
+
+    const result = await unlikePost(post_id, user_id);
+
+    if (!result) {
+      throw new BadRequestError("Cannot unlike post");
+    }
+
   }
 
 }

@@ -38,7 +38,7 @@ class _NewsfeedPageState extends State<NewsfeedPage> {
       ),
       body: Container(
         decoration: BoxDecoration(
-          color: colorScheme.surfaceContainer,
+          color: colorScheme.onPrimary,
         ),
         child: SingleChildScrollView(
           child: Column(
@@ -57,10 +57,9 @@ class _NewsfeedPageState extends State<NewsfeedPage> {
                       height: 35,
                       alignment: Alignment.centerLeft,
                       decoration: BoxDecoration(
-                          color: colorScheme.surfaceContainer,
+                          color: colorScheme.onPrimary,
                           borderRadius: BorderRadius.circular(20.0),
-                          border:
-                              Border.all(color: colorScheme.surfaceContainer)),
+                          border: Border.all(color: colorScheme.onPrimary)),
                       child: Padding(
                         padding: const EdgeInsets.only(
                           left: 16,

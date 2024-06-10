@@ -901,7 +901,7 @@ SELECT sell_post_id, image_url[1], product_name, price FROM sell_post ORDER BY c
     WHERE
         s.user_id = 18
 
-
+SELECT 1 FROM student WHERE user_id = 30 AND class_id IS NOT NULL;
 
 
  SELECT EXISTS (
@@ -920,3 +920,4 @@ FROM post p
 JOIN users u ON p.user_id = u.user_id
 WHERE p.content ILIKE '%con%' OR u.email LIKE '%con%'
 LIMIT 6;
+

@@ -1,4 +1,5 @@
 import 'package:connectivity_plus/connectivity_plus.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -16,6 +17,8 @@ import 'package:vkuniversal/features/auth/presentation/bloc/sign_up/bloc/sign_up
 import 'package:vkuniversal/features/auth/presentation/bloc/sign_in/bloc/sign_in_bloc.dart';
 import 'package:vkuniversal/features/auth/presentation/bloc/welcome/bloc/welcome_bloc.dart';
 import 'package:vkuniversal/features/auth/presentation/pages/welcome.dart';
+import 'package:vkuniversal/features/chat/presentation/bloc/list_chat/list_chat_bloc.dart';
+import 'package:vkuniversal/features/chat/presentation/bloc/room_chat/room_chat_bloc.dart';
 import 'package:vkuniversal/features/newsfeed/presentation/state/home/bloc/home_bloc.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:vkuniversal/features/profile/presentation/state/bloc/profile_bloc.dart';
@@ -23,6 +26,7 @@ import 'package:vkuniversal/features/profile/presentation/state/bloc/profile_blo
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await initializeDependencies();
+  await Firebase.initializeApp();
   initializeDateFormatting();
   final prefs = await SharedPreferences.getInstance();
   String? email = await prefs.getString('email');
@@ -50,6 +54,12 @@ Future<void> main() async {
       ),
       BlocProvider(
         create: (_) => sl<ProfileBloc>(),
+      ),
+      BlocProvider(
+        create: (_) => sl<ListChatBloc>(),
+      ),
+      BlocProvider(
+        create: (_) => sl<RoomChatBloc>(),
       ),
     ],
     child: MyApp(

@@ -1,34 +1,25 @@
+import 'package:flutter/material.dart';
 
-  import 'package:flutter/material.dart';
-
-FractionallySizedBox ChatContent(user_id, content) {
-    return FractionallySizedBox(
-                          alignment: user_id == 1
-                              ? Alignment.centerRight
-                              : Alignment.centerLeft,
-                          widthFactor: 0.6,
-                          child: Align(
-                            alignment: user_id == 1
-                                ? Alignment.centerRight
-                                : Alignment.centerLeft,
-                            child: Container(
-                              margin: EdgeInsets.symmetric(vertical: 5.0),
-                              padding: EdgeInsets.all(10.0),
-                              decoration: BoxDecoration(
-                                color: user_id == 1
-                                    ? Colors.blue
-                                    : Colors.grey.withOpacity(0.5),
-                                borderRadius: BorderRadius.circular(20.0),
-                              ),
-                              child: Text(
-                                content,
-                                style: TextStyle(
-                                  color: user_id == 1
-                                      ? Colors.white
-                                      : Colors.black,
-                                ),
-                              ),
-                            ),
-                          ),
-                        );
-  }
+FractionallySizedBox ChatContent(user_id, content, bool checkSender) {
+  return FractionallySizedBox(
+    alignment: checkSender ? Alignment.centerRight : Alignment.centerLeft,
+    widthFactor: 0.6,
+    child: Align(
+      alignment: checkSender ? Alignment.centerRight : Alignment.centerLeft,
+      child: Container(
+        margin: EdgeInsets.symmetric(vertical: 15.0),
+        padding: EdgeInsets.symmetric(vertical: 8, horizontal: 12),
+        decoration: BoxDecoration(
+          color: checkSender ? Colors.blue : Colors.grey.withOpacity(0.5),
+          borderRadius: BorderRadius.circular(15.0),
+        ),
+        child: Text(
+          content.toString(),
+          style: TextStyle(
+            color: checkSender ? Colors.white : Colors.black,
+          ),
+        ),
+      ),
+    ),
+  );
+}
