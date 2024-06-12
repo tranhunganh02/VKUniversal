@@ -65,6 +65,15 @@ class Database {
       throw error; // Re-throw for handling in AccessService
     }
   }
+  async queryGetRowCount(query, values = []) {
+    try {
+      const result = await this.pool.query(query, values);
+      return result.rowCount;
+    } catch (error) {
+      console.error('Error executing query:', error);
+      throw error; // Re-throw for handling in AccessService
+    }
+  }
 
   static getInstance() {
      if (!this.instance) {

@@ -14,6 +14,9 @@ router.put('/attachment', (postController.updatePostAttachment))
 router.post('', asyncHandler(postController.createPost)) 
 router.put('', asyncHandler(postController.updatePost)) 
 router.delete('', asyncHandler(postController.deletePost))
+//like post
+router.post('/like', asyncHandler(postController.createLikePost))
+router.delete('/like', asyncHandler(postController.UnLikePost))
 
 router.get('', asyncHandler(postController.getPost))
 router.get('/all', asyncHandler(postController.getAllPost)) 
