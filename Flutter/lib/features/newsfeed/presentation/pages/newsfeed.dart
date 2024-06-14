@@ -1,9 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:icons_plus/icons_plus.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:vkuniversal/core/constants/constants.dart';
+import 'package:vkuniversal/core/utils/injection_container.dart';
 import 'package:vkuniversal/core/utils/screen_scale.dart';
 import 'package:vkuniversal/features/newsfeed/presentation/pages/tabs/explore_tab.dart';
 import 'package:vkuniversal/features/newsfeed/presentation/pages/tabs/following_tab.dart';
 import 'package:vkuniversal/features/newsfeed/presentation/widgets/create_post_bottom_sheet.dart';
+import 'package:vkuniversal/features/profile/presentation/state/bloc/profile_bloc.dart';
 
 class NewsfeedPage extends StatefulWidget {
   const NewsfeedPage({super.key});
@@ -14,6 +19,23 @@ class NewsfeedPage extends StatefulWidget {
 
 class _NewsfeedPageState extends State<NewsfeedPage>
     with TickerProviderStateMixin {
+  Future<void> _loadDefault() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    setState(() {
+      int roleDefault = prefs.getInt('role') ?? 2;
+      int userIDDefault = prefs.getInt('userID') ?? 14;
+      sl<ProfileBloc>()
+          .add(LoadProfile(role: roleDefault, userID: userIDDefault));
+      logger.d("${roleDefault} ${userIDDefault}");
+    });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _loadDefault();
+  }
+
   @override
   Widget build(BuildContext context) {
     double width = ScreenScale(context: context).getWidth();
@@ -70,9 +92,18 @@ class _NewsfeedPageState extends State<NewsfeedPage>
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
-                    CircleAvatar(
-                      backgroundImage:
-                          AssetImage('assets/images/avatar/img_0542.jpg'),
+                    BlocBuilder<ProfileBloc, ProfileState>(
+                      builder: (context, state) {
+                        if (state is ProfileLoaded) {
+                          return CircleAvatar(
+                            backgroundImage: NetworkImage(
+                                state.profile.user.avatar ?? avatarNotFound),
+                          );
+                        }
+                        return CircleAvatar(
+                          backgroundImage: NetworkImage(avatarNotFound),
+                        );
+                      },
                     ),
                     GestureDetector(
                       onTap: () => showBottomSheet(

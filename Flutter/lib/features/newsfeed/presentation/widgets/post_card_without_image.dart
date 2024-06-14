@@ -1,67 +1,31 @@
-import 'package:carousel_slider/carousel_slider.dart';
-import 'package:expandable_text/expandable_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:icons_plus/icons_plus.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-import 'package:vkuniversal/core/constants/constants.dart';
 import 'package:vkuniversal/core/utils/date_converter.dart';
 import 'package:vkuniversal/core/utils/screen_scale.dart';
-import 'package:vkuniversal/core/widgets/loader.dart';
-import 'package:vkuniversal/features/newsfeed/data/model/attachment.dart';
 import 'package:vkuniversal/features/newsfeed/presentation/state/newfeeds/bloc/newfeed_bloc.dart';
 
-class PostCard extends StatefulWidget {
-  final int postID;
+class PostCardWithoutImage extends StatefulWidget {
   final String username;
   final String date;
   final String avatar;
   final String? content;
-  final List<Attachment> images;
   final int likes;
   final bool isLiked;
-
-  const PostCard({
-    super.key,
-    required this.username,
-    required this.date,
-    required this.avatar,
-    this.content,
-    required this.images,
-    required this.likes,
-    required this.isLiked,
-    required this.postID,
-  });
+  const PostCardWithoutImage(
+      {super.key,
+      required this.username,
+      required this.date,
+      required this.avatar,
+      this.content,
+      required this.likes,
+      required this.isLiked});
 
   @override
-  State<PostCard> createState() => _PostCardState();
+  State<PostCardWithoutImage> createState() => _PostCardWithoutImageState();
 }
 
-class _PostCardState extends State<PostCard> {
-  String? avatarUser;
-  Future<void> _loadDefault() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    setState(() {
-      avatarUser = prefs.getString('avatar');
-    });
-  }
-
-  @override
-  void initState() {
-    super.initState();
-    _loadDefault();
-    logger.d(avatarUser);
-  }
-
-  void _likePost(bool isLiked, int index) {
-    context.read<NewfeedBloc>().add(
-          LikePressed(
-            isLiked: isLiked,
-            postID: widget.postID,
-          ),
-        );
-  }
-
+class _PostCardWithoutImageState extends State<PostCardWithoutImage> {
   @override
   Widget build(BuildContext context) {
     double width = ScreenScale(context: context).getWidth();
@@ -100,7 +64,7 @@ class _PostCardState extends State<PostCard> {
                           ),
                           Text(
                             dateConverter.formattedTime +
-                                ", " +
+                                ", Ngày " +
                                 dateConverter.formattedDay,
                             style: textTheme.bodySmall?.copyWith(
                               color: colorScheme.onSurface,
@@ -124,56 +88,18 @@ class _PostCardState extends State<PostCard> {
             child: Row(
               children: [
                 Expanded(
-                  child: ExpandableText(
-                    widget.content ?? "",
-                    style: textTheme.bodyMedium?.copyWith(
-                      color: colorScheme.onSurface,
+                  child: RichText(
+                    text: TextSpan(
+                      text: widget.content ?? "",
+                      style: textTheme.bodyMedium?.copyWith(
+                        color: colorScheme.onSurface,
+                      ),
                     ),
-                    maxLines: 5,
-                    expandText: "Show more...",
-                    collapseText: "Show less...",
                   ),
-                )
+                ),
               ],
             ),
           ),
-          // Phần ảnh
-          // [NOTE: Mỗi list images đề có trả về một phần từ null nên phải check từ 2]
-          widget.images.length >= 1
-              ? CarouselSlider(
-                  items: widget.images.map((attachment) {
-                    return Builder(
-                      builder: (BuildContext context) {
-                        return Container(
-                          child: Image.network(
-                            attachment.fileURL,
-                            fit: BoxFit.cover,
-                            loadingBuilder: (BuildContext context, Widget child,
-                                ImageChunkEvent? loadingProgress) {
-                              if (loadingProgress == null) return child;
-                              return Loader();
-                            },
-                            errorBuilder: (context, error, stackTrace) {
-                              return SizedBox();
-                            },
-                          ),
-                        );
-                      },
-                    );
-                  }).toList(),
-                  options: CarouselOptions(
-                    height: widget.images.isNotEmpty ? width : 0,
-                    autoPlay: true,
-                    enlargeCenterPage: false,
-                    aspectRatio: 1 / 1,
-                    autoPlayInterval: Duration(seconds: 3),
-                    autoPlayAnimationDuration: Duration(milliseconds: 2000),
-                    autoPlayCurve: Curves.fastOutSlowIn,
-                    enableInfiniteScroll: false,
-                    viewportFraction: 1,
-                  ),
-                )
-              : Container(),
           // Các nút like, cmt,...
           Padding(
             padding: const EdgeInsets.only(left: 8, right: 16),
@@ -186,12 +112,12 @@ class _PostCardState extends State<PostCard> {
                       builder: (context, state) {
                         if (state is NewfeedLoaded && widget.isLiked) {
                           return IconButton(
-                            onPressed: () => _likePost(true, widget.postID),
+                            onPressed: () {},
                             icon: Icon(Iconsax.heart_bold),
                           );
                         }
                         return IconButton(
-                          onPressed: () => _likePost(false, widget.postID),
+                          onPressed: () {},
                           icon: Icon(Iconsax.heart_outline),
                         );
                       },
@@ -249,16 +175,9 @@ class _PostCardState extends State<PostCard> {
               children: [
                 Container(
                   width: width * 0.05,
-                  height: width *
-                      0.05, // Ensure the height is the same as the width for a square container
-                  child: ClipOval(
-                    child: Image.network(
-                      avatarUser ?? avatarNotFound,
-                      fit: BoxFit
-                          .cover, // Ensures the image covers the whole area of the ClipOval
-                      width: double.infinity,
-                      height: double.infinity,
-                    ),
+                  child: CircleAvatar(
+                    backgroundImage:
+                        AssetImage('assets/images/avatar/img_0542.jpg'),
                   ),
                 ),
                 Container(

@@ -1,5 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:get_it/get_it.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:vkuniversal/features/auth/data/data_sources/local/class_local_service.dart';
 import 'package:vkuniversal/features/auth/data/data_sources/remote/auth_api_service.dart';
 import 'package:vkuniversal/features/auth/data/data_sources/remote/user_api_service.dart';
@@ -21,9 +22,13 @@ import 'package:vkuniversal/features/auth/presentation/bloc/welcome/bloc/welcome
 import 'package:vkuniversal/features/newsfeed/data/datasourse/remote/post_api_service.dart';
 import 'package:vkuniversal/features/newsfeed/data/repository/post_repository_impl.dart';
 import 'package:vkuniversal/features/newsfeed/domain/repository/post_repository.dart';
+import 'package:vkuniversal/features/newsfeed/domain/usecase/create_post.dart';
 import 'package:vkuniversal/features/newsfeed/domain/usecase/get_posts.dart';
+import 'package:vkuniversal/features/newsfeed/domain/usecase/like.dart';
+import 'package:vkuniversal/features/newsfeed/domain/usecase/unlike.dart';
 import 'package:vkuniversal/features/newsfeed/presentation/state/home/bloc/home_bloc.dart';
 import 'package:vkuniversal/features/newsfeed/presentation/state/newfeeds/bloc/newfeed_bloc.dart';
+import 'package:vkuniversal/features/newsfeed/presentation/state/posts/bloc/create_post_bloc.dart';
 import 'package:vkuniversal/features/profile/data/data_sourse/remote/profile_api_service.dart';
 import 'package:vkuniversal/features/profile/data/model/profile.dart';
 import 'package:vkuniversal/features/profile/data/repository/profile_repository_impl.dart';
@@ -37,6 +42,7 @@ Future<void> initializeDependencies() async {
   // Dio
   sl.registerSingleton<Dio>(
       Dio(BaseOptions(connectTimeout: Duration(milliseconds: 5000))));
+
   // // Dependencies
 
   sl.registerFactory<AuthApiService>(() => AuthApiService(sl()));
@@ -66,12 +72,16 @@ Future<void> initializeDependencies() async {
       () => LoadProfileUseCase(profileRepository: sl()));
   sl.registerFactory<Logout>(() => Logout(authRepository: sl()));
   sl.registerSingleton<GetPosts>(GetPosts(postRepository: sl()));
+  sl.registerSingleton<CreatePost>(CreatePost(postRepository: sl()));
+  sl.registerSingleton<LikeAPost>(LikeAPost(postRepository: sl()));
+  sl.registerSingleton<Unlike>(Unlike(postRepository: sl()));
 
   sl.registerFactory<SignUpBloc>(() => SignUpBloc(sl()));
   sl.registerFactory<SignInBloc>(() => SignInBloc(sl()));
   sl.registerSingleton<ProfileBloc>(ProfileBloc(sl()));
   sl.registerSingleton<WelcomeBloc>(WelcomeBloc());
   sl.registerSingleton<NewfeedBloc>(NewfeedBloc(sl()));
+  sl.registerSingleton<CreatePostBloc>(CreatePostBloc(sl()));
 
   sl.registerSingleton<BottomNavigationBloc>(BottomNavigationBloc());
   sl.registerSingleton<AddUserInfoBloc>(AddUserInfoBloc(sl(), sl()));
@@ -86,4 +96,9 @@ Future<void> initializeDependencies() async {
       lastLoginAt: '',
       avatar: ''));
   sl.registerFactory<ProfileModel>(() => ProfileModel(userBio: '', user: sl()));
+}
+
+Future<void> setupLocator() async {
+  final sharedPreferences = await SharedPreferences.getInstance();
+  sl.registerSingleton<SharedPreferences>(sharedPreferences);
 }

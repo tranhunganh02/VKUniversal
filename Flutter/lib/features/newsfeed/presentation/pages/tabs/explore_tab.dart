@@ -1,12 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:vkuniversal/core/utils/injection_container.dart';
 import 'package:vkuniversal/core/widgets/loader.dart';
-import 'package:vkuniversal/features/auth/data/models/user.dart';
-import 'package:vkuniversal/features/newsfeed/data/model/post_model.dart';
 import 'package:vkuniversal/features/newsfeed/presentation/state/newfeeds/bloc/newfeed_bloc.dart';
 import 'package:vkuniversal/features/newsfeed/presentation/widgets/post_card.dart';
-import 'package:vkuniversal/features/profile/data/model/profile.dart';
 
 class ExploreTab extends StatefulWidget {
   const ExploreTab({super.key});
@@ -45,12 +41,14 @@ class _ExploreTabState extends State<ExploreTab> {
                 itemCount: state.posts.length,
                 itemBuilder: (context, index) {
                   return PostCard(
+                    postID: state.posts[index].postID,
                     username: state.posts[index].userName,
                     date: state.posts[index].createdAt,
                     avatar: state.posts[index].avatarUrl,
-                    images: [],
+                    images: state.posts[index].images ?? [],
                     content: state.posts[index].content,
                     likes: state.posts[index].likes,
+                    isLiked: state.posts[index].likeByUser,
                   );
                 },
               ),

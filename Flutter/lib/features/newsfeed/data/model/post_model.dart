@@ -1,6 +1,5 @@
-import 'package:vkuniversal/core/utils/injection_container.dart';
+import 'package:vkuniversal/features/newsfeed/data/model/attachment.dart';
 import 'package:vkuniversal/features/newsfeed/domain/entities/post.dart';
-import 'package:vkuniversal/features/profile/data/model/profile.dart';
 
 class PostModel extends PostEntity {
   final int userID;
@@ -10,6 +9,7 @@ class PostModel extends PostEntity {
   final String? updateAt;
   final bool likeByUser;
   final int? role;
+  final List<Attachment>? images;
 
   PostModel({
     required super.postID,
@@ -23,6 +23,7 @@ class PostModel extends PostEntity {
     this.role,
     required this.userName,
     required this.avatarUrl,
+    required this.images,
   });
 
   factory PostModel.fromJson(Map<String, dynamic> json) {
@@ -38,6 +39,33 @@ class PostModel extends PostEntity {
       likeByUser: json['liked_by_user'] ?? false,
       userName: json['user_name'] ?? '',
       avatarUrl: json['avatar'] ?? '',
+      images: (json['image_urls'] as List<dynamic>?)
+          ?.map((imageJson) => Attachment.fromJson(imageJson))
+          .toList(),
+    );
+  }
+
+  PostModel copyWith({
+    int? userID,
+    String? userName,
+    String? avatarUrl,
+    String? createdAt,
+    String? updateAt,
+    bool? likeByUser,
+    int? role,
+    int? likes,
+    List<Attachment>? images,
+  }) {
+    return PostModel(
+      userID: userID ?? this.userID,
+      postID: postID ?? this.postID,
+      userName: userName ?? this.userName,
+      createdAt: createdAt ?? this.createdAt,
+      avatarUrl: avatarUrl ?? this.avatarUrl,
+      images: images ?? this.images,
+      content: content ?? this.content,
+      likes: likes ?? this.likes,
+      likeByUser: likeByUser ?? this.likeByUser,
     );
   }
 }

@@ -116,7 +116,6 @@ class AuthRepositoryImpl implements AuthRepository {
   Future<DataState<UserResponseEntity>> refreshToken({
     required int userID,
     required String refreshTokenPara,
-    required String accessToken,
   }) async {
     try {
       SharedPreferences _pref = await SharedPreferences.getInstance();
@@ -143,9 +142,9 @@ class AuthRepositoryImpl implements AuthRepository {
         ));
         Authorization authorization = SetUpAuthData(_pref);
         return await refreshToken(
-            userID: authorization.userID,
-            refreshTokenPara: authorization.refreshToken,
-            accessToken: authorization.accessToken);
+          userID: authorization.userID,
+          refreshTokenPara: authorization.refreshToken,
+        );
       } else {
         RequestOptions options = RequestOptions();
         Logout(authRepository: sl());

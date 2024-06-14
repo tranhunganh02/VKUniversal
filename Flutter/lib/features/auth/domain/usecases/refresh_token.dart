@@ -16,7 +16,6 @@ class RefreshToken
     return _authRepository.refreshToken(
       userID: data!.userID,
       refreshTokenPara: data.refreshToken,
-      accessToken: data.accessToken,
     );
   }
 }

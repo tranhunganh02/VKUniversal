@@ -17,12 +17,14 @@ import 'package:vkuniversal/features/auth/presentation/pages/welcome.dart';
 import 'package:vkuniversal/features/newsfeed/presentation/state/home/bloc/home_bloc.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:vkuniversal/features/newsfeed/presentation/state/newfeeds/bloc/newfeed_bloc.dart';
+import 'package:vkuniversal/features/newsfeed/presentation/state/posts/bloc/create_post_bloc.dart';
 import 'package:vkuniversal/features/profile/presentation/state/bloc/profile_bloc.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await initializeDependencies();
   initializeDateFormatting();
+  await setupLocator();
   final prefs = await SharedPreferences.getInstance();
   String? email = await prefs.getString('email');
   String? password = await prefs.getString('password');
@@ -52,7 +54,13 @@ Future<void> main() async {
       ),
       BlocProvider(
         create: (_) => sl<NewfeedBloc>(),
-      )
+      ),
+      BlocProvider(
+        create: (_) => sl<CreatePostBloc>(),
+      ),
+      // BlocProvider(
+      //   create: (_) => sl<PostCardBloc>(),
+      // ),
     ],
     child: MyApp(
       isLoggedIn: isLoggedIn,
@@ -70,9 +78,8 @@ class MyApp extends StatelessWidget {
       title: 'Flutter Demo',
       theme: MyThemeData.lightTheme,
       home: isLoggedIn ? CheckUserState() : WelcomePage(),
-      // home: CheckUserState(),
-      // home: AddUserInfoPage(),
       onGenerateRoute: Routes.generateRoute,
+      debugShowCheckedModeBanner: false,
     );
   }
 }

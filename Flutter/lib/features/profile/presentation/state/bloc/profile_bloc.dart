@@ -5,6 +5,8 @@ import 'package:dio/dio.dart';
 import 'package:equatable/equatable.dart';
 import 'package:meta/meta.dart';
 import 'package:logger/logger.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:vkuniversal/core/constants/constants.dart';
 import 'package:vkuniversal/core/resources/data_state.dart';
 import 'package:vkuniversal/features/profile/data/model/profile.dart';
 import 'package:vkuniversal/features/profile/domain/usecase/load_profile.dart';
@@ -29,6 +31,11 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
             if (response.data != null) {
               _logger.d("API Response: ${response.data}");
               _logger.d("Get thanh cong");
+              SharedPreferences prefs = await SharedPreferences.getInstance();
+              ProfileModel profile = response.data as ProfileModel;
+              prefs.setString('avatar', profile.user.avatar ?? avatarNotFound);
+              prefs.setString(
+                  'displayName', profile.user.displayName ?? avatarNotFound);
               emit(
                 ProfileLoaded(
                   profile: response.data as ProfileModel,

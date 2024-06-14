@@ -104,7 +104,7 @@ class _ProfilePageState extends State<ProfilePage>
                                         name: department.departmentName!);
                                   }
                                   return UserLabel(
-                                    name: profile.user.displayName!,
+                                    name: profile.user.displayName??"Not Showing",
                                   );
                                 },
                               ),

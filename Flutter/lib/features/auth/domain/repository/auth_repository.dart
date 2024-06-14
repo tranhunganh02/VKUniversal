@@ -18,7 +18,6 @@ abstract interface class AuthRepository {
   Future<DataState<UserResponseEntity>> refreshToken({
     required int userID,
     required String refreshTokenPara,
-    required String accessToken,
   });
 
   Future<DataState<StudentInfoCheckEntity>> checkUserInfoExists({

@@ -10,11 +10,14 @@ class DateConverter {
 DateConverter convertDate(String dateString) {
   DateTime dateTime = DateTime.parse(dateString);
 
-  // Get the current date and time
-  DateTime now = DateTime.now();
+  // Adjust the time to UTC+7
+  DateTime dateTimeUtc7 = dateTime.toUtc().add(Duration(hours: 7));
+
+  // Get the current date and time in UTC+7
+  DateTime now = DateTime.now().toUtc().add(Duration(hours: 7));
 
   // Calculate the difference in days
-  int differenceInDays = now.difference(dateTime).inDays;
+  int differenceInDays = now.difference(dateTimeUtc7).inDays;
 
   // Create DateFormat objects for date and time
   DateFormat dateFormat = DateFormat.yMd(); // Customize as needed
@@ -27,14 +30,14 @@ DateConverter convertDate(String dateString) {
   // Determine the date string
   String formattedDay;
   if (differenceInDays <= 7) {
-    formattedDay = dayOfWeekFormat.format(dateTime);
+    formattedDay = dayOfWeekFormat.format(dateTimeUtc7);
   } else {
-    formattedDay = dateFormat.format(dateTime);
+    formattedDay = dateFormat.format(dateTimeUtc7);
   }
 
   // Format the DateTime object to a time string
-  String formattedTime =
-      timeFormat.format(dateTime); // hh:mm a will give time in 12-hour format
+  String formattedTime = timeFormat
+      .format(dateTimeUtc7); // hh:mm a will give time in 12-hour format
 
   DateConverter dateConverter =
       DateConverter(formattedDay: formattedDay, formattedTime: formattedTime);

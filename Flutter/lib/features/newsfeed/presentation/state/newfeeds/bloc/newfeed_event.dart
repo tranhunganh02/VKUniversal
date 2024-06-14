@@ -7,3 +7,13 @@ final class LoadPosts extends NewfeedEvent {
   final int page;
   LoadPosts({required this.page});
 }
+
+final class LikePressed extends NewfeedEvent {
+  final bool isLiked;
+  final int postID;
+
+  LikePressed({
+    required this.isLiked,
+    required this.postID,
+  });
+}
