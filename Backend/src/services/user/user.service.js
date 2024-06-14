@@ -1,0 +1,102 @@
+const {
+  updateStudent,
+  updateDepartment,
+  updateLecture,
+  getUserInformationAndProfile,
+  updateUserProfile,
+  checkStudentExist,
+  makeFollow,
+  unFollow
+} = require("../../dbs/user/pg.user");
+
+const { BadRequestError, NotFoundError } = require("../../core/error.response");
+class UserService {
+  //de update can truy thong tin cua bang ( student, lecture, apartment ) va role
+  static async updateUser(user_id, role, payload) {
+    //cac truong bat buoc la role
+    if (role != payload.role) {
+          new BadRequestError("cannot update");
+    }
+    delete payload.role;
+
+    let updatedUser = null;
+
+    console.log("role", role);
+
+    if (role == 1) {
+      updatedUser = await updateStudent(user_id, payload);
+    } else if (role == 2) {
+      const lecture_id = payload.lecture_id;
+      delete payload.lecture_id;
+      updatedUser = await updateLecture(user_id, lecture_id, payload);
+    } else if (role == 3) {
+      const department_id = payload.department_id;
+      delete payload.department_id;
+      updatedUser = await updateDepartment(user_id, department_id, payload);
+    }
+
+    if (!updatedUser) throw new BadRequestError("cannot update");
+  }
+  //update vao profile
+  static async updateProfile(user_id, payload) {
+    console.log("vo day");
+
+    const result = updateUserProfile(user_id, payload.bio);
+
+    if (!result)throw new BadRequestError("cannot update");
+  }
+  static async getProfile(user_id, role) {
+    console.log("id", user_id);
+    const { user_bio, user } = await getUserInformationAndProfile(user_id, role);
+
+    console.log("result", user_bio, user);
+
+    if (!user) throw new NotFoundError();
+
+    return {
+      user_bio: user_bio ? user_bio : null, 
+        user: user
+    };
+
+}
+
+  static async createStudent(user_id) {
+    const result = getUserInformationAndProfile(user_id, payload.role);
+
+    if (!result)throw new BadRequestError("Something went wrong");
+
+    return result;
+  }
+
+  static async checkStudentExist(user_id) {
+    const result = checkStudentExist(user_id);
+
+    if (!result)throw new NotFoundError();
+
+    return result;
+  }
+
+  static async searchUsers(user_ame) {
+    const result = checkStudentExist(user_id);
+
+    if (!result)throw new NotFoundError();
+
+    return result;
+  }
+  static async createFollow(follower_id, followed_id) {
+    const result = await  makeFollow(follower_id, followed_id);
+
+    if (!result)throw new BadRequestError();
+
+    return result;
+  }
+  static async deleteFollow(follower_id, followed_id) {
+    const result = await unFollow(follower_id, followed_id);
+
+    if (!result)throw new BadRequestError();
+
+    return result;
+  }
+}
+
+module.exports = UserService;

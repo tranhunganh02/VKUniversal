@@ -1,21 +1,75 @@
+import 'package:carousel_slider/carousel_slider.dart';
+import 'package:expandable_text/expandable_text.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:icons_plus/icons_plus.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:vkuniversal/core/constants/constants.dart';
+import 'package:vkuniversal/core/utils/date_converter.dart';
 import 'package:vkuniversal/core/utils/screen_scale.dart';
+import 'package:vkuniversal/core/widgets/loader.dart';
+import 'package:vkuniversal/features/newsfeed/data/model/attachment.dart';
+import 'package:vkuniversal/features/newsfeed/presentation/state/newfeeds/bloc/newfeed_bloc.dart';
 
 class PostCard extends StatefulWidget {
-  const PostCard({super.key});
+  final int postID;
+  final String username;
+  final String date;
+  final String avatar;
+  final String? content;
+  final List<Attachment> images;
+  final int likes;
+  final bool isLiked;
+
+  const PostCard({
+    super.key,
+    required this.username,
+    required this.date,
+    required this.avatar,
+    this.content,
+    required this.images,
+    required this.likes,
+    required this.isLiked,
+    required this.postID,
+  });
 
   @override
   State<PostCard> createState() => _PostCardState();
 }
 
 class _PostCardState extends State<PostCard> {
+  String? avatarUser;
+  Future<void> _loadDefault() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    setState(() {
+      avatarUser = prefs.getString('avatar');
+    });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _loadDefault();
+    logger.d(avatarUser);
+  }
+
+  void _likePost(bool isLiked, int index) {
+    context.read<NewfeedBloc>().add(
+          LikePressed(
+            isLiked: isLiked,
+            postID: widget.postID,
+          ),
+        );
+  }
+
   @override
   Widget build(BuildContext context) {
     double width = ScreenScale(context: context).getWidth();
     double height = ScreenScale(context: context).getHeight();
     ColorScheme colorScheme = Theme.of(context).colorScheme;
     TextTheme textTheme = Theme.of(context).textTheme;
+    DateConverter dateConverter = convertDate(widget.date);
+
     return Container(
       color: colorScheme.surface,
       margin: EdgeInsets.only(bottom: 8),
@@ -31,8 +85,7 @@ class _PostCardState extends State<PostCard> {
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [
                     CircleAvatar(
-                      backgroundImage:
-                          AssetImage('assets/images/avatar/img_0542.jpg'),
+                      backgroundImage: NetworkImage(widget.avatar),
                     ),
                     Padding(
                       padding: const EdgeInsets.only(left: 8),
@@ -40,13 +93,15 @@ class _PostCardState extends State<PostCard> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            "Ngọc Võ",
+                            "${widget.username}",
                             style: textTheme.bodyMedium?.copyWith(
                               color: colorScheme.onSurface,
                             ),
                           ),
                           Text(
-                            "18:10, Ngày 17/03/2024",
+                            dateConverter.formattedTime +
+                                ", " +
+                                dateConverter.formattedDay,
                             style: textTheme.bodySmall?.copyWith(
                               color: colorScheme.onSurface,
                             ),
@@ -68,19 +123,57 @@ class _PostCardState extends State<PostCard> {
             padding: const EdgeInsets.only(left: 16, right: 16, bottom: 8),
             child: Row(
               children: [
-                Text(
-                  "Hôm nay là một ngày đẹp trời.",
-                  style: textTheme.bodyMedium
-                      ?.copyWith(color: colorScheme.onSurface),
-                ),
+                Expanded(
+                  child: ExpandableText(
+                    widget.content ?? "",
+                    style: textTheme.bodyMedium?.copyWith(
+                      color: colorScheme.onSurface,
+                    ),
+                    maxLines: 5,
+                    expandText: "Show more...",
+                    collapseText: "Show less...",
+                  ),
+                )
               ],
             ),
           ),
           // Phần ảnh
-          Container(
-            child:
-                Image.asset("assets/images/background/vku_main_building.jpg"),
-          ),
+          // [NOTE: Mỗi list images đề có trả về một phần từ null nên phải check từ 2]
+          widget.images.length >= 1
+              ? CarouselSlider(
+                  items: widget.images.map((attachment) {
+                    return Builder(
+                      builder: (BuildContext context) {
+                        return Container(
+                          child: Image.network(
+                            attachment.fileURL,
+                            fit: BoxFit.cover,
+                            loadingBuilder: (BuildContext context, Widget child,
+                                ImageChunkEvent? loadingProgress) {
+                              if (loadingProgress == null) return child;
+                              return Loader();
+                            },
+                            errorBuilder: (context, error, stackTrace) {
+                              return SizedBox();
+                            },
+                          ),
+                        );
+                      },
+                    );
+                  }).toList(),
+                  options: CarouselOptions(
+                    height: widget.images.isNotEmpty ? width : 0,
+                    autoPlay: true,
+                    enlargeCenterPage: false,
+                    aspectRatio: 1 / 1,
+                    autoPlayInterval: Duration(seconds: 3),
+                    autoPlayAnimationDuration: Duration(milliseconds: 2000),
+                    autoPlayCurve: Curves.fastOutSlowIn,
+                    enableInfiniteScroll: false,
+                    viewportFraction: 1,
+                  ),
+                )
+              : Container(),
           // Các nút like, cmt,...
           Padding(
             padding: const EdgeInsets.only(left: 8, right: 16),
@@ -89,9 +182,19 @@ class _PostCardState extends State<PostCard> {
               children: [
                 Row(
                   children: [
-                    IconButton(
-                      onPressed: () {},
-                      icon: Icon(Iconsax.heart_outline),
+                    BlocBuilder<NewfeedBloc, NewfeedState>(
+                      builder: (context, state) {
+                        if (state is NewfeedLoaded && widget.isLiked) {
+                          return IconButton(
+                            onPressed: () => _likePost(true, widget.postID),
+                            icon: Icon(Iconsax.heart_bold),
+                          );
+                        }
+                        return IconButton(
+                          onPressed: () => _likePost(false, widget.postID),
+                          icon: Icon(Iconsax.heart_outline),
+                        );
+                      },
                     ),
                     IconButton(
                       onPressed: () {},
@@ -114,14 +217,16 @@ class _PostCardState extends State<PostCard> {
             alignment: Alignment.centerLeft,
             child: Padding(
               padding: const EdgeInsets.only(left: 8, right: 8),
-              child: Text(
-                "Có Nanoo, Ngocvt.21it và những người khác thích bài viết này.",
-                overflow: TextOverflow.clip,
-                maxLines: 3,
-                style: textTheme.bodySmall?.copyWith(
-                  color: colorScheme.onSurface,
-                ),
-              ),
+              child: widget.likes != 0
+                  ? Text(
+                      widget.likes.toString() + " likes",
+                      overflow: TextOverflow.clip,
+                      maxLines: 1,
+                      style: textTheme.bodySmall?.copyWith(
+                        color: colorScheme.onSurface,
+                      ),
+                    )
+                  : Container(),
             ),
           ),
           Container(
@@ -129,7 +234,7 @@ class _PostCardState extends State<PostCard> {
             child: Padding(
               padding: const EdgeInsets.only(left: 8, right: 8),
               child: Text(
-                "Xem tất cả 23 bình luận...",
+                "Xem bình luận...",
                 style: textTheme.bodySmall?.copyWith(
                   color: colorScheme.onSurface,
                 ),
@@ -144,9 +249,16 @@ class _PostCardState extends State<PostCard> {
               children: [
                 Container(
                   width: width * 0.05,
-                  child: CircleAvatar(
-                    backgroundImage:
-                        AssetImage('assets/images/avatar/img_0542.jpg'),
+                  height: width *
+                      0.05, // Ensure the height is the same as the width for a square container
+                  child: ClipOval(
+                    child: Image.network(
+                      avatarUser ?? avatarNotFound,
+                      fit: BoxFit
+                          .cover, // Ensures the image covers the whole area of the ClipOval
+                      width: double.infinity,
+                      height: double.infinity,
+                    ),
                   ),
                 ),
                 Container(

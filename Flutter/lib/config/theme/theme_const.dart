@@ -14,7 +14,7 @@ class MyThemeData {
     onError: Color(0xfffafafa),
     surface: Color(0xfff9f9f9),
     onSurface: Color(0xff000000),
-    surfaceBright: Color(0xffffffff),
+    surfaceBright: Color(0xfffef7ff),
     surfaceContainer: Color(0xfff5f5f5),
     outline: Color(0xff000000),
     outlineVariant: Color(0xffe6e6e6),
@@ -74,11 +74,11 @@ class MyThemeData {
           fontWeight: FontWeight.w700,
           fontSize: 25,
           shadows: [
-            Shadow(
-              blurRadius: 4.0,
-              offset: Offset(0, 4.0),
-              color: Colors.black.withOpacity(0.25),
-            )
+            // Shadow(
+            //   blurRadius: 4.0,
+            //   offset: Offset(0, 4.0),
+            //   color: Colors.black.withOpacity(0.25),
+            // )
           ],
         ),
       ),

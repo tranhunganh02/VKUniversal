@@ -1,15 +1,21 @@
 const {
   createPost,
-  getPostById,
   deletePostById,
   updatePost,
   updatePostByIdAndUserId,
-  updateAttachmentFileUrl
+  updateAttachmentFileUrl,
+  getLatestPosts,
+  getLatestPostsFollowed,
+  getPostById,
+  getLatestPostsByField,
+  likePost,
+  unlikePost
 } = require("../../dbs/post/pg.post");
 
-const { BadRequestError } = require("../../core/error.response");
+const { BadRequestError, NotFoundError } = require("../../core/error.response");
 const { uploadFileToFirebase, deleteFileFromFirebase, updateFileFromFirebase } = require("../../dbs/post/firebase.post");
 const { createAttachment } = require("../../dbs/post/pg.attachment");
+const { NoContentSuccess } = require("../../core/success.response");
 class PostService {
   // create post here
   // file_type:0 "image/jpg", :1"video"
@@ -28,7 +34,7 @@ class PostService {
       const attachmentURLs = await Promise.all(
         attachments.map(async (attachment) => {
           const url = await uploadFileToFirebase(attachment.buffer, attachment);
-          return createAttachment(newPost.post_id, attachment.file_name, attachment.file_type, url);
+          return createAttachment(newPost.post_id, `${attachment.fieldname}/${attachment.originalname}`, attachment.mimetype == ("video/mp4") ? 1 : 0, url);
         })
       );
       if (!attachmentURLs) {
@@ -88,6 +94,71 @@ class PostService {
    } catch (error) {
     throw error
    }
+  }
+  static async getPost(post_id) {
+
+    const result = await getPostById(post_id);
+
+    console.log("ssdad", result);
+    if (!result) {
+      throw new BadRequestError("Cannot get post");
+    } 
+    return result
+  }
+
+  static async getAllPost(page, user_id) {
+
+    const result = await getLatestPosts(page, user_id);
+
+    console.log("ssdad", result);
+    if (!result) {
+      throw new BadRequestError("Cannot get post");
+    } 
+
+    if ( result.length == 0 ) throw new NoContentSuccess("Out of posts to get")
+
+    return result
+  }
+  
+  static async getPostFollowed(page) {
+
+    const result = await getLatestPostsFollowed(page);
+
+    if (!result) {
+      throw new BadRequestError("Cannot get post");
+    }
+
+    return result
+  }
+
+  static async getPostsByField(field, page) {
+
+    const result = await getLatestPostsByField(field, page);
+
+    if (!result) {
+      throw new BadRequestError("Cannot get post");
+    }
+    
+    if (result.length == 0) throw new NotFoundError("Out of posts to get")
+
+    return result
+  }
+  static async createLikePost(post_id, user_id) {
+
+    const result = await likePost(post_id, user_id);
+
+    if (!result) {
+      throw new BadRequestError("Cannot like post");
+    }
+  }
+  static async unLikePost(post_id, user_id) {
+
+    const result = await unlikePost(post_id, user_id);
+
+    if (!result) {
+      throw new BadRequestError("Cannot unlike post");
+    }
+
   }
 
 }

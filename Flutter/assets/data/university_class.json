@@ -1,0 +1,477 @@
+[
+  {
+    "class_id": 0,
+    "class_name": "None",
+    "major_id": 0
+  },
+  {
+    "class_id": 69,
+    "class_name": "23AI",
+    "major_id": 1
+  },
+  {
+    "class_id": 11,
+    "class_name": "20MC",
+    "major_id": 2
+  },
+  {
+    "class_id": 29,
+    "class_name": "21MC",
+    "major_id": 2
+  },
+  {
+    "class_id": 49,
+    "class_name": "22MC",
+    "major_id": 2
+  },
+  {
+    "class_id": 10,
+    "class_name": "20GIT",
+    "major_id": 3
+  },
+  {
+    "class_id": 26,
+    "class_name": "21GIT",
+    "major_id": 3
+  },
+  {
+    "class_id": 47,
+    "class_name": "22GIT1",
+    "major_id": 3
+  },
+  {
+    "class_id": 48,
+    "class_name": "22GIT2",
+    "major_id": 3
+  },
+  {
+    "class_id": 71,
+    "class_name": "23GIT",
+    "major_id": 3
+  },
+  {
+    "class_id": 72,
+    "class_name": "23GITB",
+    "major_id": 3
+  },
+  {
+    "class_id": 50,
+    "class_name": "22MCB",
+    "major_id": null
+  },
+  {
+    "class_id": 52,
+    "class_name": "22SE1B",
+    "major_id": 7
+  },
+  {
+    "class_id": 67,
+    "class_name": "22IRB",
+    "major_id": 19
+  },
+  {
+    "class_id": 80,
+    "class_name": "23ITe1",
+    "major_id": 6
+  },
+  {
+    "class_id": 81,
+    "class_name": "23ITe2",
+    "major_id": 6
+  },
+  {
+    "class_id": 9,
+    "class_name": "20DA",
+    "major_id": 8
+  },
+  {
+    "class_id": 25,
+    "class_name": "21DA",
+    "major_id": 8
+  },
+  {
+    "class_id": 46,
+    "class_name": "22DA",
+    "major_id": 8
+  },
+  {
+    "class_id": 70,
+    "class_name": "23DA",
+    "major_id": 8
+  },
+  {
+    "class_id": 8,
+    "class_name": "20AD",
+    "major_id": 9
+  },
+  {
+    "class_id": 24,
+    "class_name": "21AD",
+    "major_id": 9
+  },
+  {
+    "class_id": 45,
+    "class_name": "22AD",
+    "major_id": 9
+  },
+  {
+    "class_id": 38,
+    "class_name": "21EL",
+    "major_id": 16
+  },
+  {
+    "class_id": 59,
+    "class_name": "22EL1",
+    "major_id": 16
+  },
+  {
+    "class_id": 60,
+    "class_name": "22EL2",
+    "major_id": 16
+  },
+  {
+    "class_id": 86,
+    "class_name": "23EL1",
+    "major_id": 16
+  },
+  {
+    "class_id": 87,
+    "class_name": "23EL2",
+    "major_id": 16
+  },
+  {
+    "class_id": 22,
+    "class_name": "20IR",
+    "major_id": 19
+  },
+  {
+    "class_id": 41,
+    "class_name": "21IR",
+    "major_id": 19
+  },
+  {
+    "class_id": 63,
+    "class_name": "22IM",
+    "major_id": 15
+  },
+  {
+    "class_id": 90,
+    "class_name": "23IM",
+    "major_id": 15
+  },
+  {
+    "class_id": 19,
+    "class_name": "20EC",
+    "major_id": 10
+  },
+  {
+    "class_id": 37,
+    "class_name": "21EC",
+    "major_id": 10
+  },
+  {
+    "class_id": 58,
+    "class_name": "22EF",
+    "major_id": 12
+  },
+  {
+    "class_id": 85,
+    "class_name": "23EF",
+    "major_id": 12
+  },
+  {
+    "class_id": 39,
+    "class_name": "21ET",
+    "major_id": 13
+  },
+  {
+    "class_id": 61,
+    "class_name": "22ET",
+    "major_id": 13
+  },
+  {
+    "class_id": 88,
+    "class_name": "23ET",
+    "major_id": 13
+  },
+  {
+    "class_id": 56,
+    "class_name": "22BA",
+    "major_id": 17
+  },
+  {
+    "class_id": 82,
+    "class_name": "23BA",
+    "major_id": 17
+  },
+  {
+    "class_id": 20,
+    "class_name": "20GBA",
+    "major_id": 17
+  },
+  {
+    "class_id": 40,
+    "class_name": "21GBA",
+    "major_id": 17
+  },
+  {
+    "class_id": 62,
+    "class_name": "22GBA",
+    "major_id": 17
+  },
+  {
+    "class_id": 89,
+    "class_name": "23GBA",
+    "major_id": 17
+  },
+  {
+    "class_id": 66,
+    "class_name": "22IR",
+    "major_id": 19
+  },
+  {
+    "class_id": 23,
+    "class_name": "20NS",
+    "major_id": 20
+  },
+  {
+    "class_id": 42,
+    "class_name": "21NS",
+    "major_id": 20
+  },
+  {
+    "class_id": 68,
+    "class_name": "22NS",
+    "major_id": 20
+  },
+  {
+    "class_id": 93,
+    "class_name": "23NS1",
+    "major_id": 20
+  },
+  {
+    "class_id": 94,
+    "class_name": "23NS2",
+    "major_id": 20
+  },
+  {
+    "class_id": 1,
+    "class_name": "19IT1",
+    "major_id": null
+  },
+  {
+    "class_id": 2,
+    "class_name": "19IT2",
+    "major_id": null
+  },
+  {
+    "class_id": 3,
+    "class_name": "19IT3",
+    "major_id": null
+  },
+  {
+    "class_id": 4,
+    "class_name": "19IT4",
+    "major_id": null
+  },
+  {
+    "class_id": 5,
+    "class_name": "19IT5",
+    "major_id": null
+  },
+  {
+    "class_id": 6,
+    "class_name": "19IT6",
+    "major_id": null
+  },
+  {
+    "class_id": 73,
+    "class_name": "23IT1",
+    "major_id": null
+  },
+  {
+    "class_id": 74,
+    "class_name": "23IT1B",
+    "major_id": null
+  },
+  {
+    "class_id": 75,
+    "class_name": "23IT2",
+    "major_id": null
+  },
+  {
+    "class_id": 76,
+    "class_name": "23IT2B",
+    "major_id": null
+  },
+  {
+    "class_id": 77,
+    "class_name": "23IT3",
+    "major_id": null
+  },
+  {
+    "class_id": 78,
+    "class_name": "23IT3B",
+    "major_id": null
+  },
+  {
+    "class_id": 79,
+    "class_name": "23IT4",
+    "major_id": null
+  },
+  {
+    "class_id": 27,
+    "class_name": "21JIT",
+    "major_id": null
+  },
+  {
+    "class_id": 55,
+    "class_name": "22JIT",
+    "major_id": null
+  },
+  {
+    "class_id": 28,
+    "class_name": "21KIT",
+    "major_id": null
+  },
+  {
+    "class_id": 12,
+    "class_name": "20SE1",
+    "major_id": 7
+  },
+  {
+    "class_id": 13,
+    "class_name": "20SE2",
+    "major_id": 7
+  },
+  {
+    "class_id": 14,
+    "class_name": "20SE3",
+    "major_id": 7
+  },
+  {
+    "class_id": 15,
+    "class_name": "20SE4",
+    "major_id": 7
+  },
+  {
+    "class_id": 16,
+    "class_name": "20SE5",
+    "major_id": 7
+  },
+  {
+    "class_id": 17,
+    "class_name": "20SE6",
+    "major_id": 7
+  },
+  {
+    "class_id": 30,
+    "class_name": "21SE1",
+    "major_id": 7
+  },
+  {
+    "class_id": 31,
+    "class_name": "21SE2",
+    "major_id": 7
+  },
+  {
+    "class_id": 32,
+    "class_name": "21SE3",
+    "major_id": 7
+  },
+  {
+    "class_id": 33,
+    "class_name": "21SE4",
+    "major_id": 7
+  },
+  {
+    "class_id": 34,
+    "class_name": "21SE5",
+    "major_id": 7
+  },
+  {
+    "class_id": 51,
+    "class_name": "22SE1",
+    "major_id": 7
+  },
+  {
+    "class_id": 53,
+    "class_name": "22SE2",
+    "major_id": 7
+  },
+  {
+    "class_id": 54,
+    "class_name": "22SE2B",
+    "major_id": 7
+  },
+  {
+    "class_id": 35,
+    "class_name": "21DM1",
+    "major_id": 10
+  },
+  {
+    "class_id": 36,
+    "class_name": "21DM2",
+    "major_id": 10
+  },
+  {
+    "class_id": 83,
+    "class_name": "23DM1",
+    "major_id": 10
+  },
+  {
+    "class_id": 84,
+    "class_name": "23DM2",
+    "major_id": 10
+  },
+  {
+    "class_id": 18,
+    "class_name": "20DM",
+    "major_id": 10
+  },
+  {
+    "class_id": 57,
+    "class_name": "22DM",
+    "major_id": 10
+  },
+  {
+    "class_id": 7,
+    "class_name": "19CE",
+    "major_id": null
+  },
+  {
+    "class_id": 21,
+    "class_name": "20CE",
+    "major_id": null
+  },
+  {
+    "class_id": 43,
+    "class_name": "21CE1",
+    "major_id": null
+  },
+  {
+    "class_id": 44,
+    "class_name": "21CE2",
+    "major_id": null
+  },
+  {
+    "class_id": 64,
+    "class_name": "22CE",
+    "major_id": null
+  },
+  {
+    "class_id": 65,
+    "class_name": "22CEB",
+    "major_id": null
+  },
+  {
+    "class_id": 91,
+    "class_name": "23CE1",
+    "major_id": null
+  },
+  {
+    "class_id": 92,
+    "class_name": "23CE2",
+    "major_id": null
+  }
+]

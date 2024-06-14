@@ -10,12 +10,12 @@ class SignUpWithEmail
   SignUpWithEmail(this._authRepository);
 
   @override
-  Future<DataState<UserResponseEntity>> call({SignUpRequest? params}) async {
-    print("Email: ${params?.email}");
+  Future<DataState<UserResponseEntity>> call({SignUpRequest? data}) async {
+    print("Email: ${data?.email}");
     return await _authRepository.signUpWithEmail(
-      name: params!.name,
-      email: params.email,
-      password: params.password,
+      name: data!.name,
+      email: data.email,
+      password: data.password,
     );
   }
 }

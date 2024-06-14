@@ -1,6 +1,6 @@
 const JWT = require('jsonwebtoken')
 const asyncHandler = require('../helper/asyncHandler')
-const { AuthFailureError, NotFoundError } = require('../core/error.response')
+const { AuthFailureError, NotFoundError, UnauthorizedError } = require('../core/error.response')
 const { findTokenByUserId } = require('../services/keyToken.service')
 
 const HEADER = {
@@ -15,11 +15,11 @@ const createTokenPair = async (payload, publicKey, privateKey) => {
           // access token
           
           const asscessToken = await JWT.sign(payload, publicKey, {
-               expiresIn: '30m'
+               expiresIn: '270m'
           })
 
           const refreshToken = await JWT.sign(payload, privateKey, {
-               expiresIn: '1 days'
+               expiresIn: '2 days'
           })
 
           JWT.verify(asscessToken, publicKey, (err, decode) => {
@@ -32,7 +32,7 @@ const createTokenPair = async (payload, publicKey, privateKey) => {
      } catch (error) {
           
      }
- }
+}
 // // Xác thực accessToken với Google
 // const checkTokenGoogle = async (accessToken)=> {
 //      const ticket = await client.verifyIdToken({
@@ -85,7 +85,7 @@ const authenticationV2 = asyncHandler ( async (req, res, next) => {
      if (!userId)  throw new AuthFailureError('Invalid request')
      //2
      const keyStore = await findTokenByUserId(userId)
-     if(!keyStore) throw new NotFoundError('Not found keyStore')
+     if(!keyStore) throw new UnauthorizedError('Not found keyStore')
 
      //3
      if (req.headers[HEADER.REFRESH_TOKEN]) {
@@ -110,7 +110,7 @@ const authenticationV2 = asyncHandler ( async (req, res, next) => {
           console.log(accessToken);
           const decode = JWT.verify(accessToken, keyStore.public_key)
 
-          if(userId !== decode.userId.toString()) throw new AuthFailureError('Invalid userId')
+          if(userId !== decode.userId.toString()) throw new UnauthorizedError()
 
           req.keyStore = keyStore
           req.user = decode
@@ -118,7 +118,7 @@ const authenticationV2 = asyncHandler ( async (req, res, next) => {
           console.log("req.user: ", decode);
           return next()
      } catch (error) {
-          throw error
+          throw new UnauthorizedError()
      }
 })
 

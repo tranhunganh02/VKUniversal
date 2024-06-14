@@ -24,11 +24,11 @@ async function uploadFileToFirebase(buffer, file) {
       // Lấy URL trực tiếp của tệp
       const [url] = await fileObject.getSignedUrl({
         action: 'read',
-        expires: '03-09-2491' // Thời gian hết hạn của URL (VD: '03-09-2491')
+        expires: '03-09-2491'
     });
   
       // Trả về cả URL và file_type
-      return  url ;
+      return  url 
     } catch (error) {
       console.error('Error uploading file to Firebase:', error);
       throw new Error('Error uploading file to Firebase');

@@ -1,4 +1,5 @@
 import 'package:vkuniversal/core/resources/data_state.dart';
+import 'package:vkuniversal/features/auth/domain/entities/student_info_checker.dart';
 import 'package:vkuniversal/features/auth/domain/entities/user_response.dart';
 
 abstract interface class AuthRepository {
@@ -14,6 +15,16 @@ abstract interface class AuthRepository {
     required String password,
   });
 
+  Future<DataState<UserResponseEntity>> refreshToken({
+    required int userID,
+    required String refreshTokenPara,
+  });
+
+  Future<DataState<StudentInfoCheckEntity>> checkUserInfoExists({
+    required int userID,
+    required String accessToken,
+  });
+
   Future<void> logoutWithGoogle();
-  Future<void> logout();
+  Future<DataState<void>> logout();
 }

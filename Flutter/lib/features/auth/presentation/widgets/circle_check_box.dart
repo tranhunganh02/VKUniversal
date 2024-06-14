@@ -22,7 +22,7 @@ class CircleCheckBox extends StatelessWidget {
           ),
           Text(
             label,
-            style: textTheme.bodySmall?.copyWith(color: colorScheme.onPrimary),
+            style: textTheme.bodySmall?.copyWith(color: colorScheme.primary),
           ),
         ],
       ),

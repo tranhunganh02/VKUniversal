@@ -11,7 +11,9 @@ class UserResponse extends UserResponseEntity {
 
   factory UserResponse.fromJson(Map<String, dynamic> json) {
     return UserResponse(
-        user: UserModel.fromJson(json['user'] as Map<String, dynamic>),
-        token: UserTokenModel.fromJson(json['tokens'] as Map<String, dynamic>));
+        user: UserModel.fromJson(
+            json['metadata']['user'] as Map<String, dynamic>),
+        token: UserTokenModel.fromJson(
+            json['metadata']['tokens'] as Map<String, dynamic>));
   }
 }

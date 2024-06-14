@@ -6,6 +6,25 @@ const {
 const PostService = require("../services/post/post.service");
 
 class PostController {
+  getPost = async (req, res, next) => {
+    new SuccessResponse({
+      message: "get data success",
+      metadata: await PostService.getPost(req.query.post_id),
+    }).send(res);
+  };
+  getPostsByField = async (req, res, next) => {
+    const { field, page } = req.query
+    new SuccessResponse({
+      message: "get data success",
+      metadata: await PostService.getPostsByField(field, page),
+    }).send(res);
+  };
+  getAllPost = async (req, res, next) => {
+    new SuccessResponse({
+      message: "get data success",
+      metadata: await PostService.getAllPost(req.body.page, req.user.userId,),
+    }).send(res);
+  };
   createPost = async (req, res, next) => {
     new CREATED({
       message: "Created success",
@@ -28,6 +47,24 @@ class PostController {
     new NoContentSuccess({
       message: "Delete success",
       metadata: await PostService.deletePostById(req.body, req.user.userId),
+    }).send(res);
+  };
+  getPostFollowed = async (req, res, next) => {
+    new SuccessResponse({
+      message: "get data success",
+      metadata: await PostService.getPostFollowed(req.body.page),
+    }).send(res);
+  };
+  createLikePost = async (req, res, next) => {
+    new NoContentSuccess({
+      message: "creat like post success",
+      metadata: await PostService.createLikePost(req.body.post_id, req.user.userId),
+    }).send(res);
+  };
+  UnLikePost = async (req, res, next) => {
+    new NoContentSuccess({
+      message: "unlike post success",
+      metadata: await PostService.unLikePost(req.body.post_id, req.user.userId),
     }).send(res);
   };
 }

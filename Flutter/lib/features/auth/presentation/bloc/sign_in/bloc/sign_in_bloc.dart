@@ -43,7 +43,7 @@ class SignInBloc extends Bloc<SignInEvent, SignInState> {
           password: event.password,
         );
 
-        final _response = await _signInWithEmail(params: _request);
+        final _response = await _signInWithEmail(data: _request);
         _logger.d(_response.data);
 
         if (_response is DataSuccess) {
@@ -52,6 +52,16 @@ class SignInBloc extends Bloc<SignInEvent, SignInState> {
 
           final SharedPreferences prefs = await SharedPreferences.getInstance();
           await prefs.setString('email', _response.data!.user.email.toString());
+          await prefs.setString('password', event.password);
+
+          await prefs.setInt('userID', _response.data!.user.uid!);
+          await prefs.setInt('role', _response.data!.user.role!);
+          await prefs.setString(
+              'refreshToken', _response.data!.token.refreshToken);
+          await prefs.setString(
+              'accessToken', _response.data!.token.accessToken);
+          _logger.d('Access: ' + _response.data!.token.accessToken);
+
           emit(LoginSuccess(_response.data?.user as UserModel));
         }
         if (_response is DataFailed) {
@@ -64,7 +74,7 @@ class SignInBloc extends Bloc<SignInEvent, SignInState> {
         }
       } catch (e) {
         _logger.e('At Sign_in Block: ${e}');
-        emit(LoginFailure("An unexpected error occurred"));
+        emit(LoginFailure("An unexpected error occurred!!!"));
       }
     });
   }

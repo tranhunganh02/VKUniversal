@@ -27,7 +27,7 @@ class _WelcomePageState extends State<WelcomePage> {
     double widthScreen = MediaQuery.of(context).size.width;
     double logoScale = widthScreen * 0.28;
     TextTheme textTheme = Theme.of(context).textTheme;
-    ColorScheme colorScheme = Theme.of(context).colorScheme;
+    // ColorScheme colorScheme = Theme.of(context).colorScheme;
 
     final _logger = Logger();
 

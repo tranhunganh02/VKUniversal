@@ -46,9 +46,15 @@ dependencies:
   json_annotation: ^4.8.1
   get_it: ^7.7.0
   flutter_svg: ^2.0.10+1
-  icons_plus: ^5.0.0
   gettext: ^1.2.0
   hive_storage: ^0.0.3
+  icons_plus: ^5.0.0
+  lucide_icons_flutter: ^1.0.8
+  connectivity_plus: ^6.0.3
+  carousel_slider: ^4.2.1
+  image_picker: ^0.8.4
+  permission_handler: ^10.2.0
+  expandable_text: ^2.3.0
 
 dev_dependencies:
   logger: any  #for logging purpose
@@ -86,6 +92,9 @@ flutter:
   - assets/vectors/outline/
   - assets/vectors/outline/home_outline.svg
   - assets/vectors/solid/
+  - assets/data/
+  - assets/data/university_class.json
+  - assets/data/major.json
 
   
 

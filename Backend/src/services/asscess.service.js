@@ -1,4 +1,4 @@
-const { signUpUser } = require("../dbs/access/pg.access.js");
+const { signUpUser, createLectureAndProfile } = require("../dbs/access/pg.access.js");
 const bcrypt = require("bcrypt");
 const crypto = require("node:crypto");
 const User = require("../models/userModel.js");
@@ -8,12 +8,16 @@ const { getInfoData } = require("../utils/index.js");
 const { BadRequestError, AuthFailureError, ForbiddenError } = require("../core/error.response.js");
 const UserService = require("./user.service.js");
 const { includes } = require("lodash");
+const { createStudentAndProfile, createDeparmentAndProfile } = require("../dbs/access/pg.access.js");
+const { getStudentId } = require("../dbs/user/student/pg.student.js");
+const { getLectureId } = require("../dbs/user/lecture/pg.lecture.js");
+const { getDepartmentId } = require("../dbs/user/department/pg.department.js");
 
 const roleAccount = {
-  student: 0,
-  lecture: 1,
-  department: 2,
-  admin: 3
+  student: 1,
+  lecture: 2,
+  department: 3,
+  admin: 4
 };
 
 class AccessService {
@@ -21,10 +25,30 @@ class AccessService {
   static handlerRefreshTokenV2  = async ( {refreshToken, user, keyStore} ) => {
 
     const { userId, email } = user
-
+ 
     console.log("user in hander", userId, email);
 
-    if(keyStore.refresh_tokens_used.includes(refreshToken)){
+    if(keyStore.refresh_tokens_used == null) {
+      if(keyStore.refresh_token !== refreshToken) throw new AuthFailureError('Account not registered.')
+
+
+        //create new access token and refresh token
+        const tokens = await createTokenPair(
+        { userId: userId, email: email },
+        keyStore.public_key,
+        keyStore.private_key
+      );
+      //update token
+      await KeyTokenService.updateToken(userId, tokens.refreshToken, refreshToken)
+  
+      //update token in db
+      return {
+        user,
+        tokens
+      }
+    }
+
+    else if(keyStore.refresh_tokens_used.includes(refreshToken)){
       await KeyTokenService.findAndDeleteKeyByUserId(userId)
   
       throw new ForbiddenError("Something went wrong ! Please relogin")
@@ -131,7 +155,7 @@ class AccessService {
 
     //4. generate token
     const tokens = await createTokenPair(
-      { userId: foundUser.user_id, email },
+      { userId: foundUser.user_id, email, role: foundUser.role },
       publicKey,
       privateKey
     );
@@ -143,10 +167,24 @@ class AccessService {
       publicKey: publicKey
     })
 
+    let id 
+      if (1=== roleAccount.student) {
+        id = await getStudentId(foundUser.user_id)
+      } else if (2=== roleAccount.lecture) {
+        id = await getLectureId(foundUser.user_id)
+      } else if (3 === roleAccount.department) {
+        id = await getDepartmentId(foundUser.user_id)
+      } else if (4 === roleAccount.admin) {
+     
+      } else {
+        console.log("Role not recognized.");
+      }
 
+  
     return {
-      user: getInfoData({fileds: ['user_id', 'email', ], Object: foundUser}),
+      user: getInfoData({fileds: ['user_id', 'email', 'avatar', 'role'], Object: foundUser}),
       tokens,
+      
     }
 
   }
@@ -174,7 +212,7 @@ class AccessService {
       const saveUser = await signUpUser(
         email,
         hashedPassword,
-        roleAccount.student
+        roleAccount.lecture
       );
       if (saveUser) {
 
@@ -183,7 +221,7 @@ class AccessService {
 
         //create token
         const tokens = await createTokenPair(
-          { userId: saveUser.user_id, email },
+          { userId: saveUser.user_id, email, role: roleAccount.student },
           publicKey,
           privateKey
         );
@@ -200,12 +238,122 @@ class AccessService {
           throw new BadRequestError("publicKeyString error")
         }
 
+        const student = await createStudentAndProfile(saveUser.user_id)
+        console.log("student", student);
+
         return {
-            user: getInfoData({fileds: ['user_id', 'email', ], Object: saveUser}),
+            user: getInfoData({fileds: ['user_id', 'email', 'avatar'], Object: saveUser}),
             tokens,
         };
       }
     }
+
+    static async signUpDerpartment({ email, password, department_name }) {
+      // check permisson mail vku
+      const isMailVku = await UserService.checkRoleEmail(email)
+      if (!isMailVku) {
+      console.log("email: " + email);
+       throw new ForbiddenError('Error: Your email is forbidden');
+      }
+      // Check if mail user already exists
+      const existingMailUser = await UserService.checkMailUserExists(email);
+      if (existingMailUser) {
+      console.log("email: " + email);
+        throw new BadRequestError('Error: Email already exists')
+      }
+      // Hash password using bcrypt (replace with your preferred hashing method)
+      const hashedPassword = await bcrypt.hash(password, 10);
+
+      console.log("email: " + email);
+      const saveUser = await signUpUser(
+        email,
+        hashedPassword,
+        roleAccount.department
+      );
+      if (saveUser) {
+
+        const privateKey = crypto.randomBytes(64).toString('hex')
+        const publicKey = crypto.randomBytes(64).toString('hex')
+
+        //create token
+        const tokens = await createTokenPair(
+          { userId: saveUser.user_id, email, role: roleAccount.department },
+          publicKey,
+          privateKey
+        );
+        const keyStore = await KeyTokenService.createKeyToken({
+          userId :  saveUser.user_id,
+          publicKey : publicKey,
+          privateKey : privateKey,
+          refreshToken: tokens.refreshToken
+      });
+
+        if (!keyStore) {
+          throw new BadRequestError("publicKeyString error")
+        }
+
+        const department = await createDeparmentAndProfile(saveUser.user_id, department_name)
+
+        return {
+            user: getInfoData({fileds: ['user_id', 'email', 'avatar', 'role',], Object: saveUser}),
+            tokens,
+        };
+      }
+    }
+
+    static async signUpLecture({ email, password }) {
+      // check permisson mail vku
+      const isMailVku = await UserService.checkRoleEmail(email)
+      if (!isMailVku) {
+      console.log("email: " + email);
+       throw new ForbiddenError('Error: Your email is forbidden');
+      }
+      // Check if mail user already exists
+      const existingMailUser = await UserService.checkMailUserExists(email);
+      if (existingMailUser) {
+      console.log("email: " + email);
+        throw new BadRequestError('Error: Email already exists')
+      }
+      // Hash password using bcrypt (replace with your preferred hashing method)
+      const hashedPassword = await bcrypt.hash(password, 10);
+
+      console.log("email: " + email);
+      const saveUser = await signUpUser(
+        email,
+        hashedPassword,
+        roleAccount.lecture
+      );
+      if (saveUser) {
+
+        const privateKey = crypto.randomBytes(64).toString('hex')
+        const publicKey = crypto.randomBytes(64).toString('hex')
+
+        //create token
+        const tokens = await createTokenPair(
+          { userId: saveUser.user_id, email, role: roleAccount.lecture },
+          publicKey,
+          privateKey
+        );
+        const keyStore = await KeyTokenService.createKeyToken({
+          userId :  saveUser.user_id,
+          publicKey : publicKey,
+          privateKey : privateKey,
+          refreshToken: tokens.refreshToken
+      });
+
+        if (!keyStore) {
+          throw new BadRequestError("publicKeyString error")
+        }
+
+        await createLectureAndProfile(saveUser.user_id)
+
+        return {
+            user: getInfoData({fileds: ['user_id', 'email', 'avatar', 'role',], Object: saveUser}),
+            tokens,
+        };
+      }
+    }
+  
   }
 
  
