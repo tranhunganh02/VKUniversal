@@ -55,13 +55,16 @@ dependencies:
   image_picker: ^0.8.4
   permission_handler: ^10.2.0
   expandable_text: ^2.3.0
+  firebase_core: ^2.31.1
+  firebase_database: ^10.5.5
+  intl: ^0.19.0
 
 dev_dependencies:
   logger: any  #for logging purpose
   retrofit_generator: '>=7.0.0 <8.0.0'
   build_runner: '>=2.3.0 <4.0.0'
   json_serializable: ^6.6.2
-  devtools_extensions: ^0.1.0
+  devtools_extensions: 0.0.1-dev.0
 
   flutter_test:
     sdk: flutter

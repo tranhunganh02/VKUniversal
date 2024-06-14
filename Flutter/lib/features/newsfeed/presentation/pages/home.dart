@@ -14,6 +14,7 @@ class Home extends StatefulWidget {
 
 class _HomeState extends State<Home> {
   int _selectedIndex = 0;
+  final PageStorageBucket _bucket = PageStorageBucket();
   final List<Widget> _pages = [
     NewsfeedPage(),
     Container(
@@ -21,9 +22,12 @@ class _HomeState extends State<Home> {
     ),
     ListChatScreen(),
     ProfilePage(),
-    MenuPage()
+    MenuPage(),
   ];
-  List<GlobalKey<NavigatorState>> _navigatorKeys = [
+
+  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+
+  final List<GlobalKey<NavigatorState>> _navigatorKeys = [
     GlobalKey<NavigatorState>(),
     GlobalKey<NavigatorState>(),
     GlobalKey<NavigatorState>(),
@@ -43,49 +47,62 @@ class _HomeState extends State<Home> {
 
   @override
   Widget build(BuildContext context) {
-    // final width = ScreenScale(context: context).getWidth();
+    bool _shouldShowBottomNavigationBar() {
+      return (_pages[_selectedIndex] is NewsfeedPage ||
+          _pages[_selectedIndex] is Container ||
+          _pages[_selectedIndex] is ListChatScreen ||
+          _pages[_selectedIndex] is ProfilePage ||
+          _pages[_selectedIndex] is MenuPage);
+    }
+
     return Scaffold(
-      body: _pages[_selectedIndex],
-      bottomNavigationBar: BottomNavigationBar(
-        enableFeedback: true,
-        onTap: _onItemTapped,
-        currentIndex: _selectedIndex,
-        type: BottomNavigationBarType.fixed,
-        showSelectedLabels: false,
-        showUnselectedLabels: false,
-        items: <BottomNavigationBarItem>[
-          BottomNavigationBarItem(
-            icon: _selectedIndex == 0
-                ? IconList.home_solid
-                : IconList.home_outline,
-            label: "",
-          ),
-          BottomNavigationBarItem(
-            icon: _selectedIndex == 1
-                ? IconList.marketplace_solid
-                : IconList.marketplace_outline,
-            label: "",
-          ),
-          BottomNavigationBarItem(
-            icon: _selectedIndex == 2
-                ? IconList.chat_solid
-                : IconList.chat_outline,
-            label: "",
-          ),
-          BottomNavigationBarItem(
-            icon: _selectedIndex == 3
-                ? IconList.person_solid
-                : IconList.person_outline,
-            label: "",
-          ),
-          BottomNavigationBarItem(
-            icon: _selectedIndex == 4
-                ? IconList.menu_solid
-                : IconList.menu_outline,
-            label: "",
-          ),
-        ],
+      key: _scaffoldKey,
+      body: PageStorage(
+        bucket: _bucket,
+        child: _pages[_selectedIndex],
       ),
+      bottomNavigationBar: _shouldShowBottomNavigationBar()
+          ? BottomNavigationBar(
+              enableFeedback: true,
+              onTap: _onItemTapped,
+              currentIndex: _selectedIndex,
+              type: BottomNavigationBarType.fixed,
+              showSelectedLabels: false,
+              showUnselectedLabels: false,
+              items: <BottomNavigationBarItem>[
+                BottomNavigationBarItem(
+                  icon: _selectedIndex == 0
+                      ? IconList.home_solid
+                      : IconList.home_outline,
+                  label: "",
+                ),
+                BottomNavigationBarItem(
+                  icon: _selectedIndex == 1
+                      ? IconList.marketplace_solid
+                      : IconList.marketplace_outline,
+                  label: "",
+                ),
+                BottomNavigationBarItem(
+                  icon: _selectedIndex == 2
+                      ? IconList.chat_solid
+                      : IconList.chat_outline,
+                  label: "",
+                ),
+                BottomNavigationBarItem(
+                  icon: _selectedIndex == 3
+                      ? IconList.person_solid
+                      : IconList.person_outline,
+                  label: "",
+                ),
+                BottomNavigationBarItem(
+                  icon: _selectedIndex == 4
+                      ? IconList.menu_solid
+                      : IconList.menu_outline,
+                  label: "",
+                ),
+              ],
+            )
+          : null,
     );
   }
 }

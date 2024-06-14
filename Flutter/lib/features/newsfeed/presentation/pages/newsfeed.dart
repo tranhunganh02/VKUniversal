@@ -4,7 +4,9 @@ import 'package:icons_plus/icons_plus.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:vkuniversal/core/constants/constants.dart';
 import 'package:vkuniversal/core/utils/injection_container.dart';
+import 'package:vkuniversal/core/utils/logout_common.dart';
 import 'package:vkuniversal/core/utils/screen_scale.dart';
+import 'package:vkuniversal/features/auth/domain/usecases/logout.dart';
 import 'package:vkuniversal/features/newsfeed/presentation/pages/tabs/explore_tab.dart';
 import 'package:vkuniversal/features/newsfeed/presentation/pages/tabs/following_tab.dart';
 import 'package:vkuniversal/features/newsfeed/presentation/widgets/create_post_bottom_sheet.dart';
@@ -72,7 +74,7 @@ class _NewsfeedPageState extends State<NewsfeedPage>
         actions: [
           IconButton(
             icon: Icon(Iconsax.search_normal_1_outline),
-            onPressed: () {},
+            onPressed: () => LogoutCommon(context),
           ),
           IconButton(
             icon: Icon(Iconsax.notification_outline),

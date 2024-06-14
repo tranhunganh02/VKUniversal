@@ -12,15 +12,20 @@ class ExploreTab extends StatefulWidget {
 }
 
 class _ExploreTabState extends State<ExploreTab> {
+  int page = 1;
+  final _scrollController = ScrollController();
+
   @override
   void initState() {
     super.initState();
     _loadExplorePosts();
+    _scrollController.addListener(_onScroll);
   }
 
   @override
   void dispose() {
     super.dispose();
+    _scrollController.dispose();
   }
 
   @override
@@ -38,6 +43,7 @@ class _ExploreTabState extends State<ExploreTab> {
             return Container(
               margin: EdgeInsets.only(bottom: 223),
               child: ListView.builder(
+                controller: _scrollController,
                 itemCount: state.posts.length,
                 itemBuilder: (context, index) {
                   return PostCard(
@@ -64,6 +70,23 @@ class _ExploreTabState extends State<ExploreTab> {
     // Check if the widget is still mounted before calling setState
     if (mounted) {
       context.read<NewfeedBloc>().add(LoadPosts(page: 1));
+    }
+  }
+
+  void _onScroll() {
+    if (_scrollController.position.pixels >=
+        _scrollController.position.maxScrollExtent) {
+      page++;
+      _loadMorePosts();
+    }
+  }
+
+  void _loadMorePosts() {
+    if (mounted) {
+      final currentState = context.read<NewfeedBloc>().state;
+      if (currentState is NewfeedLoaded) {
+        context.read<NewfeedBloc>().add(LoadMorePosts(page: page));
+      }
     }
   }
 }

@@ -87,5 +87,25 @@ class NewfeedBloc extends Bloc<NewfeedEvent, NewfeedState> {
         }
       },
     );
+    on<LoadMorePosts>((event, emit) async {
+      try {
+        final currentState = state;
+        if (currentState is NewfeedLoaded) {
+          SharedPreferences _pref = await SharedPreferences.getInstance();
+          final response = await _getPosts(
+              auth: SetUpAuthData(_pref), data: PageRequest(page: event.page));
+
+          if (response is DataSuccess) {
+            final data = response.data as List<PostModel>;
+            final updatePost = currentState.posts..addAll(data);
+            emit(NewfeedLoaded(posts: updatePost));
+          } else {
+            // emit(NewfeedFailed(message: "Error: Data is null"));
+          }
+        }
+      } catch (e) {
+        // emit(NewfeedFailed(message: "Error: $e"));
+      }
+    });
   }
 }

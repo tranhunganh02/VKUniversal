@@ -58,7 +58,7 @@ class PostModel extends PostEntity {
   }) {
     return PostModel(
       userID: userID ?? this.userID,
-      postID: postID ?? this.postID,
+      postID: postID,
       userName: userName ?? this.userName,
       createdAt: createdAt ?? this.createdAt,
       avatarUrl: avatarUrl ?? this.avatarUrl,
