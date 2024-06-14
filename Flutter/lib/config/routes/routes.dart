@@ -5,6 +5,7 @@ import 'package:vkuniversal/features/auth/presentation/pages/sign_up.dart';
 import 'package:vkuniversal/features/auth/presentation/pages/welcome.dart';
 import 'package:vkuniversal/features/chat/presentation/pages/chat.dart';
 import 'package:vkuniversal/features/chat/presentation/pages/list_chat.dart';
+import 'package:vkuniversal/features/newsfeed/presentation/pages/post_detail.dart';
 import 'package:vkuniversal/features/profile/presentation/pages/profile.dart';
 import 'package:vkuniversal/features/newsfeed/presentation/pages/home.dart';
 import 'package:vkuniversal/main.dart';
@@ -47,6 +48,14 @@ class Routes {
       case RoutesName.checkUserState:
         return MaterialPageRoute(
             builder: (BuildContext context) => CheckUserState());
+      case RoutesName.postDetail:
+        final PostDetailArguments args =
+            settings.arguments as PostDetailArguments;
+        return MaterialPageRoute(
+          builder: (BuildContext context) => PostDetail(
+            postID: args.postId,
+          ),
+        );
       default:
         return MaterialPageRoute(builder: (_) {
           return const Scaffold(
@@ -57,4 +66,10 @@ class Routes {
         });
     }
   }
+}
+
+class PostDetailArguments {
+  final int postId;
+
+  PostDetailArguments(this.postId);
 }

@@ -1,4 +1,7 @@
+import 'dart:io';
+
 import 'package:connectivity_plus/connectivity_plus.dart';
+// import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -6,9 +9,11 @@ import 'package:vkuniversal/config/routes/router_name.dart';
 import 'package:vkuniversal/config/routes/routes.dart';
 import 'package:vkuniversal/config/theme/theme_const.dart';
 import 'package:vkuniversal/core/constants/share_pref.dart';
+import 'package:vkuniversal/core/resources/data_state.dart';
 import 'package:vkuniversal/core/utils/injection_container.dart';
 import 'package:vkuniversal/core/widgets/loader.dart';
 import 'package:vkuniversal/features/auth/domain/usecases/check_student_info.dart';
+import 'package:vkuniversal/features/auth/domain/usecases/logout.dart';
 import 'package:vkuniversal/features/auth/presentation/bloc/add_user_info/bloc/add_user_info_bloc.dart';
 import 'package:vkuniversal/features/auth/presentation/bloc/sign_up/bloc/sign_up_bloc.dart';
 import 'package:vkuniversal/features/auth/presentation/bloc/sign_in/bloc/sign_in_bloc.dart';
@@ -23,6 +28,21 @@ import 'package:vkuniversal/features/profile/presentation/state/bloc/profile_blo
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await initializeDependencies();
+  // if (Platform.isMacOS) {
+  //   await Firebase.initializeApp(
+  //     options: FirebaseOptions(
+  //       appId: '1:282946755124:ios:d6beb875136a3a9d924861',
+  //       apiKey: 'AIzaSyA3N_V3TcCqwi9y86MStLCywIyC_EUKCFk',
+  //       projectId: 'test1-8afe3',
+  //       messagingSenderId: '282946755124',
+  //       storageBucket:
+  //           'test1-8afe3.appspot.com', // Thông tin khác tùy theo cài đặt Firebase của bạn
+  //     ),
+  //   );
+  // } else {
+  //   await Firebase
+  //       .initializeApp(); // Khởi tạo bình thường cho các nền tảng khác
+  // }
   initializeDateFormatting();
   await setupLocator();
   final prefs = await SharedPreferences.getInstance();
@@ -118,29 +138,32 @@ class _CheckUserStateState extends State<CheckUserState> {
 
     final checkUserInfo = await sl<CheckUserInfoExists>();
     final result = await checkUserInfo(data: SetUpAuthData(prefs));
-
-    if (result.data?.isExist == true) {
-      await prefs.setBool('hasUserInfo', true);
+    if (result is DataFailed) {
+      Logout(authRepository: sl());
     } else {
-      await prefs.setBool('hasUserInfo', false);
-    }
+      if (result.data?.isExist == true) {
+        await prefs.setBool('hasUserInfo', true);
+      } else {
+        await prefs.setBool('hasUserInfo', false);
+      }
 
-    String? email = prefs.getString('email');
-    int? role = prefs.getInt('role');
-    bool isLogin = email != null;
+      String? email = prefs.getString('email');
+      int? role = prefs.getInt('role');
+      bool isLogin = email != null;
 
-    bool hasStudentInfo = prefs.getBool('hasUserInfo') ?? false;
+      bool hasStudentInfo = prefs.getBool('hasUserInfo') ?? false;
 
-    if (!isLogin) {
-      Navigator.pushReplacementNamed(context, RoutesName.welcome);
-    } else if (hasStudentInfo || role != 1) {
-      Navigator.pushReplacementNamed(context, RoutesName.home);
-      Navigator.pushAndRemoveUntil(
-          context,
-          Routes.generateRoute(RouteSettings(name: RoutesName.home)),
-          (Route<dynamic> route) => false);
-    } else {
-      Navigator.pushReplacementNamed(context, RoutesName.addUserInfor);
+      if (!isLogin) {
+        Navigator.pushReplacementNamed(context, RoutesName.welcome);
+      } else if (hasStudentInfo || role != 1) {
+        Navigator.pushReplacementNamed(context, RoutesName.home);
+        Navigator.pushAndRemoveUntil(
+            context,
+            Routes.generateRoute(RouteSettings(name: RoutesName.home)),
+            (Route<dynamic> route) => false);
+      } else {
+        Navigator.pushReplacementNamed(context, RoutesName.addUserInfor);
+      }
     }
   }
 }

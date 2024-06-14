@@ -17,3 +17,9 @@ final class LikePressed extends NewfeedEvent {
     required this.postID,
   });
 }
+
+final class LoadMorePosts extends NewfeedEvent {
+  final int page;
+
+  LoadMorePosts({required this.page});
+}

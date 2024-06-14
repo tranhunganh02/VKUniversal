@@ -10,4 +10,5 @@ class RoutesName {
   static const String updateProfile = '/update_profile';
   static const String noInternet = '/noInternet';
   static const String checkUserState = '/checkUserState';
+  static const String postDetail = '/post/post_id';
 }
