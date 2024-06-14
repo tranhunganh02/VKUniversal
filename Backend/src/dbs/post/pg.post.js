@@ -161,8 +161,8 @@ const getLatestPostsFollowed = async (page, user_id) => {
       SELECT 
         a.post_id,
         COALESCE(
-          STRING_AGG(a.file_url, ', ') FILTER (WHERE a.file_url IS NOT NULL),
-          'No image'
+          json_agg(json_build_object('file_url', a.file_url, 'file_name', a.file_name, 'file_type', a.file_type)) FILTER (WHERE a.file_url IS NOT NULL),
+          '[]'::json
         ) AS image_urls
       FROM Attachment a
       GROUP BY a.post_id
@@ -258,14 +258,14 @@ const getLatestPosts = async (page, user_id) => {
       GROUP BY pl.post_id
     ),
     PostAttachments AS (
-      SELECT 
+   SELECT 
         a.post_id,
         COALESCE(
-          STRING_AGG(a.file_url, ', ') FILTER (WHERE a.file_url IS NOT NULL),
-          'No image'
+            json_agg(json_build_object('file_url', a.file_url, 'file_name', a.file_name, 'file_type', a.file_type)) FILTER (WHERE a.file_url IS NOT NULL),
+            '[]'::json
         ) AS image_urls
-      FROM Attachment a
-      GROUP BY a.post_id
+    FROM Attachment a
+    GROUP BY a.post_id
     )
     SELECT 
       p.user_id, 
