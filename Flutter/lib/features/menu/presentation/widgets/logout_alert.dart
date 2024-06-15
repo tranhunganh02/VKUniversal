@@ -1,10 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:vkuniversal/config/routes/router_name.dart';
-import 'package:vkuniversal/config/routes/routes.dart';
-import 'package:vkuniversal/core/utils/delete_login_data.dart';
-import 'package:vkuniversal/core/utils/injection_container.dart';
 import 'package:vkuniversal/core/utils/logout_common.dart';
-import 'package:vkuniversal/features/auth/domain/usecases/logout.dart';
 
 class LogoutAlert extends StatelessWidget {
   const LogoutAlert({super.key});

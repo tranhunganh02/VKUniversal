@@ -4,8 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:icons_plus/icons_plus.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:vkuniversal/config/routes/router_name.dart';
-import 'package:vkuniversal/config/routes/routes.dart';
 import 'package:vkuniversal/core/constants/constants.dart';
 import 'package:vkuniversal/core/utils/date_converter.dart';
 import 'package:vkuniversal/core/utils/screen_scale.dart';
@@ -23,6 +21,10 @@ class PostCard extends StatefulWidget {
   final List<Attachment> images;
   final int likes;
   final bool isLiked;
+  final int userID;
+  final int role;
+  final VoidCallback? onTap;
+  final VoidCallback? onProfileTap;
 
   const PostCard({
     super.key,
@@ -34,6 +36,10 @@ class PostCard extends StatefulWidget {
     required this.likes,
     required this.isLiked,
     required this.postID,
+    required this.userID,
+    required this.role,
+    this.onTap,
+    this.onProfileTap,
   });
 
   @override
@@ -65,6 +71,14 @@ class _PostCardState extends State<PostCard> {
         );
   }
 
+  // void _moveToProfile() {
+  //   Navigator.pushNamed(
+  //     context,
+  //     RoutesName.profile,
+  //     arguments: ProfileArguments(role: widget.role, userID: widget.userID),
+  //   );
+  // }
+
   @override
   Widget build(BuildContext context) {
     double width = ScreenScale(context: context).getWidth();
@@ -74,8 +88,7 @@ class _PostCardState extends State<PostCard> {
     DateConverter dateConverter = convertDate(widget.date);
 
     return GestureDetector(
-      onTap: () => Navigator.pushNamed(context, RoutesName.postDetail,
-          arguments: PostDetailArguments(widget.postID)),
+      onTap: widget.onTap,
       child: Container(
         color: colorScheme.surface,
         margin: EdgeInsets.only(bottom: 8),
@@ -90,18 +103,24 @@ class _PostCardState extends State<PostCard> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: [
-                      CircleAvatar(
-                        backgroundImage: NetworkImage(widget.avatar),
+                      GestureDetector(
+                        onTap: widget.onProfileTap,
+                        child: CircleAvatar(
+                          backgroundImage: NetworkImage(widget.avatar),
+                        ),
                       ),
                       Padding(
                         padding: const EdgeInsets.only(left: 8),
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Text(
-                              "${widget.username}",
-                              style: textTheme.bodyMedium?.copyWith(
-                                color: colorScheme.onSurface,
+                            GestureDetector(
+                              onTap: widget.onProfileTap,
+                              child: Text(
+                                "${widget.username}",
+                                style: textTheme.bodyMedium?.copyWith(
+                                  color: colorScheme.onSurface,
+                                ),
                               ),
                             ),
                             Text(
@@ -117,9 +136,41 @@ class _PostCardState extends State<PostCard> {
                       ),
                     ],
                   ),
-                  IconButton(
-                    onPressed: () {},
-                    icon: Icon(Iconsax.more_outline),
+                  // IconButton(
+                  //   onPressed: () {},
+                  //   icon: Icon(Iconsax.more_outline),
+                  // ),
+                  MenuAnchor(
+                    builder: (BuildContext context, MenuController controller,
+                        Widget? child) {
+                      return IconButton(
+                        onPressed: () {
+                          if (controller.isOpen) {
+                            controller.close();
+                          } else {
+                            controller.open();
+                          }
+                        },
+                        icon: Icon(Iconsax.more_outline),
+                        tooltip: 'Show menu',
+                      );
+                    },
+                    menuChildren: List<MenuItemButton>.from(
+                      [
+                        MenuItemButton(
+                          onPressed: () {},
+                          child: Text('Edit',
+                              style: textTheme.bodyLarge
+                                  ?.copyWith(color: colorScheme.onSurface)),
+                        ),
+                        MenuItemButton(
+                          onPressed: () {},
+                          child: Text('Delete',
+                              style: textTheme.bodyLarge
+                                  ?.copyWith(color: colorScheme.onSurface)),
+                        ),
+                      ],
+                    ),
                   ),
                 ],
               ),
@@ -239,60 +290,60 @@ class _PostCardState extends State<PostCard> {
                     : Container(),
               ),
             ),
-            Container(
-              alignment: Alignment.centerLeft,
-              child: Padding(
-                padding: const EdgeInsets.only(left: 8, right: 8),
-                child: Text(
-                  "Xem bình luận...",
-                  style: textTheme.bodySmall?.copyWith(
-                    color: colorScheme.onSurface,
-                  ),
-                ),
-              ),
-            ),
+            // Container(
+            //   alignment: Alignment.centerLeft,
+            //   child: Padding(
+            //     padding: const EdgeInsets.only(left: 8, right: 8),
+            //     child: Text(
+            //       "Xem bình luận...",
+            //       style: textTheme.bodySmall?.copyWith(
+            //         color: colorScheme.onSurface,
+            //       ),
+            //     ),
+            //   ),
+            // ),
             // Bình luận
-            Padding(
-              padding: const EdgeInsets.only(left: 8, right: 8),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Container(
-                    width: width * 0.05,
-                    height: width *
-                        0.05, // Ensure the height is the same as the width for a square container
-                    child: ClipOval(
-                      child: Image.network(
-                        avatarUser ?? avatarNotFound,
-                        fit: BoxFit
-                            .cover, // Ensures the image covers the whole area of the ClipOval
-                        width: double.infinity,
-                        height: double.infinity,
-                      ),
-                    ),
-                  ),
-                  Container(
-                    width: width * 0.9,
-                    height: height * 0.04,
-                    alignment: Alignment.centerLeft,
-                    decoration: BoxDecoration(
-                        color: colorScheme.surfaceContainer,
-                        borderRadius: BorderRadius.circular(20.0),
-                        border:
-                            Border.all(color: colorScheme.surfaceContainer)),
-                    child: Padding(
-                      padding: const EdgeInsets.only(left: 8.0),
-                      child: Text(
-                        "Thêm bình luận...",
-                        style: textTheme.labelSmall?.copyWith(
-                          color: colorScheme.onSurface,
-                        ),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            )
+            // Padding(
+            //   padding: const EdgeInsets.only(left: 8, right: 8),
+            //   child: Row(
+            //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            //     children: [
+            //       Container(
+            //         width: width * 0.05,
+            //         height: width *
+            //             0.05, // Ensure the height is the same as the width for a square container
+            //         child: ClipOval(
+            //           child: Image.network(
+            //             avatarUser ?? avatarNotFound,
+            //             fit: BoxFit
+            //                 .cover, // Ensures the image covers the whole area of the ClipOval
+            //             width: double.infinity,
+            //             height: double.infinity,
+            //           ),
+            //         ),
+            //       ),
+            //       Container(
+            //         width: width * 0.9,
+            //         height: height * 0.04,
+            //         alignment: Alignment.centerLeft,
+            //         decoration: BoxDecoration(
+            //             color: colorScheme.surfaceContainer,
+            //             borderRadius: BorderRadius.circular(20.0),
+            //             border:
+            //                 Border.all(color: colorScheme.surfaceContainer)),
+            //         child: Padding(
+            //           padding: const EdgeInsets.only(left: 8.0),
+            //           child: Text(
+            //             "Thêm bình luận...",
+            //             style: textTheme.labelSmall?.copyWith(
+            //               color: colorScheme.onSurface,
+            //             ),
+            //           ),
+            //         ),
+            //       ),
+            //     ],
+            //   ),
+            // )
           ],
         ),
       ),

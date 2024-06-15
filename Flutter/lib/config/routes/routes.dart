@@ -6,8 +6,8 @@ import 'package:vkuniversal/features/auth/presentation/pages/welcome.dart';
 import 'package:vkuniversal/features/chat/presentation/pages/chat.dart';
 import 'package:vkuniversal/features/chat/presentation/pages/list_chat.dart';
 import 'package:vkuniversal/features/newsfeed/presentation/pages/post_detail.dart';
-import 'package:vkuniversal/features/profile/presentation/pages/profile.dart';
 import 'package:vkuniversal/features/newsfeed/presentation/pages/home.dart';
+import 'package:vkuniversal/features/profile/presentation/pages/profile.dart';
 import 'package:vkuniversal/main.dart';
 
 import '../../features/profile/presentation/pages/update_profile.dart';
@@ -34,8 +34,12 @@ class Routes {
         return MaterialPageRoute(
             builder: (BuildContext context) => ChatScreen());
       case RoutesName.profile:
+        final ProfileArguments agrs = settings.arguments as ProfileArguments;
         return MaterialPageRoute(
-            builder: (BuildContext context) => ProfileScreen());
+            builder: (BuildContext context) => ProfilePage(
+                  role: agrs.role,
+                  userIDToLoadProfile: agrs.userID,
+                ));
       case RoutesName.addUserInfor:
         return MaterialPageRoute(
             builder: (BuildContext context) => AddUserInfoPage());
@@ -72,4 +76,11 @@ class PostDetailArguments {
   final int postId;
 
   PostDetailArguments(this.postId);
+}
+
+class ProfileArguments {
+  final int userID;
+  final int role;
+
+  ProfileArguments({required this.userID, required this.role});
 }

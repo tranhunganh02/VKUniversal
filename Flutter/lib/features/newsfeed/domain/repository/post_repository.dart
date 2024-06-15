@@ -28,4 +28,9 @@ abstract class PostRepository {
     int postType = 1,
     List<File> attachments = const [],
   });
+  Future<DataState<List<PostEntity>>> GetPostByID({
+    required int userID,
+    required String accessToken,
+    required int postID,
+  });
 }

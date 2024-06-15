@@ -6,7 +6,6 @@ import 'package:vkuniversal/core/constants/constants.dart';
 import 'package:vkuniversal/core/utils/injection_container.dart';
 import 'package:vkuniversal/core/utils/logout_common.dart';
 import 'package:vkuniversal/core/utils/screen_scale.dart';
-import 'package:vkuniversal/features/auth/domain/usecases/logout.dart';
 import 'package:vkuniversal/features/newsfeed/presentation/pages/tabs/explore_tab.dart';
 import 'package:vkuniversal/features/newsfeed/presentation/pages/tabs/following_tab.dart';
 import 'package:vkuniversal/features/newsfeed/presentation/widgets/create_post_bottom_sheet.dart';
@@ -24,8 +23,8 @@ class _NewsfeedPageState extends State<NewsfeedPage>
   Future<void> _loadDefault() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     setState(() {
-      int roleDefault = prefs.getInt('role') ?? 2;
-      int userIDDefault = prefs.getInt('userID') ?? 14;
+      int roleDefault = prefs.getInt('role') ?? 0;
+      int userIDDefault = prefs.getInt('userID') ?? 0;
       sl<ProfileBloc>()
           .add(LoadProfile(role: roleDefault, userID: userIDDefault));
       logger.d("${roleDefault} ${userIDDefault}");

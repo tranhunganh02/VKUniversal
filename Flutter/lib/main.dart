@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:connectivity_plus/connectivity_plus.dart';
 // import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
@@ -78,9 +76,6 @@ Future<void> main() async {
       BlocProvider(
         create: (_) => sl<CreatePostBloc>(),
       ),
-      // BlocProvider(
-      //   create: (_) => sl<PostCardBloc>(),
-      // ),
     ],
     child: MyApp(
       isLoggedIn: isLoggedIn,

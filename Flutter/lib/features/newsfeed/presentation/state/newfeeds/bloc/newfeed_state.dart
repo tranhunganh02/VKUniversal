@@ -22,3 +22,9 @@ final class NewfeedFailed extends NewfeedState {
 final class LikedByUser extends NewfeedState {}
 
 final class UnLikedByUser extends NewfeedState {}
+
+class PostDetailLoaded extends NewfeedState {
+  final PostModel post;
+
+  PostDetailLoaded({required this.post});
+}

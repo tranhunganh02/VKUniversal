@@ -193,6 +193,45 @@ class _PostApiService implements PostApiService {
     return httpResponse;
   }
 
+  @override
+  Future<HttpResponse<List<PostModel>>> GetPostByID(
+    int userID,
+    String accessToken,
+    int postID,
+  ) async {
+    const _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{r'post_id': postID};
+    final _headers = <String, dynamic>{
+      r'x-client-id': userID,
+      r'authorization': accessToken,
+    };
+    _headers.removeWhere((k, v) => v == null);
+    final Map<String, dynamic>? _data = null;
+    final _result = await _dio.fetch<Map<String, dynamic>>(
+        _setStreamType<HttpResponse<List<PostModel>>>(Options(
+      method: 'GET',
+      headers: _headers,
+      extra: _extra,
+    )
+            .compose(
+              _dio.options,
+              '/post/',
+              queryParameters: queryParameters,
+              data: _data,
+            )
+            .copyWith(
+                baseUrl: _combineBaseUrls(
+              _dio.options.baseUrl,
+              baseUrl,
+            ))));
+    List<PostModel> value = _result.data!['metadata']
+        .map<PostModel>(
+            (dynamic i) => PostModel.fromJson(i as Map<String, dynamic>))
+        .toList();
+    final httpResponse = HttpResponse(value, _result);
+    return httpResponse;
+  }
+
   RequestOptions _setStreamType<T>(RequestOptions requestOptions) {
     if (T != dynamic &&
         !(requestOptions.responseType == ResponseType.bytes ||

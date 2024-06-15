@@ -23,6 +23,7 @@ import 'package:vkuniversal/features/newsfeed/data/datasourse/remote/post_api_se
 import 'package:vkuniversal/features/newsfeed/data/repository/post_repository_impl.dart';
 import 'package:vkuniversal/features/newsfeed/domain/repository/post_repository.dart';
 import 'package:vkuniversal/features/newsfeed/domain/usecase/create_post.dart';
+import 'package:vkuniversal/features/newsfeed/domain/usecase/get_post_by_id.dart';
 import 'package:vkuniversal/features/newsfeed/domain/usecase/get_posts.dart';
 import 'package:vkuniversal/features/newsfeed/domain/usecase/like.dart';
 import 'package:vkuniversal/features/newsfeed/domain/usecase/unlike.dart';
@@ -75,12 +76,13 @@ Future<void> initializeDependencies() async {
   sl.registerSingleton<CreatePost>(CreatePost(postRepository: sl()));
   sl.registerSingleton<LikeAPost>(LikeAPost(postRepository: sl()));
   sl.registerSingleton<Unlike>(Unlike(postRepository: sl()));
+  sl.registerSingleton<GetPostById>(GetPostById(postRepository: sl()));
 
   sl.registerFactory<SignUpBloc>(() => SignUpBloc(sl()));
   sl.registerFactory<SignInBloc>(() => SignInBloc(sl()));
   sl.registerSingleton<ProfileBloc>(ProfileBloc(sl()));
   sl.registerSingleton<WelcomeBloc>(WelcomeBloc());
-  sl.registerSingleton<NewfeedBloc>(NewfeedBloc(sl()));
+  sl.registerFactory<NewfeedBloc>(() => NewfeedBloc(sl()));
   sl.registerSingleton<CreatePostBloc>(CreatePostBloc(sl()));
 
   sl.registerSingleton<BottomNavigationBloc>(BottomNavigationBloc());
