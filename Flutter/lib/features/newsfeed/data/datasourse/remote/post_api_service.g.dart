@@ -13,8 +13,10 @@ class _PostApiService implements PostApiService {
     this._dio, {
     this.baseUrl,
   }) {
-    baseUrl ??= 'https://hunganhvku.id.vn/v1/api/vkuniversal';
+    baseUrl ??= 'http://127.0.0.1:5055/v1/api/vkuniversal';
   }
+  //http://localhost:5055
+  //https://hunganhvku.id.vn
 
   final Dio _dio;
 
@@ -53,6 +55,7 @@ class _PostApiService implements PostApiService {
               baseUrl,
             ))));
     List<PostModel> value = _result.data!['metadata']
+    
         .map<PostModel>(
             (dynamic i) => PostModel.fromJson(i as Map<String, dynamic>))
         .toList();

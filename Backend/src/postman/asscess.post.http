@@ -3,12 +3,12 @@ POST http://localhost:5055/v1/api/vkuniversal/signup
 Content-Type: application/json
 
 {
-     "name": "ngoc huy",
-      "email": "huytn.21it@vku.udn.vn",
-     "password": "Huyhuy007"
+     "name": "he24",
+     "password": "abcd",
+     "email": "ab@gmail.com"
 }
 ###
-POST http://localhost:5055/v1/api/vkuniversal/login
+POST http://hunganhvku.id.vn//v1/api/vkuniversal/login
 Content-Type: application/json
 
 {
@@ -24,10 +24,10 @@ Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjkwLCJlbWFpbCI6
 
 ### handlerToken
 
-POST http://localhost:5055/v1/api/vkuniversal/follow
-x-client-id:18
-x-rtoken-id:eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjE4LCJlbWFpbCI6Imh0c2FuZy50Z0B2a3UudWRuLnZuIiwicm9sZSI6MSwiaWF0IjoxNzE2MDQ0NTEwLCJleHAiOjE3MTYwNDYzMTB9.O6baku1TpxvMqEW0840EUlPLtxQHK7b--PoMjYXwWEE
+POST http://localhost:5055/v1/api/vkuniversal/post
+x-client-id:17
+x-rtoken-id:eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjE3LCJlbWFpbCI6InRyYW52YW5odXlAdmt1LnVkbi52biIsInJvbGUiOjEsImlhdCI6MTcxNzkyMDU1NiwiZXhwIjoxNzE3OTM2NzU2fQ.tKzU07abR8dqhUqyug61_8P2sVaovZOIWoIrTig0FBM
 Content-Type: application/json
 {
-     "followed_id": 17
+     "page": 1
 }

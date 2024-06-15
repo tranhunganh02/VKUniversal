@@ -1,7 +1,7 @@
 import 'dart:io';
-
+import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:connectivity_plus/connectivity_plus.dart';
-// import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -19,6 +19,8 @@ import 'package:vkuniversal/features/auth/presentation/bloc/sign_up/bloc/sign_up
 import 'package:vkuniversal/features/auth/presentation/bloc/sign_in/bloc/sign_in_bloc.dart';
 import 'package:vkuniversal/features/auth/presentation/bloc/welcome/bloc/welcome_bloc.dart';
 import 'package:vkuniversal/features/auth/presentation/pages/welcome.dart';
+import 'package:vkuniversal/features/chat/presentation/bloc/list_chat/list_chat_bloc.dart';
+import 'package:vkuniversal/features/chat/presentation/bloc/room_chat/room_chat_bloc.dart';
 import 'package:vkuniversal/features/newsfeed/presentation/state/home/bloc/home_bloc.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:vkuniversal/features/newsfeed/presentation/state/newfeeds/bloc/newfeed_bloc.dart';
@@ -27,7 +29,7 @@ import 'package:vkuniversal/features/profile/presentation/state/bloc/profile_blo
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await initializeDependencies();
+
   // if (Platform.isMacOS) {
   //   await Firebase.initializeApp(
   //     options: FirebaseOptions(
@@ -39,10 +41,25 @@ Future<void> main() async {
   //           'test1-8afe3.appspot.com', // Thông tin khác tùy theo cài đặt Firebase của bạn
   //     ),
   //   );
+  // } else if (kIsWeb) {
+  //   await Firebase.initializeApp(
+  //     options: FirebaseOptions(
+  //         apiKey: "AIzaSyDQtiBswAc9Qn5w_5ePEW_8QJejfDQckqA",
+  //         authDomain: "test1-8afe3.firebaseapp.com",
+  //         databaseURL:
+  //             "https://test1-8afe3-default-rtdb.asia-southeast1.firebasedatabase.app",
+  //         projectId: "test1-8afe3",
+  //         storageBucket: "test1-8afe3.appspot.com",
+  //         messagingSenderId: "282946755124",
+  //         appId: "1:282946755124:web:72318e63f137b77d924861",
+  //         measurementId:
+  //             "G-P1K46FCHN2" // Thông tin khác tùy theo cài đặt Firebase của bạn
+  //         ),
+  //   ); // Khởi tạo bình thường cho các nền tảng khác
   // } else {
-  //   await Firebase
-  //       .initializeApp(); // Khởi tạo bình thường cho các nền tảng khác
+    await Firebase.initializeApp();
   // }
+    await initializeDependencies();
   initializeDateFormatting();
   await setupLocator();
   final prefs = await SharedPreferences.getInstance();
@@ -77,6 +94,12 @@ Future<void> main() async {
       ),
       BlocProvider(
         create: (_) => sl<CreatePostBloc>(),
+      ),
+       BlocProvider(
+        create: (_) => sl<ListChatBloc>(),
+      ),
+       BlocProvider(
+        create: (_) => sl<RoomChatBloc>(),
       ),
       // BlocProvider(
       //   create: (_) => sl<PostCardBloc>(),

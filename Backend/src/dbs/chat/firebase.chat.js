@@ -1,5 +1,5 @@
 const firebase = require("firebase-admin");
-const { getUserAvatar } = require("../user/pg.user");
+const {getUserChat } = require("../user/pg.user");
 const db = firebase.firestore();
 
 const PAGE_SIZE = 7; // Kích thước trang
@@ -11,9 +11,8 @@ const PAGE_SIZE = 7; // Kích thước trang
 const getListChatUser = async (user_id, page = 1) => {
     let queryRef = db.collection("chatroom")
                      .where("users", "array-contains", user_id)
-                     .orderBy('create_at', "desc")
+                     .orderBy('time_last_message', "desc")
           
-
     if (page > 1) {
       const startAfterDoc = await getLastDocumentOnPage(user_id, page - 1);
       if (!startAfterDoc) {
@@ -38,8 +37,9 @@ const getListChatUser = async (user_id, page = 1) => {
 
      console.log("user kasc laf", userNumbers[0]);
      if (userNumbers.length > 0) {
-         const avatar = await getUserAvatar(userNumbers[0]);
-         chatData.avatar = avatar;
+         const user = await getUserChat(userNumbers[0]);
+         chatData.avatar = user.avatar;
+         chatData.username = user.department_name ? user.department_name : user.surname + user.last_name;
      }
 
      data.push(chatData);
@@ -55,7 +55,7 @@ const getLastDocumentOnPage = async (user_id, page) => {
 
     const querySnapshot = await db.collection("chatroom")
                                   .where("users", "array-contains", user_id)
-                                  .orderBy("create_at", "desc")
+                                  .orderBy("time_last_message", "desc")
                                   .limit(page * PAGE_SIZE)
                                   .get();
     if (querySnapshot.empty || querySnapshot.size < (page * PAGE_SIZE)) {
@@ -74,8 +74,9 @@ const createChatRoom = async (user1, user2) => {
       
           const chatRoomRef = await firebase.firestore().collection('chatroom').add({
             create_at: timestamp,
+            time_last_message: null,
             users: [user1, user2],
-            lastmessage: null,
+            last_message: null,
           });
           // Lấy thông tin của phòng chat vừa tạo và trả về cùng với Document ID
           const chatRoomSnapshot = await chatRoomRef.get();

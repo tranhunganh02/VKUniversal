@@ -13,14 +13,6 @@ class Database {
   async connect(type = "pg") {
      if (type === "pg") {
           try {
-            // this.pool = new Pool({
-            //   user: process.env.POSTGRES_USER,
-            //   password: process.env.POSTGRES_PASSWORD,
-            //   database: process.env.POSTGRES_DATABASE,
-            //   host: process.env.POSTGRES_HOST,
-            //   connectionString: process.env.POSTGRES_URL,
-            //   poolSize: 100, // Adjust poolSize as needed
-            // });
             this.pool = new Pool({
               user: db.name,
               password: db.password,
@@ -28,10 +20,10 @@ class Database {
               host: db.host,
               port: db.port,
               poolSize: 100, // Adjust poolSize as needed
-            })
+            });
     
             await this.pool.connect(); // Use await to ensure connection is established
-            console.log("Connected to PostgreSQL database successfully: ");
+            console.log("Connected to PostgreSQL database successfully: ", db.database);
           } catch (error) {
             console.error("Error connecting to database:", error);
             // Handle connection errors appropriately (e.g., retry, exit gracefully)
@@ -73,11 +65,9 @@ class Database {
       throw error; // Re-throw for handling in AccessService
     }
   }
-
   async queryGetRowCount(query, values = []) {
     try {
       const result = await this.pool.query(query, values);
-      console.log("res", result.rowCount);
       return result.rowCount;
     } catch (error) {
       console.error('Error executing query:', error);

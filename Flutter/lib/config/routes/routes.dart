@@ -9,12 +9,13 @@ import 'package:vkuniversal/features/newsfeed/presentation/pages/post_detail.dar
 import 'package:vkuniversal/features/profile/presentation/pages/profile.dart';
 import 'package:vkuniversal/features/newsfeed/presentation/pages/home.dart';
 import 'package:vkuniversal/main.dart';
-
+import '../../features/chat/domain/entities/receiver.dart';
 import '../../features/profile/presentation/pages/update_profile.dart';
 import 'router_name.dart';
 
 class Routes {
   static MaterialPageRoute generateRoute(RouteSettings settings) {
+     final arguments = settings.arguments;
     switch (settings.name) {
       case RoutesName.home:
         return MaterialPageRoute(builder: (BuildContext context) => Home());
@@ -32,7 +33,7 @@ class Routes {
             builder: (BuildContext context) => ListChatScreen());
       case RoutesName.roomChat:
         return MaterialPageRoute(
-            builder: (BuildContext context) => ChatScreen());
+            builder: (BuildContext context) => ChatScreen(rc: arguments as Receiver,));
       case RoutesName.profile:
         return MaterialPageRoute(
             builder: (BuildContext context) => ProfileScreen());

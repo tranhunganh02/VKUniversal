@@ -9,7 +9,7 @@ class ChatController {
   getChat = async (req, res, next) => {
     new SuccessResponse({
       message: "get data success",
-      metadata: await ChatService.getListChatByUserId(req.user.userId, req.body.page),
+      metadata: await ChatService.getListChatByUserId(req.user.userId, req.body.page, ),
     }).send(res);
   };
   createRoomChat = async (req, res, next) => {

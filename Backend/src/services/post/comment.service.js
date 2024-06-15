@@ -10,13 +10,14 @@ class CommentService {
     // 2. if have path and level -> check comment parent
     // 3. if have attachments -> push attachments
     // 4. return data
-    const { post_id, content, path, level } = payload;
+    const { post_id, content, pr_id } = payload;
+    console.log("pr_id", pr_id);
     //1.
     if (!content || !user_id || !post_id)
       throw new BadRequestError("Some fields required are missing");
     //2.
-    if( path && level){
-      const checkCommentParent = await checkCommentExists(path)
+    if( pr_id){
+      const checkCommentParent = await checkCommentExists(pr_id)
       if(!checkCommentParent) throw new NotFoundError("Comment parent not found ")
     }  
     //3.
@@ -32,14 +33,14 @@ class CommentService {
         throw BadRequestError("Cannot push image");
       }
       console.log("attachmentURLs", attachmentURLs);
-      const newComment = await createCommentToFb(Number(post_id), user_id, content,attachmentURLs, path, level);
+      const newComment = await createCommentToFb(Number(post_id), user_id, content,attachmentURLs,pr_id);
 
       if(!newComment) throw new BadRequestError("Can not create comment")
       //4
       return newComment
     }
 
-    const newComment = await createCommentToFb(Number(post_id), user_id, content, path, level);
+    const newComment = await createCommentToFb(Number(post_id), user_id, content, null, pr_id);
 
     if(!newComment) throw new BadRequestError("Can not create comment")
       //4.
@@ -47,11 +48,13 @@ class CommentService {
   }
 
   static async udpateComment(payload, user_id) {
-    const {comment_id, content,image, path, level } = payload;
+    const {comment_id, content,image } = payload;
+
+    console.log(payload);
     //check missing value
-    if (!content || !user_id || !comment_id)
+    if (!content || !comment_id)
       throw new BadRequestError("Some fields required are missing");
-    const newComment = await updateCommentToFb(comment_id, content,image, path, level);
+    const newComment = await updateCommentToFb(comment_id, content,image);
 
     if(!newComment) throw new BadRequestError("Can not create comment")
     return newComment
@@ -67,11 +70,11 @@ class CommentService {
 
   }
   static async getCommentsById(payload) {
-    const { comment_id, post_id, path, level } = payload;
+    const { pr_id, post_id} = payload;
     // if (!comment_id)
     //   throw new BadRequestError("Some fields required are missing");
 
-    const comments = await getCommentsByCommentId(comment_id, Number(post_id), path, level)
+    const comments = await getCommentsByCommentId(pr_id, Number(post_id),)
 
     if(!comments) throw new NotFoundError("Comment parent not found ") 
 

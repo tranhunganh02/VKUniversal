@@ -4,7 +4,7 @@ const { checkMutualFollow } = require("../../dbs/chat/pg.chat");
 
 class ChatService {
      static async getListChatByUserId(user_id, page) {
-
+          console.log("user ", user_id, "page", page);
           const result = await getListChatUser(user_id, page);
 
           if (!result) throw new BadRequestError("Cannot get data");

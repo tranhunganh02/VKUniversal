@@ -54,7 +54,7 @@ class UserService {
     if (!user) throw new NotFoundError();
 
     return {
-      user_bio: user_bio ? user_bio : null, 
+      user_bio: user_bio ? user_bio.bio : null, 
         user: user
     };
 

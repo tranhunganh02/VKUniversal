@@ -6,21 +6,19 @@ const createCommentToFb = async (
   userId,
   content,
   image = null,
-  path = null,
-  level = null
+  pr_id = null
 ) => {
   const newComment = {
     post_id: postId,
     user_id: userId,
     content: content,
+    pr_id: pr_id,
     image: image,
     created_at: new Date(), // Get server timestamp
     updated_at: null, // Get server timestamp
   };
 
-  const commentRef = path
-    ? db.collection(`comments/${path}/${level}`).doc()
-    : db.collection(`comments`).doc();
+  const commentRef = db.collection(`comments`).doc();
   await commentRef.set(newComment);
   const commentId = commentRef.id; // Get the comment_id
   const commentData = (await commentRef.get()).data();
@@ -34,18 +32,15 @@ const createCommentToFb = async (
   return { comment_id: commentId, ...commentData };
 };
 const checkCommentExists = async (comment_id) => {
-    const docRef = db.collection("comments").doc(comment_id);
-    const docSnapshot = await docRef.get();
-    return docSnapshot.exists;
+  const docRef = db.collection("comments").doc(comment_id);
+  const docSnapshot = await docRef.get();
+  return docSnapshot.exists;
 };
-
 
 const updateCommentToFb = async (
   comment_id,
   content,
   image = null,
-  path = null,
-  level = null
 ) => {
   const newComment = {
     content: content,
@@ -56,10 +51,7 @@ const updateCommentToFb = async (
     newComment.image = image;
   }
 
-  const commentRef =
-    path && level
-      ? db.collection(`comments/${path}/${level}`).doc(comment_id)
-      : db.collection(`comments`).doc(comment_id);
+  const commentRef = db.collection(`comments`).doc(comment_id);
   const commentSnapshot = await commentRef.get();
 
   // Kiểm tra xem tài liệu comment có tồn tại không
@@ -91,13 +83,8 @@ const updateCommentToFb = async (
 const deleteCommentToFb = async (
   comment_id,
   user_id,
-  path = null,
-  level = null
 ) => {
-  const commentRef =
-    path && level
-      ? db.collection(`comments/${path}/${level}`).doc(comment_id)
-      : db.collection(`comments`).doc(comment_id);
+  const commentRef = db.collection(`comments`).doc(comment_id);
   const commentSnapshot = await commentRef.get();
 
   // Kiểm tra xem tài liệu comment có tồn tại không
@@ -119,24 +106,17 @@ const deleteCommentToFb = async (
   }
 };
 
-const getCommentsByCommentId = async(comment_id, post_id=null, path= null, level= null) => {
-  let commentRef = db.collection('comments');
-  
-  if (post_id) {
-    console.log("ddaa");
-    commentRef = commentRef.where('post_id', '==', post_id);
-  } 
-
-  // Trường hợp 2: Nếu không có path và level, thực hiện truy vấn tất cả các comment với điều kiện post_id
-  else {
-    commentRef = commentRef.doc(path).collection(level);
-  }
+const getCommentsByCommentId = async (pr_id = null, post_id) => {
+  let commentRef = db.collection("comments");
+  commentRef = commentRef
+    .where("post_id", "==", post_id)
+    .where("pr_id", "==", pr_id ?? null);
   // Thực hiện truy vấn để lấy tất cả các comment có cùng comment_id
 
   const docSnapshot = await commentRef.get();
 
   const comments = [];
-  docSnapshot.forEach(doc => {
+  docSnapshot.forEach((doc) => {
     const commentData = doc.data();
     commentData.comment_id = doc.id;
     comments.push(commentData);
@@ -144,6 +124,12 @@ const getCommentsByCommentId = async(comment_id, post_id=null, path= null, level
 
   // Trả về danh sách các comment
   return comments;
-}
+};
 
-module.exports = {getCommentsByCommentId, createCommentToFb, updateCommentToFb, deleteCommentToFb, checkCommentExists };
+module.exports = {
+  getCommentsByCommentId,
+  createCommentToFb,
+  updateCommentToFb,
+  deleteCommentToFb,
+  checkCommentExists,
+};
