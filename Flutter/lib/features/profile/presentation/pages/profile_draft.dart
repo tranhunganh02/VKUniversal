@@ -16,6 +16,8 @@ import 'package:vkuniversal/features/profile/presentation/widgets/major_label.da
 import 'package:vkuniversal/features/profile/presentation/widgets/profile_buttons.dart';
 import 'package:vkuniversal/features/profile/presentation/widgets/user_label.dart';
 
+import '../../../../core/utils/responsive.dart';
+
 class ProfilePage extends StatefulWidget {
   final int? role;
   final int? userIDToLoadProfile;
@@ -60,6 +62,11 @@ class _ProfilePageState extends State<ProfilePage>
     ColorScheme colorScheme = Theme.of(context).colorScheme;
     TextTheme textTheme = Theme.of(context).textTheme;
 
+    final isDesktop = Responsive.isDesktop(context);
+    final isTable = Responsive.isTable(context);
+    final isMobileLarge = Responsive.isMobileLarge(context);
+
+
     final tabs = <Widget>[
       Text("Post"),
       Text("Image"),
@@ -84,17 +91,18 @@ class _ProfilePageState extends State<ProfilePage>
                   controller: scrollController,
                   physics: ClampingScrollPhysics(),
                   child: Padding(
-                    padding: const EdgeInsets.only(top: 32),
+                    padding: const EdgeInsets.only(top: 30),
                     child: Column(
                       children: [
                         Container(
                           color: colorScheme.surface,
                           width: widthScreen,
                           margin: EdgeInsets.only(bottom: 8),
+                          padding: EdgeInsets.only(bottom: 5),
                           child: Column(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
-                              Avatar(profile.user.avatar, 80),
+                              Avatar(image: profile.user.avatar,size: 80),
                               BlocBuilder<ProfileBloc, ProfileState>(
                                 builder: (context, state) {
                                   if (profile.user is DepartmentModel) {

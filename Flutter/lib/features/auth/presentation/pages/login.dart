@@ -14,6 +14,8 @@ import 'package:vkuniversal/features/auth/presentation/widgets/filled_button.dar
 import 'package:vkuniversal/features/auth/presentation/widgets/google_button.dart';
 import 'package:vkuniversal/features/auth/presentation/widgets/text_form_field.dart';
 
+import '../../../../core/utils/responsive.dart';
+
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
 
@@ -40,6 +42,9 @@ class _LoginPageState extends State<LoginPage> {
   Widget build(BuildContext context) {
     TextTheme textTheme = Theme.of(context).textTheme;
     ColorScheme colorScheme = Theme.of(context).colorScheme;
+
+        final isDesktop = Responsive.isDesktop(context);
+     final isMobileLarge = Responsive.isMobileLarge(context);
     return Scaffold(
       body: BlocConsumer<SignInBloc, SignInState>(
         listener: (context, state) {
@@ -57,13 +62,16 @@ class _LoginPageState extends State<LoginPage> {
             children: [
               Positioned(
                 child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     ClipPath(
                       clipper: CurvedBottomClipper(),
-                      child: Container(
+                       child: Container(
+                        height: isDesktop ? 400 : isMobileLarge ? 300 : 200, // Adjust height based on isDesktop and isMobileLarge
+                        width: double.infinity,
                         child: Image.asset(
                           ImageString.vku_landscape,
-                          fit: BoxFit.cover,
+                          fit: isDesktop ? BoxFit.fitWidth : BoxFit.cover,
                         ),
                       ),
                     ),
@@ -84,21 +92,23 @@ class _LoginPageState extends State<LoginPage> {
                             ),
                             CustomSizeBox(value: 30),
                             AuthTextField(
+                              widthFieldPercent: isDesktop ? 0.5: 0.9,
                               hintText: "Email",
                               prefixIcon: IconList.email,
                               isObscured: false,
                               controller: emailController,
                               validation: null,
                             ),
-                            CustomSizeBox(value: 10),
+                            CustomSizeBox(value: isDesktop ? 30: 10),
                             AuthTextField(
+                              widthFieldPercent: isDesktop ? 0.5: 0.9,
                               hintText: "Password",
                               prefixIcon: IconList.lock,
                               isObscured: true,
                               controller: passwordController,
                               validation: null,
                             ),
-                            CustomSizeBox(value: 10),
+                            CustomSizeBox(value: isDesktop ? 30: 10),
                             FilledButtonCustom(
                               label: "Login",
                               onPress: () {
@@ -106,12 +116,14 @@ class _LoginPageState extends State<LoginPage> {
                                   SubmitForm();
                                 }
                               },
+                              heightButton:  isDesktop ? 40: 10,
+                              widthPercent: isDesktop ? 0.5: 0.9,
                             ),
-                            CustomSizeBox(value: 10),
+                            CustomSizeBox(value: isDesktop ? 15: 10),
                             DontHaveAccount(),
-                            CustomSizeBox(value: 10),
+                            CustomSizeBox(value: isDesktop ? 15: 10),
                             Text(
-                              "Or",
+                              "Or \n",
                               style: textTheme.headlineSmall
                                   ?.copyWith(color: Color(0xffD0CFD4)),
                             ),

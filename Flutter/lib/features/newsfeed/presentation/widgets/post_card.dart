@@ -9,10 +9,13 @@ import 'package:vkuniversal/config/routes/routes.dart';
 import 'package:vkuniversal/core/constants/constants.dart';
 import 'package:vkuniversal/core/utils/date_converter.dart';
 import 'package:vkuniversal/core/utils/screen_scale.dart';
+import 'package:vkuniversal/core/widgets/avatat.dart';
 import 'package:vkuniversal/core/widgets/loader.dart';
 import 'package:vkuniversal/features/newsfeed/data/model/attachment.dart';
 import 'package:vkuniversal/features/newsfeed/presentation/state/newfeeds/bloc/newfeed_bloc.dart';
 import 'package:vkuniversal/features/newsfeed/presentation/widgets/create_post_bottom_sheet.dart';
+
+import '../../../../core/utils/responsive.dart';
 
 class PostCard extends StatefulWidget {
   final int postID;
@@ -53,7 +56,6 @@ class _PostCardState extends State<PostCard> {
   void initState() {
     super.initState();
     _loadDefault();
-    logger.d(avatarUser);
   }
 
   void _likePost(bool isLiked, int index) {
@@ -72,6 +74,11 @@ class _PostCardState extends State<PostCard> {
     ColorScheme colorScheme = Theme.of(context).colorScheme;
     TextTheme textTheme = Theme.of(context).textTheme;
     DateConverter dateConverter = convertDate(widget.date);
+
+
+    final isDesktop = Responsive.isDesktop(context);
+    final isTable = Responsive.isTable(context);
+    final isMobileLarge = Responsive.isMobileLarge(context);
 
     return GestureDetector(
       onTap: () => Navigator.pushNamed(context, RoutesName.postDetail,
@@ -146,40 +153,43 @@ class _PostCardState extends State<PostCard> {
             // Phần ảnh
             // [NOTE: Mỗi list images đề có trả về một phần từ null nên phải check từ 2]
             widget.images.length >= 1
-                ? CarouselSlider(
-                    items: widget.images.map((attachment) {
-                      return Builder(
-                        builder: (BuildContext context) {
-                          return Container(
-                            child: Image.network(
-                              attachment.fileURL,
-                              fit: BoxFit.cover,
-                              loadingBuilder: (BuildContext context,
-                                  Widget child,
-                                  ImageChunkEvent? loadingProgress) {
-                                if (loadingProgress == null) return child;
-                                return Loader();
-                              },
-                              errorBuilder: (context, error, stackTrace) {
-                                return SizedBox();
-                              },
-                            ),
-                          );
-                        },
-                      );
-                    }).toList(),
-                    options: CarouselOptions(
-                      height: widget.images.isNotEmpty ? width : 0,
-                      autoPlay: true,
-                      enlargeCenterPage: false,
-                      aspectRatio: 1 / 1,
-                      autoPlayInterval: Duration(seconds: 3),
-                      autoPlayAnimationDuration: Duration(milliseconds: 2000),
-                      autoPlayCurve: Curves.fastOutSlowIn,
-                      enableInfiniteScroll: false,
-                      viewportFraction: 1,
+                ? Padding(
+                  padding: const EdgeInsets.all(2),
+                  child: CarouselSlider(
+                      items: widget.images.map((attachment) {
+                        return Builder(
+                          builder: (BuildContext context) {
+                            return Container(
+                              child: Image.network(
+                                attachment.fileURL,
+                                fit: BoxFit.cover,
+                                loadingBuilder: (BuildContext context,
+                                    Widget child,
+                                    ImageChunkEvent? loadingProgress) {
+                                  if (loadingProgress == null) return child;
+                                  return Loader();
+                                },
+                                errorBuilder: (context, error, stackTrace) {
+                                  return SizedBox();
+                                },
+                              ),
+                            );
+                          },
+                        );
+                      }).toList(),
+                      options: CarouselOptions(
+                        height: widget.images.isNotEmpty ? isDesktop||isTable ? width*0.38 : width: 0,
+                        autoPlay: true,
+                        enlargeCenterPage: false,
+                        aspectRatio: 1 / 1,
+                        autoPlayInterval: Duration(seconds: 3),
+                        autoPlayAnimationDuration: Duration(milliseconds: 2000),
+                        autoPlayCurve: Curves.fastOutSlowIn,
+                        enableInfiniteScroll: false,
+                        viewportFraction: 1,
+                      ),
                     ),
-                  )
+                )
                 : Container(),
             // Các nút like, cmt,...
             Padding(
@@ -241,8 +251,9 @@ class _PostCardState extends State<PostCard> {
             ),
             Container(
               alignment: Alignment.centerLeft,
+              margin: EdgeInsets.symmetric(vertical: 5),
               child: Padding(
-                padding: const EdgeInsets.only(left: 8, right: 8),
+                padding:  EdgeInsets.only(left: 8, right: 8),
                 child: Text(
                   "Xem bình luận...",
                   style: textTheme.bodySmall?.copyWith(
@@ -253,26 +264,13 @@ class _PostCardState extends State<PostCard> {
             ),
             // Bình luận
             Padding(
-              padding: const EdgeInsets.only(left: 8, right: 8),
+              padding: isDesktop||isTable ? EdgeInsets.symmetric(horizontal: 15)  :  EdgeInsets.only(left: 8, right: 8, bottom: 5),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
+                  Avatar(size: isTable|| isDesktop ? 50: 35),
                   Container(
-                    width: width * 0.05,
-                    height: width *
-                        0.05, // Ensure the height is the same as the width for a square container
-                    child: ClipOval(
-                      child: Image.network(
-                        avatarUser ?? avatarNotFound,
-                        fit: BoxFit
-                            .cover, // Ensures the image covers the whole area of the ClipOval
-                        width: double.infinity,
-                        height: double.infinity,
-                      ),
-                    ),
-                  ),
-                  Container(
-                    width: width * 0.9,
+                    width: isTable||isDesktop? width*0.64: width * 0.82,
                     height: height * 0.04,
                     alignment: Alignment.centerLeft,
                     decoration: BoxDecoration(

@@ -8,6 +8,7 @@ class AuthTextField extends StatelessWidget {
   final bool isObscured;
   final TextEditingController controller;
   final String? validation;
+  final double widthFieldPercent;
   AuthTextField({
     super.key,
     required this.hintText,
@@ -15,7 +16,7 @@ class AuthTextField extends StatelessWidget {
     this.imageIcon,
     required this.isObscured,
     required this.controller,
-    this.validation,
+    this.validation, required this.widthFieldPercent,
   });
 
   @override
@@ -24,7 +25,7 @@ class AuthTextField extends StatelessWidget {
     ColorScheme colorScheme = Theme.of(context).colorScheme;
     TextTheme textTheme = Theme.of(context).textTheme;
     return SizedBox(
-      width: width * 0.9,
+      width: width * widthFieldPercent,
       height: 52,
       child: TextFormField(
         controller: controller,

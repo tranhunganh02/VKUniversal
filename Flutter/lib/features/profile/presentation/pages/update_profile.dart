@@ -50,7 +50,7 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
                     child: Stack(
                       alignment: Alignment.center,
                       children: [
-                        Avatar(image, 90),
+                        Avatar(image: image, size: 90,),
                         Positioned(
                             bottom: 10,
                             right: 0,

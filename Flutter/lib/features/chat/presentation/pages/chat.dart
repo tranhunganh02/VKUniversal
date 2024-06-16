@@ -10,6 +10,7 @@ import 'package:vkuniversal/features/chat/data/model/message.dart';
 import 'package:vkuniversal/features/chat/presentation/bloc/room_chat/room_chat_bloc.dart';
 import 'package:vkuniversal/features/chat/presentation/pages/data_fake.dart';
 import '../../../../core/utils/injection_container.dart';
+import '../../../../core/utils/responsive.dart';
 import '../../../../core/widgets/avatat.dart';
 import '../../domain/entities/receiver.dart';
 import '../widgets/chat_content.dart';
@@ -40,17 +41,6 @@ class _ChatScreenState extends State<ChatScreen> {
     _messageController.dispose();
     super.dispose();
   }
-
-  loadOldMessage(String idMessage, int userId, String message) async {
-    print("dã vao2 ");
-    context.read<RoomChatBloc>().add(LoadOldMessagesEvent(
-          idRoom: widget.rc.idRoom,
-          idMessage: idMessage,
-          userId: userId,
-          message: message,
-        ));
-  }
-
   Future<void> _loadUserId() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     int? id = prefs.getInt('userID');
@@ -82,7 +72,9 @@ class _ChatScreenState extends State<ChatScreen> {
   @override
   Widget build(BuildContext context) {
     // ignore: deprecated_member_use
-
+    final isDesktop = Responsive.isDesktop(context);
+    final isTable = Responsive.isTable(context);
+    final isMobileLarge = Responsive.isMobileLarge(context);
     TextTheme textTheme = Theme.of(context).textTheme;
     return Scaffold(
       resizeToAvoidBottomInset: true,
@@ -90,10 +82,13 @@ class _ChatScreenState extends State<ChatScreen> {
         preferredSize: Size.fromHeight(kToolbarHeight + 10),
         child: AppBar(
           centerTitle: true,
-          title: Text(
+          title:  Expanded(
+          child: Text(
             widget.rc.name,
-            style: textTheme.displayMedium,
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis, // Truncate the text if it's too long
           ),
+        ),
           leading: Row(
             children: [
               IconButton(
@@ -105,7 +100,7 @@ class _ChatScreenState extends State<ChatScreen> {
               ),
               Container(
                   margin: const EdgeInsets.only(left: 2.0),
-                  child: Avatar(widget.rc.avatar, 45.0))
+                  child: Avatar(image : widget.rc.avatar, size: 45.0))
             ],
           ),
           leadingWidth: 100,
@@ -125,9 +120,6 @@ class _ChatScreenState extends State<ChatScreen> {
                     create: (context) =>
                         sl()..add(LoadMessagesEvent(idRoom: widget.rc.idRoom)),
                     child: BlocConsumer<RoomChatBloc, RoomChatState>(
-                      buildWhen: (context, state) {
-                        return state is ChatLoadedState;
-                      },
                       builder: (_, state) {
                         if (state is ChatLoadingState) {
                           return Center(
@@ -166,11 +158,13 @@ class _ChatScreenState extends State<ChatScreen> {
             Expanded(
                 flex: 1,
                 child: Container(
+                   margin: isDesktop? EdgeInsets.only(right: 10, left: 5) :null,
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Container(
-                        width: MediaQuery.of(context).size.width *
+                        width:isDesktop? MediaQuery.of(context).size.width *
+                            0.9 : MediaQuery.of(context).size.width *
                             0.83, // Chiều rộng là 80% màn hình
                         height: 45,
                         alignment: Alignment.center,
@@ -190,7 +184,7 @@ class _ChatScreenState extends State<ChatScreen> {
                             hintText: 'Enter your text here',
                           ),
                           textAlign: TextAlign.justify,
-                          style: textTheme.bodySmall,
+                          style: isDesktop? textTheme.bodyMedium?.copyWith(color: Colors.black) : textTheme.bodySmall?.copyWith(color: Colors.black),
                         ),
                       ),
                       GestureDetector(

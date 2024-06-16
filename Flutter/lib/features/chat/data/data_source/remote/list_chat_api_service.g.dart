@@ -13,7 +13,7 @@ class _RoomChatService implements RoomChatService {
     this._dio, {
     this.baseUrl,
   }) {
-    baseUrl ??= "http://127.0.0.1:5055/v1/api/vkuniversal";
+    baseUrl ??= "https://hunganhvku.id.vn/v1/api/vkuniversal";
   }
 
   final Dio _dio;

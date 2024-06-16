@@ -121,8 +121,8 @@ class MyThemeData {
       ),
       labelMedium: GoogleFonts.montserrat(
         textStyle: TextStyle(
-          fontWeight: FontWeight.w700,
-          fontSize: 16,
+          fontWeight: FontWeight.w500,
+          fontSize: 17,
         ),
       ),
       labelSmall: GoogleFonts.montserrat(

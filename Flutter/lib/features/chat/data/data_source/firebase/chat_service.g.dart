@@ -33,35 +33,6 @@ class FirebaseChatService {
     return controller.stream;
   }
 
-  Stream<List<MessageModel>> getOldMessages(
-      String idRoom, String lastMessageId) {
-    var controller = StreamController<List<MessageModel>>.broadcast();
-    Query ref = FirebaseDatabase.instance
-        .ref('ChatRoom/$idRoom')
-        .orderByKey()
-        .endBefore(lastMessageId)
-        .limitToLast(10);
-
-    ref.onValue.listen((event) {
-      final data = event.snapshot.value as Map<dynamic, dynamic>;
-
-      if (data == null) {
-        controller.add(<MessageModel>[]);
-      } else {
-        var messages = data.entries
-            .map((entry) => MessageModel(
-                  idMessage: entry.key,
-                  userId: entry.value['idUser'] as int,
-                  message: entry.value['message'] as String,
-                ))
-            .toList();
-        messages.sort((a, b) => a.idMessage.compareTo(b.idMessage));
-        controller.add(messages);
-      }
-    });
-    return controller.stream;
-  }
-
   Future<void> sendMessage(String idRoom, int userId, String message) async {
     // Get a reference to the specific message location in the chat room
     final timestamp = DateTime.now().millisecondsSinceEpoch;

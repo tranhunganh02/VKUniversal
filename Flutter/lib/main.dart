@@ -11,6 +11,7 @@ import 'package:vkuniversal/config/theme/theme_const.dart';
 import 'package:vkuniversal/core/constants/share_pref.dart';
 import 'package:vkuniversal/core/resources/data_state.dart';
 import 'package:vkuniversal/core/utils/injection_container.dart';
+import 'package:vkuniversal/core/utils/logout_common.dart';
 import 'package:vkuniversal/core/widgets/loader.dart';
 import 'package:vkuniversal/features/auth/domain/usecases/check_student_info.dart';
 import 'package:vkuniversal/features/auth/domain/usecases/logout.dart';
@@ -30,36 +31,42 @@ import 'package:vkuniversal/features/profile/presentation/state/bloc/profile_blo
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-  // if (Platform.isMacOS) {
-  //   await Firebase.initializeApp(
-  //     options: FirebaseOptions(
-  //       appId: '1:282946755124:ios:d6beb875136a3a9d924861',
-  //       apiKey: 'AIzaSyA3N_V3TcCqwi9y86MStLCywIyC_EUKCFk',
-  //       projectId: 'test1-8afe3',
-  //       messagingSenderId: '282946755124',
-  //       storageBucket:
-  //           'test1-8afe3.appspot.com', // Thông tin khác tùy theo cài đặt Firebase của bạn
-  //     ),
-  //   );
-  // } else if (kIsWeb) {
-  //   await Firebase.initializeApp(
-  //     options: FirebaseOptions(
-  //         apiKey: "AIzaSyDQtiBswAc9Qn5w_5ePEW_8QJejfDQckqA",
-  //         authDomain: "test1-8afe3.firebaseapp.com",
-  //         databaseURL:
-  //             "https://test1-8afe3-default-rtdb.asia-southeast1.firebasedatabase.app",
-  //         projectId: "test1-8afe3",
-  //         storageBucket: "test1-8afe3.appspot.com",
-  //         messagingSenderId: "282946755124",
-  //         appId: "1:282946755124:web:72318e63f137b77d924861",
-  //         measurementId:
-  //             "G-P1K46FCHN2" // Thông tin khác tùy theo cài đặt Firebase của bạn
-  //         ),
-  //   ); // Khởi tạo bình thường cho các nền tảng khác
-  // } else {
+
+  if (kIsWeb) {
+    await Firebase.initializeApp(
+      options: FirebaseOptions(
+          apiKey: "AIzaSyDQtiBswAc9Qn5w_5ePEW_8QJejfDQckqA",
+          authDomain: "test1-8afe3.firebaseapp.com",
+          databaseURL:
+              "https://test1-8afe3-default-rtdb.asia-southeast1.firebasedatabase.app",
+          projectId: "test1-8afe3",
+          storageBucket: "test1-8afe3.appspot.com",
+          messagingSenderId: "282946755124",
+          appId: "1:282946755124:web:72318e63f137b77d924861",
+          measurementId:
+              "G-P1K46FCHN2" // Thông tin khác tùy theo cài đặt Firebase của bạn
+          ),
+    ); // Khởi tạo bình thường cho các nền tảng khác
+  } 
+  else if (Platform.isMacOS) {
+    await Firebase.initializeApp(
+      options: FirebaseOptions(
+        appId: '1:282946755124:ios:d6beb875136a3a9d924861',
+        authDomain: 'test1-8afe3.firebaseapp.com',
+        apiKey: 'AIzaSyA3N_V3TcCqwi9y86MStLCywIyC_EUKCFk',
+        projectId: 'test1-8afe3',
+        messagingSenderId: '282946755124',
+        storageBucket:
+            'test1-8afe3.appspot.com',
+        databaseURL: 'https://test1-8afe3-default-rtdb.asia-southeast1.firebasedatabase.app'    
+             // Thông tin khác tùy theo cài đặt Firebase của bạn
+      ),
+    );
+  }
+   else  {
     await Firebase.initializeApp();
-  // }
-    await initializeDependencies();
+  }
+  await initializeDependencies();
   initializeDateFormatting();
   await setupLocator();
   final prefs = await SharedPreferences.getInstance();
@@ -95,10 +102,10 @@ Future<void> main() async {
       BlocProvider(
         create: (_) => sl<CreatePostBloc>(),
       ),
-       BlocProvider(
+      BlocProvider(
         create: (_) => sl<ListChatBloc>(),
       ),
-       BlocProvider(
+      BlocProvider(
         create: (_) => sl<RoomChatBloc>(),
       ),
       // BlocProvider(
@@ -161,8 +168,11 @@ class _CheckUserStateState extends State<CheckUserState> {
 
     final checkUserInfo = await sl<CheckUserInfoExists>();
     final result = await checkUserInfo(data: SetUpAuthData(prefs));
+
+    
     if (result is DataFailed) {
-      Logout(authRepository: sl());
+      LogoutCommon(context);
+      //Logout(authRepository: sl());
     } else {
       if (result.data?.isExist == true) {
         await prefs.setBool('hasUserInfo', true);

@@ -4,6 +4,8 @@ import 'package:vkuniversal/core/widgets/loader.dart';
 import 'package:vkuniversal/features/newsfeed/presentation/state/newfeeds/bloc/newfeed_bloc.dart';
 import 'package:vkuniversal/features/newsfeed/presentation/widgets/post_card.dart';
 
+import '../../../../../core/utils/responsive.dart';
+
 class ExploreTab extends StatefulWidget {
   const ExploreTab({super.key});
 
@@ -31,6 +33,11 @@ class _ExploreTabState extends State<ExploreTab> {
   @override
   Widget build(BuildContext context) {
     // ProfileModel userModel = ProfileModel(userBio: "", user: sl());
+
+    final isDesktop = Responsive.isDesktop(context);
+    final isTable = Responsive.isTable(context);
+    final isMobileLarge = Responsive.isMobileLarge(context);
+
     return RefreshIndicator(
       onRefresh: () async {
         _loadExplorePosts();
@@ -41,6 +48,7 @@ class _ExploreTabState extends State<ExploreTab> {
             return Loader();
           } else if (state is NewfeedLoaded) {
             return Container(
+              padding: isDesktop||isTable? EdgeInsets.symmetric(horizontal: 200): null,
               margin: EdgeInsets.only(bottom: 223),
               child: ListView.builder(
                 controller: _scrollController,

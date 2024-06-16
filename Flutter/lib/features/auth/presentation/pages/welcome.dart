@@ -3,6 +3,7 @@ import 'package:logger/logger.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:vkuniversal/config/routes/router_name.dart';
 import 'package:vkuniversal/core/utils/images_string.dart';
+import 'package:vkuniversal/core/utils/responsive.dart';
 import 'package:vkuniversal/core/widgets/size_box.dart';
 import 'package:vkuniversal/features/auth/presentation/bloc/welcome/bloc/welcome_bloc.dart';
 import 'package:vkuniversal/features/auth/presentation/widgets/login_button.dart';
@@ -31,6 +32,9 @@ class _WelcomePageState extends State<WelcomePage> {
 
     final _logger = Logger();
 
+    final isDesktop = Responsive.isDesktop(context);
+     final isMobileLarge = Responsive.isMobileLarge(context);
+
     return Scaffold(
       body: BlocConsumer<WelcomeBloc, WelcomeState>(
         listener: (context, state) async {
@@ -44,7 +48,7 @@ class _WelcomePageState extends State<WelcomePage> {
             children: [
               // Background
               AspectRatio(
-                aspectRatio: 9 / 16,
+                aspectRatio: 16/9.735 ,
                 child: ShaderMask(
                   shaderCallback: (bounds) {
                     return LinearGradient(

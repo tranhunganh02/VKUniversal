@@ -5,6 +5,7 @@ import 'package:vkuniversal/core/utils/injection_container.dart';
 import 'package:vkuniversal/features/chat/domain/entities/receiver.dart';
 import 'package:vkuniversal/features/chat/presentation/bloc/list_chat/list_chat_bloc.dart';
 import '../../../../config/routes/router_name.dart';
+import '../../../../core/utils/responsive.dart';
 import '../../../../core/widgets/avatat.dart';
 import '../widgets/circle_green.dart';
 import '../widgets/tile_chat_user.dart';
@@ -41,15 +42,13 @@ class _ListChatScreenState extends State<ListChatScreen> {
     super.dispose();
   }
 
-  void navigateToChat(String idRoom, String avatar, String username) {
-    Receiver rc = Receiver(idRoom, avatar, username);
+  void navigateToChat(String idRoom, String? avatar, String username) {
+    Receiver rc = Receiver(idRoom, avatar?? "https://e7.pngegg.com/pngimages/304/275/png-clipart-user-profile-computer-icons-profile-miscellaneous-logo.png", username);
     print(rc);
     Navigator.pushNamed(context, RoutesName.roomChat, arguments: rc);
   }
 
-  
 
- 
 
   @override
   Widget build(BuildContext context) {
@@ -82,6 +81,9 @@ class _ListChatScreenState extends State<ListChatScreen> {
   }
 
   _body() {
+     final isDesktop = Responsive.isDesktop(context);
+    final isTable = Responsive.isTable(context);
+    final isMobileLarge = Responsive.isMobileLarge(context);
     TextTheme textTheme = Theme.of(context).textTheme;
     return BlocBuilder<ListChatBloc, ListChatState>(builder: (_, state) {
       if (state is ListChatLoading) {
@@ -112,8 +114,8 @@ class _ListChatScreenState extends State<ListChatScreen> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text(
-                        "Chat",
-                        style: textTheme.displayMedium,
+                        "List Chat",
+                        style: textTheme.displayMedium?.copyWith(color: Colors.black),
                       ),
                       SizedBox(
                         height: 45,
@@ -175,7 +177,7 @@ class _ListChatScreenState extends State<ListChatScreen> {
                               children: [
                                 Stack(
                                   children: [
-                                    Avatar(state.listChat[index].avatar!, 55),
+                                    Avatar(image: state.listChat[index].avatar!, size: 55),
                                     Positioned(
                                       bottom: 0,
                                       right: 7,
@@ -200,7 +202,7 @@ class _ListChatScreenState extends State<ListChatScreen> {
                               children: [
                                 Stack(
                                   children: [
-                                    Avatar(state.listChat[index].avatar!, 55),
+                                    Avatar(image: state.listChat[index].avatar, size: 55),
                                     Positioned(
                                       bottom: 0,
                                       right: 7,
@@ -223,9 +225,9 @@ class _ListChatScreenState extends State<ListChatScreen> {
                   itemCount: state.listChat.length,
                   itemBuilder: (BuildContext context, int index) {
                     String idRoom = state.listChat[index].documentId!;
-                    String image = state.listChat[index].avatar!;
+                    var image = state.listChat[index].avatar;
                     var username = state.listChat[index].username!;
-                    var last_message = state.listChat[index].lastMessage!;
+                    var last_message = state.listChat[index].lastMessage;
                     var time_last_message = state.listChat[index].timeLastMessage;
                     return TileUserChat(
                         username,

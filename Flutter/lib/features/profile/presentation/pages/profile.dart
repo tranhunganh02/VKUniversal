@@ -5,6 +5,7 @@ import 'package:vkuniversal/core/widgets/avatat.dart';
 import 'package:vkuniversal/features/profile/presentation/widgets/library.dart';
 import 'package:vkuniversal/helper/check_notch_device.dart';
 
+import '../../../../core/utils/responsive.dart';
 import '../widgets/biography.dart';
 import '../widgets/update_button.dart';
 
@@ -17,6 +18,11 @@ class ProfileScreen extends StatelessWidget {
     double heightScreen = MediaQuery.of(context).size.width;
     ColorScheme colorScheme = Theme.of(context).colorScheme;
     TextTheme textTheme = Theme.of(context).textTheme;
+
+
+    final isDesktop = Responsive.isDesktop(context);
+    final isTable = Responsive.isTable(context);
+    final isMobileLarge = Responsive.isMobileLarge(context);
 
     var image =
         "https://scontent.fdad1-4.fna.fbcdn.net/v/t39.30808-6/427931630_3730941007228005_4002607693884312382_n.jpg?_nc_cat=103&ccb=1-7&_nc_sid=5f2048&_nc_ohc=pKahOw0j4ZkQ7kNvgFkW0xf&_nc_ht=scontent.fdad1-4.fna&oh=00_AYBjZPBhQ9i1AfywfNQgXyJ4Bd5mI2kn7eKTsgi5yMHFaQ&oe=664B9F13";
@@ -46,7 +52,7 @@ class ProfileScreen extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     //dien link avatar
-                    Avatar(image, 80),
+                    Avatar(image:image, size: 80),
                     FractionallySizedBox(
                       widthFactor: 0.5,
                       child: Padding(
@@ -85,7 +91,7 @@ class ProfileScreen extends StatelessWidget {
                               onPressed: () {},
                               child: Container(
                                 width: widthScreen * 0.3,
-                                height: heightScreen * 0.09,
+                                height:isDesktop? heightScreen*0.02 : heightScreen * 0.09,
                                 decoration: BoxDecoration(
                                     borderRadius:
                                         BorderRadius.all(Radius.circular(25)),

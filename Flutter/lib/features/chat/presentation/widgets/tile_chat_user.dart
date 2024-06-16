@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import '../../../../core/widgets/avatat.dart';
 import '../../../../helper/convert_time.dart';
 
-ListTile TileUserChat(String username, String? last_message, int? time_last_message, TextTheme textTheme, String image, void Function() navigate) {
+ListTile TileUserChat(String username, String? last_message, int? time_last_message, TextTheme textTheme, String? image, void Function() navigate) {
   return ListTile(
     title: Text(username),
     subtitle: Row(
@@ -23,7 +23,7 @@ ListTile TileUserChat(String username, String? last_message, int? time_last_mess
         ),
       ],
     ),
-    leading: Avatar(image, 55),
+    leading: Avatar(size: 55, image: image,),
 
     onTap: navigate,
   );

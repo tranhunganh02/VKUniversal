@@ -18,19 +18,6 @@ class LoadMessagesNewEvent extends RoomChatEvent {
     required this.idRoom,
   });
 }
-
-class LoadOldMessagesEvent extends RoomChatEvent {
-  final String idRoom;
-  final String idMessage;
-  final int userId;
-  final String message;
-  LoadOldMessagesEvent(
-      {required this.idRoom,
-      required this.idMessage,
-      required this.userId,
-      required this.message});
-}
-
 class SendMessageEvent extends RoomChatEvent {
   final String idRoom;
   final int userId;
@@ -41,6 +28,14 @@ class SendMessageEvent extends RoomChatEvent {
     required this.userId,
     required this.message,
   });
+}
+class UpdateMessagesEvent extends RoomChatEvent {
+  final List<MessageModel> messages;
+
+  UpdateMessagesEvent(this.messages);
+
+  @override
+  List<Object> get props => [messages];
 }
 
 class ClickNavigateEvent extends RoomChatEvent {}

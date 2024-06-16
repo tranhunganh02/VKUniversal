@@ -16,7 +16,7 @@ FractionallySizedBox ChatContent(user_id, content, bool checkSender) {
         child: Text(
           content.toString(),
           style: TextStyle(
-            color: checkSender ? Colors.white : Colors.black,
+            color: checkSender ? Colors.black : Colors.black,
           ),
         ),
       ),

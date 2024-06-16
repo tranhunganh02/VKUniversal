@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:meta/meta.dart';
@@ -10,8 +12,9 @@ part 'room_chat_state.dart';
 
 class RoomChatBloc extends Bloc<RoomChatEvent, RoomChatState> {
   final FirebaseChatService _firebaseChatService;
-
+ StreamSubscription<List<MessageModel>>? _messagesSubscription;
   RoomChatBloc(this._firebaseChatService) : super(ChatInitial()) {
+    // ignore: invalid_use_of_visible_for_testing_member
     emit(ChatLoadingState());
     on<RoomChatEvent>((event, emit) {
       // TODO: implement event handler
@@ -21,30 +24,24 @@ class RoomChatBloc extends Bloc<RoomChatEvent, RoomChatState> {
         try {
           emit(ChatLoadingState());
           print("cos goi");
-          final data =
-              await _firebaseChatService.getMessages(event.idRoom).first;
-          emit(ChatLoadedState(messages: data));
+           await _messagesSubscription?.cancel();
+         _messagesSubscription = _firebaseChatService.getMessages(event.idRoom).listen(
+        (messages) {
+          add(UpdateMessagesEvent(messages));
+        },
+        onError: (error) {
+          emit(ChatErrorState(message: error.toString()));
+        },
+      );
         } catch (error) {
           emit(ChatErrorState(
               message: error.toString())); // Handle error more comprehensively
         }
       },
     );
-
-    on<LoadMessagesNewEvent>(
-      (event, emit) async {
-        emit(ChatLoadingState());
-        try {
-          print("cos goi");
-          final data =
-              await _firebaseChatService.getMessages(event.idRoom).first;
-          emit(ChatLoadedState(messages: data));
-        } catch (error) {
-          emit(ChatErrorState(
-              message: error.toString())); // Handle error more comprehensively
-        }
-      },
-    );
+        on<UpdateMessagesEvent>((event, emit) {
+      emit(ChatLoadedState(messages: event.messages));
+    });
     on<SendMessageEvent>(
       (event, emit) async {
         try {
@@ -56,26 +53,6 @@ class RoomChatBloc extends Bloc<RoomChatEvent, RoomChatState> {
         }
       },
     );
-    on<LoadOldMessagesEvent>((event, emit) async {
-      try {
-        print("Loading old messages2");
-        final oldMessages = await _firebaseChatService
-            .getOldMessages(
-              event.idRoom,
-              event.idMessage,
-            )
-            .first;
 
-        final currentState = state as ChatLoadedState;
-        final allMessages = [...oldMessages, ...currentState.messages];
-        emit(ChatLoadedState(
-          messages: allMessages,
-        ));
-      } catch (error) {
-        emit(ChatErrorState(
-          message: error.toString(),
-        ));
-      }
-    });
   }
 }

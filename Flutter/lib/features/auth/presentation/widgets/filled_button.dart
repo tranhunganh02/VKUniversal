@@ -4,10 +4,13 @@ import 'package:vkuniversal/core/utils/screen_scale.dart';
 class FilledButtonCustom extends StatelessWidget {
   final String label;
   final VoidCallback onPress;
+  final double heightButton;
+  final double widthPercent;
   const FilledButtonCustom({
     super.key,
     required this.label,
-    required this.onPress,
+    required this.onPress, 
+    required this.heightButton, required this.widthPercent,
   });
 
   @override
@@ -17,7 +20,8 @@ class FilledButtonCustom extends StatelessWidget {
     TextTheme textTheme = Theme.of(context).textTheme;
 
     return SizedBox(
-      width: width * 0.9,
+      width: width * widthPercent,
+      height: heightButton,
       child: FilledButton(
         onPressed: onPress,
         child: Text(

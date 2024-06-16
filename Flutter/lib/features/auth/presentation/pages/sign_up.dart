@@ -12,6 +12,8 @@ import 'package:vkuniversal/features/auth/presentation/widgets/google_button.dar
 import 'package:vkuniversal/features/auth/presentation/widgets/horizontal_line.dart';
 import 'package:vkuniversal/features/auth/presentation/widgets/text_form_field.dart';
 
+import '../../../../core/utils/responsive.dart';
+
 class SignUpPage extends StatefulWidget {
   const SignUpPage({super.key});
 
@@ -47,6 +49,9 @@ class _SignUpPageState extends State<SignUpPage> {
   Widget build(BuildContext context) {
     TextTheme textTheme = Theme.of(context).textTheme;
     ColorScheme colorScheme = Theme.of(context).colorScheme;
+
+     final isDesktop = Responsive.isDesktop(context);
+     final isMobileLarge = Responsive.isMobileLarge(context);
     return Scaffold(
       appBar: AppBar(
         leading: BackLeadingBtn(),
@@ -78,42 +83,46 @@ class _SignUpPageState extends State<SignUpPage> {
                     color: colorScheme.primary,
                   ),
                 ),
-                CustomSizeBox(value: 50),
+                CustomSizeBox(value: isDesktop ? 150: 30),
                 AuthTextField(
+                  widthFieldPercent: isDesktop ? 0.5 : 0.9,
                   hintText: "Name",
                   prefixIcon: IconList.user,
                   isObscured: false,
                   controller: nameController,
                 ),
-                CustomSizeBox(value: 10),
+                CustomSizeBox(value:  isDesktop ? 30: 10),
                 AuthTextField(
+                  widthFieldPercent: isDesktop ? 0.5 : 0.9,
                   hintText: "Email",
                   prefixIcon: IconList.email,
                   isObscured: false,
                   controller: emailController,
                 ),
-                CustomSizeBox(value: 10),
+                CustomSizeBox(value:   isDesktop ? 30: 10),
                 AuthTextField(
+                  widthFieldPercent: isDesktop ? 0.5 : 0.9,
                   hintText: "Password",
                   prefixIcon: IconList.lock,
                   isObscured: true,
                   controller: passwordController,
                 ),
-                CustomSizeBox(value: 10),
+                CustomSizeBox(value:  isDesktop ? 30: 10),
                 FilledButtonCustom(
                   label: "Create",
                   onPress: () {
                     SignUpSubmitted();
                   },
+                  heightButton: isDesktop ? 40: 20, widthPercent: isDesktop ? 0.5: 0.9,
                 ),
-                CustomSizeBox(value: 10),
+                CustomSizeBox(value:   isDesktop ? 30: 10),
                 HorizontalLine(),
-                CustomSizeBox(value: 10),
+                CustomSizeBox(value:   isDesktop ? 30: 10),
                 GoogleButton(
                   label: 'Sign up with Google',
                   onPressed: () {},
                 ),
-                CustomSizeBox(value: 10),
+                CustomSizeBox(value:   isDesktop ? 30: 10),
                 GestureDetector(
                   onTap: () {
                     Navigator.popAndPushNamed(context, RoutesName.login);

@@ -15,6 +15,8 @@ import 'package:vkuniversal/features/auth/presentation/bloc/add_user_info/bloc/a
 import 'package:vkuniversal/features/auth/presentation/widgets/filled_button.dart';
 import 'package:vkuniversal/features/auth/presentation/widgets/text_form_field.dart';
 
+import '../../../../core/utils/responsive.dart';
+
 class AddUserInfoPage extends StatefulWidget {
   const AddUserInfoPage({Key? key}) : super(key: key);
 
@@ -65,7 +67,8 @@ class _AddUserInfoPageState extends State<AddUserInfoPage> {
   Widget build(BuildContext context) {
     TextTheme textTheme = Theme.of(context).textTheme;
     ColorScheme colorScheme = Theme.of(context).colorScheme;
-
+    final isDesktop = Responsive.isDesktop(context);
+     final isMobileLarge = Responsive.isMobileLarge(context);
     return Scaffold(
       appBar: AppBar(
         backgroundColor: colorScheme.surface.withOpacity(0),
@@ -105,18 +108,21 @@ class _AddUserInfoPageState extends State<AddUserInfoPage> {
                     ),
                     CustomSizeBox(value: 10),
                     AuthTextField(
+                      widthFieldPercent: isDesktop? 0.5: 0.9,
                       hintText: "Student ID*",
                       isObscured: false,
                       controller: studentCodeController,
                     ),
                     CustomSizeBox(value: 10),
                     AuthTextField(
+                      widthFieldPercent: isDesktop? 0.5: 0.9,
                       hintText: "First Name",
                       isObscured: false,
                       controller: firstNameController,
                     ),
                     CustomSizeBox(value: 10),
                     AuthTextField(
+                      widthFieldPercent: isDesktop? 0.5: 0.9,
                       hintText: "Last Name",
                       isObscured: false,
                       controller: lastNameController,
@@ -199,7 +205,7 @@ class _AddUserInfoPageState extends State<AddUserInfoPage> {
                         ),
                       ],
                     ),
-                    FilledButtonCustom(label: "Submit", onPress: submitForm),
+                    FilledButtonCustom(label: "Submit", onPress: submitForm, heightButton:  isDesktop ? 30: 10, widthPercent: isDesktop ? 0.5: 0.9,),
                   ],
                 ),
               ),
