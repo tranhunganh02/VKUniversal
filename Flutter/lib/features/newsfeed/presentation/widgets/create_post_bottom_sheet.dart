@@ -254,15 +254,43 @@ class _PostBottomSheetState extends State<PostBottomSheet>
         );
   }
 
-  Future<void> _requestPermissions() async {
-    var status = await Permission.storage.status;
+Future<void> _requestPermissions() async {
+  if (Platform.isMacOS) {
+    // No need to request specific permissions on macOS
+    var status = await Permission.photos.status;
     if (!status.isGranted) {
-      await Permission.storage.request();
+      var result = await Permission.photos.request();
+      if (result.isDenied || result.isPermanentlyDenied) {
+        // Thực hiện các hành động khi người dùng từ chối cấp quyền, ví dụ: hiển thị dialog hướng dẫn
+        await showDialog(
+          context: context,
+          builder: (context) => AlertDialog(
+            title: Text('Permission Required'),
+            content: Text('Please grant permission to access your photo library.'),
+            actions: [
+              TextButton(
+                onPressed: () {
+                  Navigator.pop(context); // Đóng dialog
+                },
+                child: Text('OK'),
+              ),
+            ],
+          ),
+        );
+      }
     }
-
-    status = await Permission.camera.status;
-    if (!status.isGranted) {
-      await Permission.camera.request();
-    }
+    return;
   }
+
+  // For other platforms (iOS, Android), request permissions as usual
+  var status = await Permission.storage.status;
+  if (!status.isGranted) {
+    await Permission.storage.request();
+  }
+
+  status = await Permission.camera.status;
+  if (!status.isGranted) {
+    await Permission.camera.request();
+  }
+}
 }

@@ -1,6 +1,6 @@
 const firebase = require("firebase-admin");
 const db = firebase.firestore();
-
+const {getUserAvatarAndNameByUserId} = require('../user/pg.user')
 const createCommentToFb = async (
   postId,
   userId,

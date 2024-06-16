@@ -9,7 +9,8 @@ const {
   getPostById,
   getLatestPostsByField,
   likePost,
-  unlikePost
+  unlikePost,
+  getPostsByUserId
 } = require("../../dbs/post/pg.post");
 
 const { BadRequestError, NotFoundError } = require("../../core/error.response");
@@ -130,6 +131,20 @@ class PostService {
 
     return result
   }
+
+  static async getPostByUserId(_user_id, payload) {
+    console.log("vo day roui na");
+    const {user_id, page} = payload
+
+    const result = await getPostsByUserId(page, _user_id, user_id);
+
+    if (!result) {
+      throw new BadRequestError("Cannot get post");
+    }
+
+    return result
+  }
+
 
   static async getPostsByField(field, page) {
 

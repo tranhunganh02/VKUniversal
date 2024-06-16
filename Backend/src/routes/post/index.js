@@ -22,6 +22,7 @@ router.get('', asyncHandler(postController.getPost))
 router.get('/all', asyncHandler(postController.getAllPost)) 
 router.get('/search', asyncHandler(postController.getPostsByField)) 
 router.get('/follow', asyncHandler(postController.getPostFollowed)) 
+router.get('/user', asyncHandler(postController.getPostByUserId))
 
 //comment
 router.get('/comment', asyncHandler(commentController.getCommentsById)) 

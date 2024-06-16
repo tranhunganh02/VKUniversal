@@ -15,10 +15,44 @@ const createPost = async (content, userId, privacy, postType, attachment) => {
 
 // Get post
 const getPostById = async (postId) => {
-  const query = `SELECT p.*, a.attachment_id, a.file_url
-  FROM Post p
-  LEFT JOIN Attachment a ON p.post_id = a.post_id
-  WHERE p.post_id = $1;`;
+  const query = `
+       SELECT 
+      p.post_id, 
+      p.content, 
+      p.user_id, 
+      p.privacy, 
+      p.post_type, 
+      p.created_at, 
+      p.updated_at,
+      u.avatar,
+      u.role,
+      COALESCE(
+        CASE 
+          WHEN u.role = 1 THEN CONCAT(s.surname, ' ', s.last_name)
+          WHEN u.role = 2 THEN CONCAT(l.surname, ' ', l.last_name)
+          WHEN u.role = 3 THEN d.department_name
+          ELSE 'Unknown'
+        END,
+        'Unknown'
+      ) AS user_name,
+      COALESCE(
+        json_agg(
+          json_build_object(
+            'attachment_id', a.attachment_id,
+            'file_url', a.file_url
+          )
+        ) FILTER (WHERE a.attachment_id IS NOT NULL), 
+        '[]'
+      ) AS attachments
+    FROM Post p
+    LEFT JOIN Attachment a ON p.post_id = a.post_id
+    LEFT JOIN users u ON p.user_id = u.user_id
+    LEFT JOIN student s ON u.user_id = s.user_id AND u.role = 1
+    LEFT JOIN lecturer l ON u.user_id = l.user_id AND u.role = 2
+    LEFT JOIN department d ON u.user_id = d.user_id AND u.role = 3
+    WHERE p.post_id = $1
+    GROUP BY p.post_id, u.user_id, s.surname, s.last_name, l.surname, l.last_name, d.department_name;
+  `;
   const values = [postId];
   const result = await db.query(query, values);
   return result || null;
@@ -302,8 +336,6 @@ const getLatestPostsByField = async (field, page = 1, user_id) => {
   const limit = 6;
   const offset = (page - 1) * limit;
 
-  console.log("s", field);
-
   const query = `
     WITH UserRoles AS (
       SELECT 
@@ -395,6 +427,54 @@ const unlikePost = async (post_id, user_id) => {
   return result == 1 ?  true :  false
   
 };
+const getPostsByUserId = async (page=1, userId, targetUserId) => {
+  console.log("data", page, userId, targetUserId);
+  const limit = 6;
+  const offset = (page - 1) * limit;
+  const query = `
+    SELECT 
+      p.post_id, 
+      p.content, 
+      p.user_id, 
+      p.privacy, 
+      p.post_type, 
+      p.created_at, 
+      p.updated_at,
+      COALESCE(pl.like_count, 0) AS like_count,
+      COALESCE(pa.attachments, '[]'::json) AS attachments,
+      COALESCE(ul.liked_by_user, FALSE) AS liked_by_user
+    FROM Post p
+    LEFT JOIN (
+      SELECT 
+        pl.post_id, 
+        COUNT(*)::int AS like_count 
+      FROM Post_like pl 
+      GROUP BY pl.post_id
+    ) pl ON p.post_id = pl.post_id
+    LEFT JOIN (
+      SELECT 
+        a.post_id, 
+        json_agg(json_build_object('file_url', a.file_url, 'file_name', a.file_name, 'file_type', a.file_type)) AS attachments
+      FROM Attachment a 
+      GROUP BY a.post_id
+    ) pa ON p.post_id = pa.post_id
+    LEFT JOIN (
+      SELECT 
+        pl.post_id, 
+        TRUE AS liked_by_user 
+      FROM Post_like pl 
+      WHERE pl.user_id = $1
+    ) ul ON p.post_id = ul.post_id
+    WHERE p.user_id = $2
+    ORDER BY p.created_at DESC
+    LIMIT $3 OFFSET $4;
+  `;
+
+  const values = [userId, targetUserId, limit, offset];
+  const result = await db.query(query, values);
+  console.log(result);
+  return result[0];
+};
 
 
 
@@ -413,5 +493,6 @@ module.exports = {
   getLatestPosts,
   getLatestPostsByField,
   likePost,
-  unlikePost
+  unlikePost,
+  getPostsByUserId
 };

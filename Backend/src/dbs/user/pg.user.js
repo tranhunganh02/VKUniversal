@@ -291,7 +291,7 @@ const getUserAvatarAndNameByUserId = async (userId) => {
   
   try {
     const result = await db.query(query, values);
-    return result.rows[0]; // Trả về dòng đầu tiên nếu có kết quả
+    return result[0]; // Trả về dòng đầu tiên nếu có kết quả
   } catch (error) {
     throw new Error(`Error fetching avatar and name for user with ID ${userId}: ${error.message}`);
   }

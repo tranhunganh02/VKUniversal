@@ -49,6 +49,12 @@ class PostController {
       metadata: await PostService.deletePostById(req.body, req.user.userId),
     }).send(res);
   };
+  getPostByUserId = async (req, res, next) => {
+    new SuccessResponse({
+      message: "get data success",
+      metadata: await PostService.getPostByUserId(req.user.userId, req.query),
+    }).send(res);
+  };
   getPostFollowed = async (req, res, next) => {
     new SuccessResponse({
       message: "get data success",
