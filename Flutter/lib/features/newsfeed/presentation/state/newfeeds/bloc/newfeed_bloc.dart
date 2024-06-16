@@ -7,9 +7,11 @@ import 'package:vkuniversal/core/constants/share_pref.dart';
 import 'package:vkuniversal/core/resources/data_state.dart';
 import 'package:vkuniversal/core/utils/injection_container.dart';
 import 'package:vkuniversal/features/auth/data/models/authorization.dart';
+import 'package:vkuniversal/features/newsfeed/data/model/comment.dart';
 import 'package:vkuniversal/features/newsfeed/data/model/page_request.dart';
 import 'package:vkuniversal/features/newsfeed/data/model/post_model.dart';
 import 'package:vkuniversal/features/newsfeed/data/model/post_request.dart';
+import 'package:vkuniversal/features/newsfeed/domain/usecase/get_comments.dart';
 import 'package:vkuniversal/features/newsfeed/domain/usecase/get_post_by_id.dart';
 import 'package:vkuniversal/features/newsfeed/domain/usecase/get_posts.dart';
 import 'package:vkuniversal/features/newsfeed/domain/usecase/like.dart';
@@ -111,17 +113,29 @@ class NewfeedBloc extends Bloc<NewfeedEvent, NewfeedState> {
     });
     on<LoadPostDetail>((event, emit) async {
       final _getPostByID = sl<GetPostById>();
+      final _getComments = sl<GetComments>();
 
-      if (state is NewfeedLoaded) {
-        // emit(NewfeedLoading());
+      if (state is NewfeedInitial) {
+        emit(NewfeedLoading());
         try {
+          logger.d("At comment");
           SharedPreferences pref = await SharedPreferences.getInstance();
           Authorization authorization = SetUpAuthData(pref);
+
           final response = await _getPostByID(
               auth: authorization, data: PostRequest(postID: event.postID));
-          if (response is DataSuccess) {
+
+          final commentResponse = await _getComments(
+            auth: authorization,
+            data: PostRequest(postID: event.postID),
+          );
+
+          if (response is DataSuccess && commentResponse is DataSuccess) {
             final post = response.data as List<PostModel>;
-            emit(NewfeedLoaded(posts: post));
+            final comments = commentResponse.data as List<CommentModel>;
+            logger.d("At comment: ${comments.length}");
+
+            emit(NewfeedLoaded(posts: post, comments: comments));
           } else {
             logger.e("Error: Data is null");
             emit(NewfeedFailed(message: "Error: Data is null"));

@@ -10,7 +10,7 @@ import 'package:vkuniversal/core/utils/screen_scale.dart';
 import 'package:vkuniversal/core/widgets/loader.dart';
 import 'package:vkuniversal/features/newsfeed/data/model/attachment.dart';
 import 'package:vkuniversal/features/newsfeed/presentation/state/newfeeds/bloc/newfeed_bloc.dart';
-import 'package:vkuniversal/features/newsfeed/presentation/widgets/create_post_bottom_sheet.dart';
+import 'package:vkuniversal/features/newsfeed/presentation/widgets/comment_bottom_sheet.dart';
 
 class PostCard extends StatefulWidget {
   final int postID;
@@ -116,10 +116,15 @@ class _PostCardState extends State<PostCard> {
                           children: [
                             GestureDetector(
                               onTap: widget.onProfileTap,
-                              child: Text(
-                                "${widget.username}",
-                                style: textTheme.bodyMedium?.copyWith(
-                                  color: colorScheme.onSurface,
+                              child: Container(
+                                width: width * 0.6,
+                                child: Text(
+                                  "${widget.username}",
+                                  style: textTheme.bodyMedium?.copyWith(
+                                    color: colorScheme.onSurface,
+                                  ),
+                                  maxLines: 1,
+                                  overflow: TextOverflow.ellipsis,
                                 ),
                               ),
                             ),
@@ -140,38 +145,38 @@ class _PostCardState extends State<PostCard> {
                   //   onPressed: () {},
                   //   icon: Icon(Iconsax.more_outline),
                   // ),
-                  MenuAnchor(
-                    builder: (BuildContext context, MenuController controller,
-                        Widget? child) {
-                      return IconButton(
-                        onPressed: () {
-                          if (controller.isOpen) {
-                            controller.close();
-                          } else {
-                            controller.open();
-                          }
-                        },
-                        icon: Icon(Iconsax.more_outline),
-                        tooltip: 'Show menu',
-                      );
-                    },
-                    menuChildren: List<MenuItemButton>.from(
-                      [
-                        MenuItemButton(
-                          onPressed: () {},
-                          child: Text('Edit',
-                              style: textTheme.bodyLarge
-                                  ?.copyWith(color: colorScheme.onSurface)),
-                        ),
-                        MenuItemButton(
-                          onPressed: () {},
-                          child: Text('Delete',
-                              style: textTheme.bodyLarge
-                                  ?.copyWith(color: colorScheme.onSurface)),
-                        ),
-                      ],
-                    ),
-                  ),
+                  // MenuAnchor(
+                  //   builder: (BuildContext context, MenuController controller,
+                  //       Widget? child) {
+                  //     return IconButton(
+                  //       onPressed: () {
+                  //         if (controller.isOpen) {
+                  //           controller.close();
+                  //         } else {
+                  //           controller.open();
+                  //         }
+                  //       },
+                  //       icon: Icon(Iconsax.more_outline),
+                  //       tooltip: 'Show menu',
+                  //     );
+                  //   },
+                  //   menuChildren: List<MenuItemButton>.from(
+                  //     [
+                  //       MenuItemButton(
+                  //         onPressed: () {},
+                  //         child: Text('Edit',
+                  //             style: textTheme.bodyLarge
+                  //                 ?.copyWith(color: colorScheme.onSurface)),
+                  //       ),
+                  //       MenuItemButton(
+                  //         onPressed: () {},
+                  //         child: Text('Delete',
+                  //             style: textTheme.bodyLarge
+                  //                 ?.copyWith(color: colorScheme.onSurface)),
+                  //       ),
+                  //     ],
+                  //   ),
+                  // ),
                 ],
               ),
             ),
@@ -257,7 +262,9 @@ class _PostCardState extends State<PostCard> {
                       IconButton(
                         onPressed: () => showBottomSheet(
                           context: context,
-                          builder: (context) => PostBottomSheet(),
+                          builder: (context) => CommentBottomSheet(
+                            postID: widget.postID,
+                          ),
                         ),
                         icon: Icon(Iconsax.message_2_outline),
                       ),

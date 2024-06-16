@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:vkuniversal/config/routes/router_name.dart';
-import 'package:vkuniversal/config/routes/routes.dart';
 import 'package:vkuniversal/core/widgets/loader.dart';
 import 'package:vkuniversal/features/newsfeed/presentation/pages/post_detail.dart';
 import 'package:vkuniversal/features/newsfeed/presentation/state/newfeeds/bloc/newfeed_bloc.dart';

@@ -68,4 +68,9 @@ class PostModel extends PostEntity {
       likeByUser: likeByUser ?? this.likeByUser,
     );
   }
+
+  @override
+  String toString() {
+    return 'PostModel(userID: $userID, userName: $userName, avatarUrl: $avatarUrl, createdAt: $createdAt, updateAt: $updateAt, likeByUser: $likeByUser, role: $role, likes: $likes, images: $images)';
+  }
 }

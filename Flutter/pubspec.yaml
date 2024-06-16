@@ -58,6 +58,7 @@ dependencies:
   firebase_core: ^2.31.1
   firebase_database: ^10.5.5
   intl: ^0.19.0
+  comment_tree: ^0.3.0
 
 dev_dependencies:
   logger: any  #for logging purpose

@@ -52,93 +52,95 @@ class _SignUpPageState extends State<SignUpPage> {
       appBar: AppBar(
         leading: BackLeadingBtn(),
       ),
-      body: BlocConsumer<SignUpBloc, SignUpState>(
-        listener: (context, state) {
-          if (state is SignUpSuccess) {
-            Navigator.popAndPushNamed(context, RoutesName.addUserInfor);
-          } else if (state is SignUpFailure) {
-            showErrorSnackBar(context, state.message ?? "");
-          }
-        },
-        builder: (context, state) {
-          if (state is SignUpLoading) {
-            return Loader();
-          }
-          return Form(
-            key: formKey,
-            child: Column(
-              children: [
-                Text(
-                  "Register",
-                  style: textTheme.headlineLarge,
-                ),
-                CustomSizeBox(value: 10),
-                Text(
-                  "Create your new account",
-                  style: textTheme.headlineSmall?.copyWith(
-                    color: colorScheme.primary,
+      body: SingleChildScrollView(
+        child: BlocConsumer<SignUpBloc, SignUpState>(
+          listener: (context, state) {
+            if (state is SignUpSuccess) {
+              Navigator.popAndPushNamed(context, RoutesName.addUserInfor);
+            } else if (state is SignUpFailure) {
+              showErrorSnackBar(context, state.message ?? "");
+            }
+          },
+          builder: (context, state) {
+            if (state is SignUpLoading) {
+              return Loader();
+            }
+            return Form(
+              key: formKey,
+              child: Column(
+                children: [
+                  Text(
+                    "Register",
+                    style: textTheme.headlineLarge,
                   ),
-                ),
-                CustomSizeBox(value: 50),
-                AuthTextField(
-                  hintText: "Name",
-                  prefixIcon: IconList.user,
-                  isObscured: false,
-                  controller: nameController,
-                ),
-                CustomSizeBox(value: 10),
-                AuthTextField(
-                  hintText: "Email",
-                  prefixIcon: IconList.email,
-                  isObscured: false,
-                  controller: emailController,
-                ),
-                CustomSizeBox(value: 10),
-                AuthTextField(
-                  hintText: "Password",
-                  prefixIcon: IconList.lock,
-                  isObscured: true,
-                  controller: passwordController,
-                ),
-                CustomSizeBox(value: 10),
-                FilledButtonCustom(
-                  label: "Create",
-                  onPress: () {
-                    SignUpSubmitted();
-                  },
-                ),
-                CustomSizeBox(value: 10),
-                HorizontalLine(),
-                CustomSizeBox(value: 10),
-                GoogleButton(
-                  label: 'Sign up with Google',
-                  onPressed: () {},
-                ),
-                CustomSizeBox(value: 10),
-                GestureDetector(
-                  onTap: () {
-                    Navigator.popAndPushNamed(context, RoutesName.login);
-                  },
-                  child: RichText(
-                    text: TextSpan(
-                        text: "Already have an account? ",
-                        style: textTheme.headlineSmall
-                            ?.copyWith(color: Color(0xffD0CFD4)),
-                        children: [
-                          TextSpan(
-                            text: "Sign in",
-                            style: textTheme.headlineSmall?.copyWith(
-                              color: colorScheme.primaryContainer,
-                              decoration: TextDecoration.underline,
+                  CustomSizeBox(value: 10),
+                  Text(
+                    "Create your new account",
+                    style: textTheme.headlineSmall?.copyWith(
+                      color: colorScheme.primary,
+                    ),
+                  ),
+                  CustomSizeBox(value: 50),
+                  AuthTextField(
+                    hintText: "Name",
+                    prefixIcon: IconList.user,
+                    isObscured: false,
+                    controller: nameController,
+                  ),
+                  CustomSizeBox(value: 10),
+                  AuthTextField(
+                    hintText: "Email",
+                    prefixIcon: IconList.email,
+                    isObscured: false,
+                    controller: emailController,
+                  ),
+                  CustomSizeBox(value: 10),
+                  AuthTextField(
+                    hintText: "Password",
+                    prefixIcon: IconList.lock,
+                    isObscured: true,
+                    controller: passwordController,
+                  ),
+                  CustomSizeBox(value: 10),
+                  FilledButtonCustom(
+                    label: "Create",
+                    onPress: () {
+                      SignUpSubmitted();
+                    },
+                  ),
+                  CustomSizeBox(value: 10),
+                  HorizontalLine(),
+                  CustomSizeBox(value: 10),
+                  GoogleButton(
+                    label: 'Sign up with Google',
+                    onPressed: () {},
+                  ),
+                  CustomSizeBox(value: 10),
+                  GestureDetector(
+                    onTap: () {
+                      Navigator.popAndPushNamed(context, RoutesName.login);
+                    },
+                    child: RichText(
+                      text: TextSpan(
+                          text: "Already have an account? ",
+                          style: textTheme.headlineSmall
+                              ?.copyWith(color: Color(0xffD0CFD4)),
+                          children: [
+                            TextSpan(
+                              text: "Sign in",
+                              style: textTheme.headlineSmall?.copyWith(
+                                color: colorScheme.primaryContainer,
+                                decoration: TextDecoration.underline,
+                              ),
                             ),
-                          ),
-                        ]),
+                          ]),
+                    ),
                   ),
-                ),
-              ],
-            ),
-          );
-        },
+                ],
+              ),
+            );
+          },
+        ),
       ),
     );
   }

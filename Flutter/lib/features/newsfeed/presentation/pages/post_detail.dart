@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:vkuniversal/core/utils/injection_container.dart';
+import 'package:vkuniversal/core/utils/setup_comment.dart';
 import 'package:vkuniversal/core/widgets/loader.dart';
 import 'package:vkuniversal/features/newsfeed/data/model/post_model.dart';
-import 'package:vkuniversal/features/newsfeed/presentation/state/newfeeds/bloc/newfeed_bloc.dart';
+import 'package:vkuniversal/features/newsfeed/presentation/state/post_detail.dart/bloc/post_detail_bloc.dart';
+import 'package:vkuniversal/features/newsfeed/presentation/widgets/cmt_tree.dart';
 import 'package:vkuniversal/features/newsfeed/presentation/widgets/post_card.dart';
 
 class PostDetail extends StatefulWidget {
@@ -15,24 +17,28 @@ class PostDetail extends StatefulWidget {
 }
 
 class _PostDetailState extends State<PostDetail> {
+  final bloc = sl<PostDetailBloc>();
   @override
   void initState() {
     super.initState();
-    _loadDefault();
+    // _loadDefault();
   }
 
-  Future<void> _loadDefault() async {
-    setState(() {
-      if (mounted) {
-        sl<NewfeedBloc>().add(LoadPostDetail(postID: widget.postID));
-      }
-    });
-  }
+  // Future<void> _loadDefault() async {
+  //   setState(() {
+  //     bloc.add(LoadPostDetail(postID: widget.postID));
+  //   });
+  // }
 
   void _refreshPostDetail() {
     if (mounted) {
-      sl<NewfeedBloc>().add(LoadPostDetail(postID: widget.postID));
+      context.read<PostDetailBloc>().add(LoadPostDetail(postID: widget.postID));
     }
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
   }
 
   @override
@@ -43,33 +49,36 @@ class _PostDetailState extends State<PostDetail> {
       appBar: AppBar(),
       body: RefreshIndicator(
         onRefresh: () async {
-          _refreshPostDetail;
+          _refreshPostDetail();
         },
-        child: BlocBuilder<NewfeedBloc, NewfeedState>(
-          builder: (context, state) {
-            if (state is NewfeedLoaded) {
-              final post = state.posts
-                  .firstWhere((post) => post.postID == widget.postID);
-              return ListView(
-                children: [
-                  PostCard(
-                    username: post.userName,
-                    content: post.content,
-                    date: post.createdAt,
-                    avatar: post.avatarUrl,
-                    images: post.images ?? [],
-                    likes: post.likes,
-                    isLiked: post.likeByUser,
-                    postID: post.postID,
-                    userID: post.userID,
-                    role: post.role ?? 0,
-                  ),
-                ],
-              );
-            } else {
-              return Loader();
-            }
-          },
+        child: BlocProvider<PostDetailBloc>(
+          create: (context) => bloc..add(LoadPostDetail(postID: widget.postID)),
+          child: BlocBuilder<PostDetailBloc, PostDetailState>(
+            builder: (context, state) {
+              if (state is PostDetailLoaded) {
+                final post = state.post;
+                return ListView(
+                  children: [
+                    PostCard(
+                      username: post.userName,
+                      content: post.content,
+                      date: post.createdAt,
+                      avatar: post.avatarUrl,
+                      images: post.images ?? [],
+                      likes: post.likes,
+                      isLiked: post.likeByUser,
+                      postID: post.postID,
+                      userID: post.userID,
+                      role: post.role ?? 0,
+                    ),
+                    CmtTree(setUpCommentTree(state.comments)),
+                  ],
+                );
+              } else {
+                return Loader();
+              }
+            },
+          ),
         ),
       ),
     );

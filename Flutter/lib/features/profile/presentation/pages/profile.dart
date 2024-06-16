@@ -74,6 +74,7 @@ class _ProfilePageState extends State<ProfilePage>
     return Scaffold(
       appBar: AppBar(),
       body: BlocBuilder<ProfileBloc, ProfileState>(builder: (context, state) {
+        
         if (state is ProfileLoaded) {
           final profile = state.profile;
           return Container(

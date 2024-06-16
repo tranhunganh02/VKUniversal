@@ -2,6 +2,7 @@ import 'dart:io';
 import 'package:dio/dio.dart';
 import 'package:logger/logger.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:vkuniversal/core/constants/constants.dart';
 import 'package:vkuniversal/core/constants/refresh_token.dart';
 import 'package:vkuniversal/core/constants/share_pref.dart';
 import 'package:vkuniversal/core/resources/data_state.dart';
@@ -75,6 +76,7 @@ class AuthRepositoryImpl implements AuthRepository {
         return DataFailed(DioException(requestOptions: options));
       }
     } on DioException catch (e) {
+      logger.e(e);
       return DataFailed(e);
     }
   }

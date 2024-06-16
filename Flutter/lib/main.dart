@@ -9,17 +9,19 @@ import 'package:vkuniversal/config/theme/theme_const.dart';
 import 'package:vkuniversal/core/constants/share_pref.dart';
 import 'package:vkuniversal/core/resources/data_state.dart';
 import 'package:vkuniversal/core/utils/injection_container.dart';
+import 'package:vkuniversal/core/utils/logout_common.dart';
 import 'package:vkuniversal/core/widgets/loader.dart';
 import 'package:vkuniversal/features/auth/domain/usecases/check_student_info.dart';
-import 'package:vkuniversal/features/auth/domain/usecases/logout.dart';
 import 'package:vkuniversal/features/auth/presentation/bloc/add_user_info/bloc/add_user_info_bloc.dart';
 import 'package:vkuniversal/features/auth/presentation/bloc/sign_up/bloc/sign_up_bloc.dart';
 import 'package:vkuniversal/features/auth/presentation/bloc/sign_in/bloc/sign_in_bloc.dart';
 import 'package:vkuniversal/features/auth/presentation/bloc/welcome/bloc/welcome_bloc.dart';
 import 'package:vkuniversal/features/auth/presentation/pages/welcome.dart';
+import 'package:vkuniversal/features/newsfeed/presentation/state/comment/bloc/comment_bloc.dart';
 import 'package:vkuniversal/features/newsfeed/presentation/state/home/bloc/home_bloc.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:vkuniversal/features/newsfeed/presentation/state/newfeeds/bloc/newfeed_bloc.dart';
+import 'package:vkuniversal/features/newsfeed/presentation/state/post_detail.dart/bloc/post_detail_bloc.dart';
 import 'package:vkuniversal/features/newsfeed/presentation/state/posts/bloc/create_post_bloc.dart';
 import 'package:vkuniversal/features/profile/presentation/state/bloc/profile_bloc.dart';
 
@@ -75,6 +77,12 @@ Future<void> main() async {
       ),
       BlocProvider(
         create: (_) => sl<CreatePostBloc>(),
+      ),
+      BlocProvider(
+        create: (_) => sl<PostDetailBloc>(),
+      ),
+      BlocProvider(
+        create: (_) => sl<CommentBloc>(),
       ),
     ],
     child: MyApp(
@@ -134,7 +142,7 @@ class _CheckUserStateState extends State<CheckUserState> {
     final checkUserInfo = await sl<CheckUserInfoExists>();
     final result = await checkUserInfo(data: SetUpAuthData(prefs));
     if (result is DataFailed) {
-      Logout(authRepository: sl());
+      LogoutCommon(context);
     } else {
       if (result.data?.isExist == true) {
         await prefs.setBool('hasUserInfo', true);
