@@ -48,7 +48,7 @@ class _WelcomePageState extends State<WelcomePage> {
             children: [
               // Background
               AspectRatio(
-                aspectRatio: 16/9.735 ,
+                aspectRatio: isDesktop ? isMobileLarge ? 5/4 : 16/9.735 : 5/4 ,
                 child: ShaderMask(
                   shaderCallback: (bounds) {
                     return LinearGradient(

@@ -107,24 +107,39 @@ const deleteCommentToFb = async (
 };
 
 const getCommentsByCommentId = async (pr_id = null, post_id) => {
-  let commentRef = db.collection("comments");
-  commentRef = commentRef
-    .where("post_id", "==", post_id)
-    .where("pr_id", "==", pr_id ?? null);
-  // Thực hiện truy vấn để lấy tất cả các comment có cùng comment_id
-
+  let commentRef = db.collection("comments").where("post_id", "==", post_id);
   const docSnapshot = await commentRef.get();
 
   const comments = [];
-  docSnapshot.forEach((doc) => {
+
+  for (const doc of docSnapshot.docs) {
     const commentData = doc.data();
     commentData.comment_id = doc.id;
-    comments.push(commentData);
-  });
 
-  // Trả về danh sách các comment
+    try {
+      console.log("dang lay");
+      // Gọi hàm lấy thông tin avatar và user_name từ user_id
+      const { avatar, user_name } = await getUserAvatarAndNameByUserId(commentData.user_id);
+
+      // Gán thông tin avatar và user_name vào commentData
+      commentData.avatar = avatar;
+      commentData.user_name = user_name;
+
+      console.log(`dang lay ${avatar} ${user_name}`);
+    } catch (error) {
+      // Xử lý lỗi nếu không thể lấy thông tin từ user_id
+      console.error(`Error fetching avatar and name for user with ID ${commentData.user_id}: ${error.message}`);
+      commentData.avatar = null;
+      commentData.user_name = 'Unknown';
+    }
+
+    comments.push(commentData);
+  }
+
+  // Trả về danh sách các comment đã được bổ sung avatar và user_name
   return comments;
 };
+
 
 module.exports = {
   getCommentsByCommentId,

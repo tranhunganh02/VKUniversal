@@ -105,10 +105,15 @@ class _PostCardState extends State<PostCard> {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Text(
-                              "${widget.username}",
-                              style: textTheme.bodyMedium?.copyWith(
-                                color: colorScheme.onSurface,
+                            SizedBox(
+                              width: width *0.6,
+                              child: Text(
+                                "${widget.username}",
+                                style: textTheme.bodyMedium?.copyWith(
+                                  color: colorScheme.onSurface,
+                                ),
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
                               ),
                             ),
                             Text(

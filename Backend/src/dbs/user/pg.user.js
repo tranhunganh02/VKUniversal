@@ -271,6 +271,33 @@ WHERE
   }
 };
 
+const getUserAvatarAndNameByUserId = async (userId) => {
+  const query = `
+    SELECT 
+      u.avatar,
+      CASE
+        WHEN u.role = 1 THEN CONCAT(s.surname, ' ', s.last_name)
+        WHEN u.role = 2 THEN CONCAT(l.surname, ' ', l.last_name)
+        WHEN u.role = 3 THEN d.department_name
+        ELSE 'Unknown'
+      END AS user_name
+    FROM users u
+    LEFT JOIN student s ON u.user_id = s.user_id AND u.role = 1
+    LEFT JOIN lecturer l ON u.user_id = l.user_id AND u.role = 2
+    LEFT JOIN department d ON u.user_id = d.user_id AND u.role = 3
+    WHERE u.user_id = $1;
+  `;
+  const values = [userId];
+  
+  try {
+    const result = await db.query(query, values);
+    return result.rows[0]; // Trả về dòng đầu tiên nếu có kết quả
+  } catch (error) {
+    throw new Error(`Error fetching avatar and name for user with ID ${userId}: ${error.message}`);
+  }
+};
+
+
 module.exports = {
   getStudentById,
   updateStudent,
@@ -282,4 +309,5 @@ module.exports = {
   makeFollow,
   unFollow,
   getUserChat,
+  getUserAvatarAndNameByUserId
 };

@@ -57,164 +57,178 @@ class _PostBottomSheetState extends State<PostBottomSheet>
       onClosing: () {},
       builder: (BuildContext context) {
         return Scaffold(
-          appBar: AppBar(
-            leading: Container(
-              width: 35,
-              height: 35,
-              decoration: BoxDecoration(
-                shape: BoxShape.circle,
-                color: colorScheme.surface.withOpacity(0.75),
-              ),
-              child: IconButton(
-                onPressed: () {
-                  Navigator.pop(context);
-                },
-                icon: IconList.backArrow,
-                tooltip: "Close",
+          appBar: PreferredSize(
+            preferredSize: Size.fromHeight(kToolbarHeight + 40),
+            
+            child: Padding(
+              padding: const EdgeInsets.only(top: 20.0),
+              child: AppBar(
+                 automaticallyImplyLeading: false,
+                 
+                leading: Container(
+                  width: 35,
+                  height: 35,
+              
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    color: colorScheme.surface.withOpacity(0.75),
+                  ),
+                  child: IconButton(
+                    onPressed: () {
+                      Navigator.pop(context);
+                    },
+                    icon: IconList.backArrow,
+                    tooltip: "Close",
+                  ),
+                ),
+                title: Container(
+                  child: Text(
+                    'Create Post',
+                    style:
+                        textTheme.displaySmall!.copyWith(color: colorScheme.primary),
+                    textAlign: TextAlign.center,
+                  ),
+                ),
+                actions: [
+                  BlocBuilder<CreatePostBloc, CreatePostState>(
+                    builder: (context, state) {
+                      if (state is CreatePostLoading) {
+                        return TextButton(
+                          onPressed: null,
+                          child: Text('Post'),
+                        );
+                      }
+                      return TextButton(
+                        onPressed: _post,
+                        child: Text('Post'),
+                      );
+                    },
+                  ),
+                ],
               ),
             ),
-            title: Text(
-              'Create Post',
-              style:
-                  textTheme.displaySmall!.copyWith(color: colorScheme.primary),
-              textAlign: TextAlign.center,
-            ),
-            actions: [
-              BlocBuilder<CreatePostBloc, CreatePostState>(
-                builder: (context, state) {
-                  if (state is CreatePostLoading) {
-                    return TextButton(
-                      onPressed: null,
-                      child: Text('Post'),
-                    );
-                  }
-                  return TextButton(
-                    onPressed: _post,
-                    child: Text('Post'),
-                  );
-                },
-              ),
-            ],
           ),
-          body: BlocConsumer<CreatePostBloc, CreatePostState>(
-            listener: (context, state) {
-              if (state is CreatePostSuccess) {
-                Navigator.pop(context);
-              } else if (state is CreatePostFailed) {
-                showErrorSnackBar(
-                  context,
-                  state.message,
-                );
-              }
-            },
-            builder: (context, state) {
-              if (state is CreatePostLoading) {
-                return Loader();
-              }
-              return Container(
-                child: Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Column(
-                    children: [
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        children: [
-                          CircleAvatar(
-                              backgroundImage:
-                                  NetworkImage(avatarUser ?? avatarNotFound)),
-                          Padding(
-                            padding: const EdgeInsets.only(left: 8.0),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  displayName ?? "Not showing",
-                                  style: textTheme.bodyLarge!
-                                      .copyWith(color: colorScheme.onSurface),
+          body: SafeArea(
+            child: BlocConsumer<CreatePostBloc, CreatePostState>(
+              listener: (context, state) {
+                if (state is CreatePostSuccess) {
+                  Navigator.pop(context);
+                } else if (state is CreatePostFailed) {
+                  showErrorSnackBar(
+                    context,
+                    state.message,
+                  );
+                }
+              },
+              builder: (context, state) {
+                if (state is CreatePostLoading) {
+                  return Loader();
+                }
+                return Container(
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Column(
+                      children: [
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: [
+                            CircleAvatar(
+                                backgroundImage:
+                                    NetworkImage(avatarUser ?? avatarNotFound)),
+                            Padding(
+                              padding: const EdgeInsets.only(left: 8.0),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    displayName ?? "Not showing",
+                                    style: textTheme.bodyLarge!
+                                        .copyWith(color: colorScheme.onSurface),
+                                  ),
+                                  Text(
+                                    "Public",
+                                    style: textTheme.bodySmall!
+                                        .copyWith(color: colorScheme.onSurface),
+                                  ),
+                                ],
+                              ),
+                            )
+                          ],
+                        ),
+                        Row(
+                          children: [
+                            Flexible(
+                              child: TextField(
+                                controller: _contentController,
+                                keyboardType: TextInputType.multiline,
+                                style: textTheme.bodyLarge
+                                    ?.copyWith(color: colorScheme.secondary),
+                                minLines: 1,
+                                maxLines:
+                                    null, // Allows the TextField to grow with content
+                                decoration: InputDecoration(
+                                  border: InputBorder.none,
+                                  hintText: 'What\'s on your mind?',
+                                  hintStyle: textTheme.bodyLarge?.copyWith(
+                                    color: colorScheme.onSurface,
+                                  ),
                                 ),
-                                Text(
-                                  "Public",
-                                  style: textTheme.bodySmall!
-                                      .copyWith(color: colorScheme.onSurface),
-                                ),
-                              ],
+                              ),
                             ),
-                          )
-                        ],
-                      ),
-                      Row(
-                        children: [
-                          Flexible(
-                            child: TextField(
-                              controller: _contentController,
-                              keyboardType: TextInputType.multiline,
-                              style: textTheme.bodyLarge
-                                  ?.copyWith(color: colorScheme.secondary),
-                              minLines: 1,
-                              maxLines:
-                                  null, // Allows the TextField to grow with content
-                              decoration: InputDecoration(
-                                border: InputBorder.none,
-                                hintText: 'What\'s on your mind?',
-                                hintStyle: textTheme.bodyLarge?.copyWith(
+                          ],
+                        ),
+                        _images.isNotEmpty
+                            ? Flexible(
+                                child: ListView.builder(
+                                    itemCount: _images.length,
+                                    itemBuilder: (context, index) {
+                                      return Dismissible(
+                                        key: Key(_images[index].path),
+                                        onDismissed: (direction) {
+                                          setState(() {
+                                            _images.removeAt(
+                                                index); // Remove the item from the list
+                                          });
+                                        },
+                                        child: Container(
+                                          width: width,
+                                          height: width,
+                                          child: Image.file(
+                                            _images[index],
+                                            fit: BoxFit.cover,
+                                          ),
+                                        ),
+                                      );
+                                    }),
+                              )
+                            : Text(
+                                "No images selected",
+                                style: textTheme.bodySmall?.copyWith(
                                   color: colorScheme.onSurface,
                                 ),
                               ),
-                            ),
+                        _images.isNotEmpty
+                            ? Text(
+                                "! Swipe to remove image",
+                                style: textTheme.bodySmall?.copyWith(
+                                  color: colorScheme.onSurface,
+                                ),
+                              )
+                            : Container(),
+                        ElevatedButton(
+                          onPressed: _pickImageFromGallery,
+                          child: Text(
+                            'Add images',
+                            style: textTheme.labelSmall
+                                ?.copyWith(color: colorScheme.primary),
                           ),
-                        ],
-                      ),
-                      _images.isNotEmpty
-                          ? Flexible(
-                              child: ListView.builder(
-                                  itemCount: _images.length,
-                                  itemBuilder: (context, index) {
-                                    return Dismissible(
-                                      key: Key(_images[index].path),
-                                      onDismissed: (direction) {
-                                        setState(() {
-                                          _images.removeAt(
-                                              index); // Remove the item from the list
-                                        });
-                                      },
-                                      child: Container(
-                                        width: width,
-                                        height: width,
-                                        child: Image.file(
-                                          _images[index],
-                                          fit: BoxFit.cover,
-                                        ),
-                                      ),
-                                    );
-                                  }),
-                            )
-                          : Text(
-                              "No images selected",
-                              style: textTheme.bodySmall?.copyWith(
-                                color: colorScheme.onSurface,
-                              ),
-                            ),
-                      _images.isNotEmpty
-                          ? Text(
-                              "! Swipe to remove image",
-                              style: textTheme.bodySmall?.copyWith(
-                                color: colorScheme.onSurface,
-                              ),
-                            )
-                          : Container(),
-                      ElevatedButton(
-                        onPressed: _pickImageFromGallery,
-                        child: Text(
-                          'Add images',
-                          style: textTheme.labelSmall
-                              ?.copyWith(color: colorScheme.primary),
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
-                ),
-              );
-            },
+                );
+              },
+            ),
           ),
         );
       },

@@ -11,4 +11,9 @@ class RoutesName {
   static const String noInternet = '/noInternet';
   static const String checkUserState = '/checkUserState';
   static const String postDetail = '/post/post_id';
+  //
+  static const String market = '/market';
+  static const String productDetail = '/market/product_id';
+  static const String updateProduct = '/update_product';
+  static const String createProduct = '/create_product';
 }
