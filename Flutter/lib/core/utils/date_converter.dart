@@ -21,7 +21,7 @@ DateConverter convertDate(String dateString) {
 
   // Create DateFormat objects for date and time
   DateFormat dateFormat = DateFormat.yMd(); // Customize as needed
-  DateFormat timeFormat = DateFormat.Hms(); // Customize as needed
+  DateFormat timeFormat = DateFormat.Hm(); // Customize as needed
 
   // Create DateFormat object for day of the week
   DateFormat dayOfWeekFormat =

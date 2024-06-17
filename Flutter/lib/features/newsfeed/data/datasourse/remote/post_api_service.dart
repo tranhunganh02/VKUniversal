@@ -40,4 +40,11 @@ abstract class PostApiService {
     @Part(name: 'post_type') int? postType,
     @Part(name: 'images') List<MultipartFile>? attachments,
   );
+
+  @GET('/post/')
+  Future<HttpResponse<List<PostModel>>> GetPostByID(
+    @Header('x-client-id') int userID,
+    @Header('authorization') String accessToken,
+    @Query("post_id") int postID,
+  );
 }

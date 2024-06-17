@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:vkuniversal/core/widgets/loader.dart';
+import 'package:vkuniversal/features/newsfeed/presentation/pages/post_detail.dart';
 import 'package:vkuniversal/features/newsfeed/presentation/state/newfeeds/bloc/newfeed_bloc.dart';
 import 'package:vkuniversal/features/newsfeed/presentation/widgets/post_card.dart';
+import 'package:vkuniversal/features/profile/presentation/pages/profile.dart';
 
 class ExploreTab extends StatefulWidget {
   const ExploreTab({super.key});
@@ -55,6 +57,27 @@ class _ExploreTabState extends State<ExploreTab> {
                     content: state.posts[index].content,
                     likes: state.posts[index].likes,
                     isLiked: state.posts[index].likeByUser,
+                    userID: state.posts[index].userID,
+                    role: state.posts[index].role ?? 0,
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) =>
+                              PostDetail(postID: state.posts[index].postID),
+                        ),
+                      );
+                    },
+                    onProfileTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => ProfilePage(
+                              role: state.posts[index].role,
+                              userIDToLoadProfile: state.posts[index].userID),
+                        ),
+                      );
+                    },
                   );
                 },
               ),

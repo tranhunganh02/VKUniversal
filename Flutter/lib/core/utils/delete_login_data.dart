@@ -8,4 +8,6 @@ DeleteLoginData() async {
   _pref.remove('email');
   _pref.remove('password');
   _pref.remove('role');
+  _pref.remove('avatar');
+  _pref.remove('displayName');
 }

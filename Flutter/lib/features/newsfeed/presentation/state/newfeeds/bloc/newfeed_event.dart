@@ -23,3 +23,8 @@ final class LoadMorePosts extends NewfeedEvent {
 
   LoadMorePosts({required this.page});
 }
+
+class LoadPostDetail extends NewfeedEvent {
+  final int postID;
+  LoadPostDetail({required this.postID});
+}

@@ -68,8 +68,6 @@ class PostRepositoryImpl implements PostRepository {
     List<File> attachments = const [],
   }) async {
     try {
-      // final _pref = await SharedPreferences.getInstance();
-      // Authorization authorization = SetUpAuthData(_pref);
       List<MultipartFile> imageFiles = [];
       for (var path in attachments) {
         logger.d("Path: $path");
@@ -176,6 +174,40 @@ class PostRepositoryImpl implements PostRepository {
         RequestOptions options = RequestOptions();
         return DataFailed(DioException(
             requestOptions: options, message: "UnLike ko thanh cong!"));
+      }
+    } on DioException catch (e) {
+      RequestOptions options = RequestOptions();
+      return DataFailed(DioException(requestOptions: options, message: "$e"));
+    }
+  }
+
+  @override
+  Future<DataState<List<PostModel>>> GetPostByID({
+    required int userID,
+    required String accessToken,
+    required int postID,
+  }) async {
+    try {
+      final response = await _postApiService.GetPostByID(
+        userID,
+        accessToken,
+        postID,
+      );
+      if (response.response.statusCode == HttpStatus.ok) {
+        return DataSuccess(response.data);
+      } else if (response.response.statusCode == HttpStatus.unauthorized) {
+        RefreshTokenCommon();
+        SharedPreferences _pref = await SharedPreferences.getInstance();
+        Authorization authorization = SetUpAuthData(_pref);
+        return await GetPostByID(
+          userID: authorization.userID,
+          accessToken: authorization.accessToken,
+          postID: postID,
+        );
+      } else {
+        RequestOptions options = RequestOptions();
+        return DataFailed(DioException(
+            requestOptions: options, message: "Get Post ko thanh cong!"));
       }
     } on DioException catch (e) {
       RequestOptions options = RequestOptions();

@@ -19,15 +19,23 @@ import 'package:vkuniversal/features/auth/presentation/bloc/add_user_info/bloc/a
 import 'package:vkuniversal/features/auth/presentation/bloc/sign_up/bloc/sign_up_bloc.dart';
 import 'package:vkuniversal/features/auth/presentation/bloc/sign_in/bloc/sign_in_bloc.dart';
 import 'package:vkuniversal/features/auth/presentation/bloc/welcome/bloc/welcome_bloc.dart';
+import 'package:vkuniversal/features/newsfeed/data/datasourse/remote/comment_api_service.dart';
 import 'package:vkuniversal/features/newsfeed/data/datasourse/remote/post_api_service.dart';
+import 'package:vkuniversal/features/newsfeed/data/repository/comment_repository_impl.dart';
 import 'package:vkuniversal/features/newsfeed/data/repository/post_repository_impl.dart';
+import 'package:vkuniversal/features/newsfeed/domain/repository/comment_repository.dart';
 import 'package:vkuniversal/features/newsfeed/domain/repository/post_repository.dart';
+import 'package:vkuniversal/features/newsfeed/domain/usecase/create_comment.dart';
 import 'package:vkuniversal/features/newsfeed/domain/usecase/create_post.dart';
+import 'package:vkuniversal/features/newsfeed/domain/usecase/get_comments.dart';
+import 'package:vkuniversal/features/newsfeed/domain/usecase/get_post_by_id.dart';
 import 'package:vkuniversal/features/newsfeed/domain/usecase/get_posts.dart';
 import 'package:vkuniversal/features/newsfeed/domain/usecase/like.dart';
 import 'package:vkuniversal/features/newsfeed/domain/usecase/unlike.dart';
+import 'package:vkuniversal/features/newsfeed/presentation/state/comment/bloc/comment_bloc.dart';
 import 'package:vkuniversal/features/newsfeed/presentation/state/home/bloc/home_bloc.dart';
 import 'package:vkuniversal/features/newsfeed/presentation/state/newfeeds/bloc/newfeed_bloc.dart';
+import 'package:vkuniversal/features/newsfeed/presentation/state/post_detail.dart/bloc/post_detail_bloc.dart';
 import 'package:vkuniversal/features/newsfeed/presentation/state/posts/bloc/create_post_bloc.dart';
 import 'package:vkuniversal/features/profile/data/data_sourse/remote/profile_api_service.dart';
 import 'package:vkuniversal/features/profile/data/model/profile.dart';
@@ -50,6 +58,7 @@ Future<void> initializeDependencies() async {
   sl.registerFactory<ProfileApiService>(() => ProfileApiService(sl()));
   sl.registerFactory<ClassLocalService>(() => ClassLocalService());
   sl.registerFactory<PostApiService>(() => PostApiService(sl()));
+  sl.registerFactory<CommentApiService>(() => CommentApiService(sl()));
 
   sl.registerFactory<AuthRepository>(
       () => AuthRepositoryImpl(authApiService: sl()));
@@ -59,6 +68,8 @@ Future<void> initializeDependencies() async {
       () => UserInfoReposiroryImpl(sl(), classLocalService: sl()));
   sl.registerFactory<PostRepository>(
       () => PostRepositoryImpl(postApiService: sl()));
+  sl.registerFactory<CommentRepository>(
+      () => CommentRepositoryImpl(commentApiService: sl()));
 
   sl.registerFactory<SignUpWithEmail>(() => SignUpWithEmail(sl()));
   sl.registerFactory<RefreshToken>(() => RefreshToken(authRepository: sl()));
@@ -75,13 +86,19 @@ Future<void> initializeDependencies() async {
   sl.registerSingleton<CreatePost>(CreatePost(postRepository: sl()));
   sl.registerSingleton<LikeAPost>(LikeAPost(postRepository: sl()));
   sl.registerSingleton<Unlike>(Unlike(postRepository: sl()));
+  sl.registerFactory<GetPostById>(() => GetPostById(postRepository: sl()));
+  sl.registerFactory<GetComments>(() => GetComments(commentRepository: sl()));
+  sl.registerFactory<CreateCommentUsecase>(
+      () => CreateCommentUsecase(commentRepository: sl()));
 
   sl.registerFactory<SignUpBloc>(() => SignUpBloc(sl()));
   sl.registerFactory<SignInBloc>(() => SignInBloc(sl()));
   sl.registerSingleton<ProfileBloc>(ProfileBloc(sl()));
   sl.registerSingleton<WelcomeBloc>(WelcomeBloc());
-  sl.registerSingleton<NewfeedBloc>(NewfeedBloc(sl()));
+  sl.registerFactory<NewfeedBloc>(() => NewfeedBloc(sl()));
   sl.registerSingleton<CreatePostBloc>(CreatePostBloc(sl()));
+  sl.registerFactory<PostDetailBloc>(() => PostDetailBloc());
+  sl.registerFactory<CommentBloc>(() => CommentBloc());
 
   sl.registerSingleton<BottomNavigationBloc>(BottomNavigationBloc());
   sl.registerSingleton<AddUserInfoBloc>(AddUserInfoBloc(sl(), sl()));

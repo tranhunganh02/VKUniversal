@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:vkuniversal/core/utils/icon_string.dart';
 import 'package:vkuniversal/features/chat/presentation/pages/list_chat.dart';
+import 'package:vkuniversal/features/marketplace/market.dart';
 import 'package:vkuniversal/features/menu/presentation/pages/menu.dart';
 import 'package:vkuniversal/features/newsfeed/presentation/pages/newsfeed.dart';
-import 'package:vkuniversal/features/profile/presentation/pages/profile_draft.dart';
+import 'package:vkuniversal/features/profile/presentation/pages/profile.dart';
 
 class Home extends StatefulWidget {
   const Home({super.key});
@@ -17,9 +18,7 @@ class _HomeState extends State<Home> {
   final PageStorageBucket _bucket = PageStorageBucket();
   final List<Widget> _pages = [
     NewsfeedPage(),
-    Container(
-      color: Colors.blue,
-    ),
+    Marketplace(),
     ListChatScreen(),
     ProfilePage(),
     MenuPage(),

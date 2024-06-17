@@ -41,103 +41,106 @@ class _LoginPageState extends State<LoginPage> {
     TextTheme textTheme = Theme.of(context).textTheme;
     ColorScheme colorScheme = Theme.of(context).colorScheme;
     return Scaffold(
-      body: BlocConsumer<SignInBloc, SignInState>(
-        listener: (context, state) {
-          if (state is LoginSuccess) {
-            Navigator.pushReplacementNamed(context, RoutesName.checkUserState);
-          } else if (state is LoginFailure) {
-            showErrorSnackBar(context, state.message);
-          }
-        },
-        builder: (context, state) {
-          if (state is LoginLoading) {
-            return Loader();
-          }
-          return Stack(
-            children: [
-              Positioned(
-                child: Column(
-                  children: [
-                    ClipPath(
-                      clipper: CurvedBottomClipper(),
-                      child: Container(
-                        child: Image.asset(
-                          ImageString.vku_landscape,
-                          fit: BoxFit.cover,
+      body: SingleChildScrollView(
+        child: BlocConsumer<SignInBloc, SignInState>(
+          listener: (context, state) {
+            if (state is LoginSuccess) {
+              Navigator.pushReplacementNamed(
+                  context, RoutesName.checkUserState);
+            } else if (state is LoginFailure) {
+              showErrorSnackBar(context, state.message);
+            }
+          },
+          builder: (context, state) {
+            if (state is LoginLoading) {
+              return Loader();
+            }
+            return Stack(
+              children: [
+                Positioned(
+                  child: Column(
+                    children: [
+                      ClipPath(
+                        clipper: CurvedBottomClipper(),
+                        child: Container(
+                          child: Image.asset(
+                            ImageString.vku_landscape,
+                            fit: BoxFit.cover,
+                          ),
                         ),
                       ),
-                    ),
-                    Form(
-                      key: formKey,
-                      child: Center(
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                          children: [
-                            Text(
-                              "Welcome back",
-                              style: textTheme.headlineLarge,
-                            ),
-                            Text(
-                              "Login to your account",
-                              style: textTheme.headlineSmall
-                                  ?.copyWith(color: colorScheme.primary),
-                            ),
-                            CustomSizeBox(value: 30),
-                            AuthTextField(
-                              hintText: "Email",
-                              prefixIcon: IconList.email,
-                              isObscured: false,
-                              controller: emailController,
-                              validation: null,
-                            ),
-                            CustomSizeBox(value: 10),
-                            AuthTextField(
-                              hintText: "Password",
-                              prefixIcon: IconList.lock,
-                              isObscured: true,
-                              controller: passwordController,
-                              validation: null,
-                            ),
-                            CustomSizeBox(value: 10),
-                            FilledButtonCustom(
-                              label: "Login",
-                              onPress: () {
-                                if (formKey.currentState!.validate()) {
-                                  SubmitForm();
-                                }
-                              },
-                            ),
-                            CustomSizeBox(value: 10),
-                            DontHaveAccount(),
-                            CustomSizeBox(value: 10),
-                            Text(
-                              "Or",
-                              style: textTheme.headlineSmall
-                                  ?.copyWith(color: Color(0xffD0CFD4)),
-                            ),
-                            GoogleButton(
-                              label: 'Sign up with Google',
-                              onPressed: () {},
-                            ),
-                          ],
+                      Form(
+                        key: formKey,
+                        child: Center(
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                            children: [
+                              Text(
+                                "Welcome back",
+                                style: textTheme.headlineLarge,
+                              ),
+                              Text(
+                                "Login to your account",
+                                style: textTheme.headlineSmall
+                                    ?.copyWith(color: colorScheme.primary),
+                              ),
+                              CustomSizeBox(value: 30),
+                              AuthTextField(
+                                hintText: "Email",
+                                prefixIcon: IconList.email,
+                                isObscured: false,
+                                controller: emailController,
+                                validation: null,
+                              ),
+                              CustomSizeBox(value: 10),
+                              AuthTextField(
+                                hintText: "Password",
+                                prefixIcon: IconList.lock,
+                                isObscured: true,
+                                controller: passwordController,
+                                validation: null,
+                              ),
+                              CustomSizeBox(value: 10),
+                              FilledButtonCustom(
+                                label: "Login",
+                                onPress: () {
+                                  if (formKey.currentState!.validate()) {
+                                    SubmitForm();
+                                  }
+                                },
+                              ),
+                              CustomSizeBox(value: 10),
+                              DontHaveAccount(),
+                              CustomSizeBox(value: 10),
+                              Text(
+                                "Or",
+                                style: textTheme.headlineSmall
+                                    ?.copyWith(color: Color(0xffD0CFD4)),
+                              ),
+                              GoogleButton(
+                                label: 'Sign up with Google',
+                                onPressed: () {},
+                              ),
+                            ],
+                          ),
                         ),
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
-              ),
-              Positioned(
-                top: 0,
-                left: 0,
-                right: 0,
-                child: AppBar(
-                  backgroundColor: Colors.transparent.withOpacity(0),
-                  leading: BackLeadingBtn(),
+                Positioned(
+                  top: 0,
+                  left: 0,
+                  right: 0,
+                  child: AppBar(
+                    backgroundColor: Colors.transparent.withOpacity(0),
+                    leading: BackLeadingBtn(),
+                  ),
                 ),
-              ),
-            ],
-          );
-        },
+              ],
+            );
+          },
+        ),
       ),
     );
   }

@@ -5,12 +5,12 @@ sealed class ProfileState extends Equatable {}
 
 final class ProfileInitial extends ProfileState {
   @override
-  List<Object?> get props => throw UnimplementedError();
+  List<Object?> get props => [];
 }
 
 final class ProfileLoading extends ProfileState {
   @override
-  List<Object?> get props => throw UnimplementedError();
+  List<Object?> get props => [];
 }
 
 final class ProfileLoaded extends ProfileState {

@@ -8,8 +8,10 @@ import 'package:vkuniversal/core/constants/share_pref.dart';
 import 'package:vkuniversal/core/resources/data_state.dart';
 import 'package:vkuniversal/core/utils/injection_container.dart';
 import 'package:vkuniversal/features/auth/data/models/authorization.dart';
+import 'package:vkuniversal/features/newsfeed/data/datasourse/remote/comment_api_service.dart';
 import 'package:vkuniversal/features/newsfeed/data/datasourse/remote/post_api_service.dart';
 import 'package:vkuniversal/features/newsfeed/data/model/page_request.dart';
+import 'package:vkuniversal/features/newsfeed/data/model/post_request.dart';
 import 'package:vkuniversal/features/newsfeed/domain/repository/post_repository.dart';
 import 'package:vkuniversal/features/newsfeed/domain/usecase/get_posts.dart';
 
@@ -77,5 +79,16 @@ void main() {
 
     // logger.d(response.error!.message);
     expect(response is DataSuccess, true);
+  });
+  test("Get Comments", () async {
+    CommentApiService commentApiService = CommentApiService(sl());
+
+    final response = await commentApiService.getComments(
+        28,
+        "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjI4LCJlbWFpbCI6Imh0c2FuZzIudGdAdmt1LnVkbi52biIsInJvbGUiOjEsImlhdCI6MTcxODUyMDAxNywiZXhwIjoxNzE4NTM2MjE3fQ.GBc9om7vH8PffpXAIMXbUdAH38HgvsDO9R69GzNs3Cg",
+        PostRequest(postID: 105));
+
+    logger.d(response.data);
+    expect(response.data.isNotEmpty, true);
   });
 }
